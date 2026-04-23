@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="styles/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+</head>
+<body>
+    <nav>
+        <span class="navbar-left">
+            <span id="nav-left-1">Konevo</span>
+            <span id="nav-left-2">
+                <a href="index.html" aria-label="Home">
+                    <span>Home</span>
+                </a>
+                <a href="#" aria-label="Messages">
+                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#" aria-label="Bookmark">
+                    <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                    <span>Bookmark</span>
+                </a>
+            </span>
+            <span>
+                <form>
+                    <input type="search" placeholder="Search games..." aria-label="Search">
+                </form>
+            </span>
+        </span>
+        <span class="navbar-right">
+            <a href="#" class="creator-btn" aria-label="Become a creator">Become a creator</a>
+            <i class="fa fa-bell-o" aria-hidden="true"></i>
+            <div class="profile-dropdown">
+                <button aria-label="Profile menu">
+                    <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                </button>
+            </div>
+        </span>
+    </nav>
+    <main>
+        <div class="profile-main">fooo</div>
+        <div class="profile-sidebar">
+            <div id="profile-sidebar-support">
+                <h2>Support Emily</h2>
+                <p>Love Emily's content? Support her directly!</p>
+                <div id="profile-sidebar-support-tabs">
+                    <button class="support-tab" aria-selected="true" data-index="0">Donate</button>
+                    <button class="support-tab" aria-selected="false" data-index="1">Subscribe</button>
+                </div>
+                <div id="profile-sidebar-support-contents"></div>
+            </div>
+            <div id="profile-sidebar-creator-stats">
+                <div class="stat-card">124 sessions completed</div>
+                <div class="stat-card">98% positive reviews</div>
+                <div class="stat-card">4.9 average rating</div>
+                <div class="stat-card">2.1k followers</div>
+            </div>
+            <div id="profile-sidebar-reviews"></div>
+        </div>
+    </main>
+</body>
+<script src="profile.js"></script>
+</html>
