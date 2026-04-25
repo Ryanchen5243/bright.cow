@@ -2,6 +2,7 @@
 
 /* Standardized Styles */
 :root {
+    /* colors */
     --primary-purple: #7C3AED;
     --primary-purple-hover:#8B5CF6;
     --accent-purple: #A855F7;
@@ -12,20 +13,75 @@
     --border-divider: #1F1F2E;
     --surface-card: #11131A;
     --background: #0B0D14;
+
+    /* typography */
+    --h1-font-size: 1.5rem; /* 24px / 16 */
+    --h1-line-height: 2rem; /* 32px / 16 */
+    --h1-font-weight: bold; /* Bold */
+    --h2-font-size: 1.25rem; /* 20px / 16 */
+    --h2-line-height: 1.75rem; /* 28px / 16 */
+    --h2-font-weight: 600; /* Semi-bold */
+    --h3-font-size: 1rem; /* 16px / 16 */
+    --h3-line-height: 1.5rem; /* 24px / 16 */
+    --h3-font-weight: 600; /* Semi-bold */
+    --body-large-font-size: 1rem; /* 16px / 16 */
+    --body-large-line-height: 1.5rem; /* 24px / 16 */
+    --body-large-font-weight: 400; /* Regular */
+    --body-font-size: 0.875rem; /* 14px / 16 */
+    --body-line-height: 1.25rem; /* 20px / 16 */
+    --body-font-weight: 400; /* Regular */
+    --body-small-font-size: 0.75rem; /* 12px / 16 */
+    --body-small-line-height: 1rem; /* 16px / 16 */
+    --body-small-font-weight: 400; /* Regular */
+    --caption-font-size: 0.75rem; /* 12px / 16 */
+    --caption-line-height: 1rem; /* 16px / 16 */
+    --caption-font-weight: 500; /* Medium */
+}
+.h1-style {
+    font-size: var(--h1-font-size);
+    line-height: var(--h1-line-height);
+    font-weight: var(--h1-font-weight);
+}
+.h2-style {
+    font-size: var(--h2-font-size);
+    line-height: var(--h2-line-height);
+    font-weight: var(--h2-font-weight);
+}
+.h3-style {
+    font-size: var(--h3-font-size);
+    line-height: var(--h3-line-height);
+    font-weight: var(--h3-font-weight);
+}
+.body-large-style {
+    font-size: var(--body-large-font-size);
+    line-height: var(--body-large-line-height);
+    font-weight: var(--body-large-font-weight);
+}
+.body-style {
+    font-size: var(--body-font-size);
+    line-height: var(--body-line-height);
+    font-weight: var(--body-font-weight);
+}
+.body-small-style {
+    font-size: var(--body-small-font-size);
+    line-height: var(--body-small-line-height);
+    font-weight: var(--body-small-font-weight);
+}
+.caption-style {
+    font-size: var(--caption-font-size);
+    line-height: var(--caption-line-height);
+    font-weight: var(--caption-font-weight);
 }
 
-/* Custom Overrides */
-h1 {
-    font-size: 1em;
-    font-weight: bold;
-    color: var(--primary-purple);
+html {
+    font-size: 16px;
 }
+
 body {
     height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: "Inter", sans-serif;
-    border: 1px solid black;
 }
 
 nav {
