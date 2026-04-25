@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/* Standardized Styles */
+:root {
+    --primary-purple: #7C3AED;
+    --primary-purple-hover:#8B5CF6;
+    --accent-purple: #A855F7;
+    --success-green: #22C55E;
+    --text-primary: #FFFFFF;
+    --text-secondary:#A1A1AA;
+    --text-muted: #71717A;
+    --border-divider: #1F1F2E;
+    --surface-card: #11131A;
+    --background: #0B0D14;
+}
+
+/* Custom Overrides */
+h1 {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--primary-purple);
+}
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+    border: 1px solid black;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
