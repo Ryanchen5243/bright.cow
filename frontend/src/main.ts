@@ -1,60 +1,46 @@
-import '../src/style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+import "../src/style.css";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+function InitNavBar(): void {
+  const nav = document.getElementById("nav-bar") as HTMLElement;
+  nav.innerHTML += `<div>
+        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="kGradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#5B8CFF"/>
+              <stop offset="100%" stop-color="#9B5CFF"/>
+            </linearGradient>
+          </defs>
+          <rect x="6" y="6" width="8" height="36" rx="4" fill="url(#kGradient)"/>
+          <path d="M16 24 L34 6 C36 4 40 6 38 10 L22 26 Z" fill="url(#kGradient)"/>
+          <path d="M16 24 L34 42 C36 44 40 42 38 38 L22 22 Z" fill="url(#kGradient)"/>
+          <circle cx="38" cy="38" r="4" fill="url(#kGradient)"/>
+        </svg>
+        <h2 class="h2-style">Konevo</h2>
+      </div>`;
+  nav.innerHTML += `<div>
+    <div><input type='text' placeholder='Search...'></div>
+    <div><svg width='32' height='32' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='24' cy='24' r='12' fill='url(#kGradient)'/></svg></div>
+    </div>`;
+}
 
-<div class="ticks"></div>
+function InitLandingPage(): void {
+  const container = document.getElementById("app") as HTMLElement;
+  container.innerHTML += `
+          <div class="main">
+            <h1 class="h1-style">This is an H1</h1>
+            <h2 class="h2-style">This is an H2</h2>
+            <h3 class="h3-style">This is an H3</h3>
+            <p class="body-style">This is a paragraph.</p>
+            <h1 class="h1-style">fpasodfi</h1>
+          </div>
+        <footer>
+          <div>© Konevo 2026</div>
+          <div>
+            terms of service | privacy policy
+          </div>
+        </footer>
+  `;
+}
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
-
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+InitNavBar();
+InitLandingPage();

@@ -7,44 +7,8 @@
     <title>Konevo</title>
   </head>
   <body>
-    <nav>
-      <div class="logo flex items-center space-x-3">
-      <svg viewBox="0 0 48 48" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="kGradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#5B8CFF"/>
-        <stop offset="100%" stop-color="#9B5CFF"/>
-        </linearGradient>
-      </defs>
-      <rect x="6" y="6" width="8" height="36" rx="4" fill="url(#kGradient)"/>
-      <path d="M16 24 L34 6 C36 4 40 6 38 10 L22 26 Z" fill="url(#kGradient)"/>
-      <path d="M16 24 L34 42 C36 44 40 42 38 38 L22 22 Z" fill="url(#kGradient)"/>
-      <circle cx="38" cy="38" r="4" fill="url(#kGradient)"/>
-      </svg>
-      <span class="text-xl font-bold text-slate-900">Konevo</span>
-      </div>
-      <div class="flex space-x-8 text-sm font-medium text-slate-600">
-        <a href="#" class="hover:text-slate-900 transition">Home</a>
-        <a href="#" class="hover:text-slate-900 transition">Messages</a>
-        <a href="#" class="hover:text-slate-900 transition">Bookmark</a>
-      </div>
-      <button class="bg-linear-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition" onclick="login()">Login</button>
-    </nav>
-    <main>
-        <div>
-          <h1 class="h1-style">This is an H1</h1>
-          <h2 class="h2-style">This is an H2</h2>
-          <h3 class="h3-style">This is an H3</h3>
-          <p class="body-style">This is a paragraph.</p>
-          <h1 class="h1-style">fpasodfi</h1>
-        </div>
-    </main>
-    <footer>
-      <div>© Konevo 2026</div>
-      <div>
-      terms of service | privacy policy
-      </div>
-    </footer>
+    <nav id="nav-bar"></nav>
+    <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

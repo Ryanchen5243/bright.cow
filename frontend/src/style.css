@@ -76,6 +76,7 @@
 
 html, body {
   margin: 0;
+  height: 100%;
 }
 
 html {
@@ -83,7 +84,7 @@ html {
 }
 
 body {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     font-family: "Inter", sans-serif;
@@ -94,8 +95,20 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 64px;
+    border-bottom: 1px solid black;
 }
 
-main {
+nav > div {
+    display: flex;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.main {
     flex: 1;
 }
