@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:s3": "npm run build && aws s3 sync dist/ s3://lobbynest.com --delete"
   },
   "devDependencies": {
     "typescript": "~6.0.2",
