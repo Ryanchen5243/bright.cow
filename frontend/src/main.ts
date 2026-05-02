@@ -1,4 +1,4 @@
-import '../styles/style.css'
+import '../src/style.css'
 import typescriptLogo from './assets/typescript.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
