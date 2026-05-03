@@ -1,46 +1,57 @@
 import "../src/style.css";
 
-function InitNavBar(): void {
-  const nav = document.getElementById("nav-bar") as HTMLElement;
-  nav.innerHTML += `<div>
-        <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="kGradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#5B8CFF"/>
-              <stop offset="100%" stop-color="#9B5CFF"/>
-            </linearGradient>
-          </defs>
-          <rect x="6" y="6" width="8" height="36" rx="4" fill="url(#kGradient)"/>
-          <path d="M16 24 L34 6 C36 4 40 6 38 10 L22 26 Z" fill="url(#kGradient)"/>
-          <path d="M16 24 L34 42 C36 44 40 42 38 38 L22 22 Z" fill="url(#kGradient)"/>
-          <circle cx="38" cy="38" r="4" fill="url(#kGradient)"/>
-        </svg>
-        <h2 class="h2-style">Konevo</h2>
-      </div>`;
-  nav.innerHTML += `<div>
-    <div><input type='text' placeholder='Search...'></div>
-    <div><svg width='32' height='32' viewBox='0 0 48 48' fill='none' xmlns='http://www.w3.org/2000/svg'><circle cx='24' cy='24' r='12' fill='url(#kGradient)'/></svg></div>
-    </div>`;
-}
-
-function InitLandingPage(): void {
-  const container = document.getElementById("app") as HTMLElement;
-  container.innerHTML += `
-          <div class="main">
-            <h1 class="h1-style">This is an H1</h1>
-            <h2 class="h2-style">This is an H2</h2>
-            <h3 class="h3-style">This is an H3</h3>
-            <p class="body-style">This is a paragraph.</p>
-            <h1 class="h1-style">fpasodfi</h1>
-          </div>
-        <footer>
-          <div>© Konevo 2026</div>
-          <div>
-            terms of service | privacy policy
-          </div>
-        </footer>
+function NavBar(): string {
+  return `
+    <div><h2 class="h2-style">LobbyNest</h2></div>
+    <div>
+      <div><input id="search-input" type='text' placeholder='Search games...'></div>
+      <div><img id="messages-icon" src='src\\assets\\lucide-message-circle-more.svg' alt='messages'></div>
+      <div><img id="profile-avatar" src='src\\assets\\profile-avatar.svg' alt='profile avatar'></div>
+    </div>
   `;
 }
 
-InitNavBar();
+function ProfileConents(): string {
+  return `
+    <div id="profile-main">
+    hello 
+    </div>
+    <div id="profile-aside">
+      <div id="profile-aside-donation">
+        <p class="body-style">Support Emily</p>
+        <p class="body-style">Love Emily's Content? Support her directly!</p>
+        <div id="profile-aside-donation-grid">
+          <div>5</div>
+          <div>10</div>
+          <div>15</div>
+          <div>20</div>
+          <div>50</div>
+          <div>100</div>
+        </div>
+        <button class="donate-button">Donate</button>
+      </div>
+      <div id="profile-aside-ads">ads will go here...</div>
+    </div>
+    `;
+}
+
+function Footer(): string {
+  return `
+    <footer>
+      <div>© Konevo 2026</div>
+      <div> terms of service | privacy policy </div>
+    </footer>`;
+}
+
+function InitLandingPage(): void {
+  const nav = document.getElementById("nav-bar") as HTMLElement;
+  const app = document.getElementById("app") as HTMLElement;
+  if (!nav || !app) return;
+  nav.innerHTML = NavBar();
+  app.innerHTML = `
+    <div class="main"></div>
+    ${Footer()}`;
+  document.getElementsByClassName("main")[0].innerHTML = ProfileConents();
+}
+
 InitLandingPage();

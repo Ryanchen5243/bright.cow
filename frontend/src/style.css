@@ -96,11 +96,15 @@ nav {
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--border-divider);
 }
 
 nav > div {
     display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
 }
 
 #app {
@@ -110,5 +114,80 @@ nav > div {
 }
 
 .main {
+    display: flex;
     flex: 1;
+}
+
+#search-input {
+    border: 1px solid var(--border-divider);
+    border-radius: 4px;
+    padding: 6px;
+}
+
+#messages-icon {
+    background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+    height: 40px;
+    width: 40px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--primary-purple);
+}
+
+#profile-avatar {
+    background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
+    padding: 8px;
+    border-radius: 50%;
+    color: var(--text-primary);
+    border: 2px solid var(--primary-purple);
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+#profile-main, #profile-aside {
+    flex-direction: column;
+}
+#profile-main {
+    flex: 3.5;
+    padding: 16px;
+    border: 1px solid var(--border-divider);
+}
+#profile-aside {
+    flex: 1;
+    padding: 16px;
+    border: 1px solid var(--border-divider);
+    display: flex;
+}
+#profile-aside-donation {
+    flex: 2;
+    border: 1px solid var(--border-divider);
+}
+#profile-aside-ads {
+    flex: 3;
+    border: 1px solid var(--border-divider);
+}
+#profile-aside-donation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 40px);
+  gap: 8px;
+}
+
+#profile-aside-donation-grid div {
+  background: lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.donate-button {
+    background: var(--primary-purple);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
 }
