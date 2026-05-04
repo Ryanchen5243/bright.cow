@@ -1,12 +1,12 @@
 import "../src/style.css";
+import profileAvatar from "./assets/profile-avatar.svg";
 
 function NavBar(): string {
   return `
     <div><h2 class="h2-style">LobbyNest</h2></div>
     <div>
       <div><input id="search-input" type='text' placeholder='Search games...'></div>
-      <div><img id="messages-icon" src='src\\assets\\lucide-message-circle-more.svg' alt='messages'></div>
-      <div><img id="profile-avatar" src='src\\assets\\profile-avatar.svg' alt='profile avatar'></div>
+      <div><img id="profile-avatar" src="${profileAvatar}" alt='profile avatar'></div>
     </div>
   `;
 }
@@ -14,19 +14,20 @@ function NavBar(): string {
 function ProfileConents(): string {
   return `
     <div id="profile-main">
-    hello 
+      <div id="profile-main-header" class="level-one-card">header</div>
+      <div id="profile-main-content" class="level-one-card">main content will go here...</div>
     </div>
     <div id="profile-aside">
-      <div id="profile-aside-donation">
+      <div id="profile-aside-donation" class="level-one-card">
         <p class="body-style">Support Emily</p>
         <p class="body-style">Love Emily's Content? Support her directly!</p>
         <div id="profile-aside-donation-grid">
-          <div>5</div>
-          <div>10</div>
-          <div>15</div>
-          <div>20</div>
-          <div>50</div>
-          <div>100</div>
+          <div>$5</div>
+          <div>$10</div>
+          <div>$15</div>
+          <div>$20</div>
+          <div>$50</div>
+          <div>$100</div>
         </div>
         <button class="donate-button">Donate</button>
       </div>
