@@ -83,6 +83,7 @@ nav {
     display: flex;
     align-items: center;
     height: clamp(48px, 2vw, 64px);
+    font-size: clamp(16px, 1.5vw, 24px);
     border-bottom: 2px solid var(--border-divider);
 }
 .nav-left {
@@ -100,6 +101,27 @@ nav {
     justify-content: flex-end;
 }
 
+.nav-icon {
+    min-width: 24px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+#search-input {
+    padding: 8px 12px;
+    border: 1px solid var(--text-primary);
+    border-radius: 4px;
+    font-size: 14px;
+    color: var(--text-primary);
+    background-color: var(--background);
+    outline: none;
+    transition: border-color 0.2s;
+}
+#search-input:focus {
+    border-color: var(--accent-purple);
+}
 /*
 body {
     height: 100vh;
