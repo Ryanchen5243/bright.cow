@@ -1,17 +1,16 @@
-// import {Business as BusinessIcon} from "@mui/icons-material"; // dont work
-// import AccountCircleIcon from "@mui/icons-material/AccountCircle";// works??
-// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-// named vs default imports 
+// import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { AccountCircle } from "@mui/icons-material";
+import { Business } from "@mui/icons-material";
 export default function NavBar() {
     return (
         <nav>
             <div className="nav-left">
-                {/* <AccountCircleIcon /> */}
+                <AccountCircle />
+                <Business />
                 <p>LobbyNest</p>
             </div>
             <div className="nav-right">
                 <div><input id="search-input" type='text' placeholder='Search games...'/></div>
-                {/* <div id="nav-profile-icon"><AccountCircleIcon /></div> */}
             </div>
         </nav>
     )
