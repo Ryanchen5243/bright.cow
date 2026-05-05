@@ -1,6 +1,14 @@
-import "../src/style.css";
-import profileAvatar from "./assets/profile-avatar.svg";
+import React from "react";
 
+export default function App() {
+  return (
+    <div className="App">
+      <h1>Hello world!</h1>
+    </div>
+  );
+}
+
+/*
 function NavBar(): string {
   return `
     <div><h2 class="h2-style">LobbyNest</h2></div>
@@ -101,3 +109,5 @@ function InitLandingPage(): void {
 }
 
 InitLandingPage();
+
+*/
