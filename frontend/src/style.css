@@ -1,26 +1,17 @@
-/* Standardized Styles */
+/* Design System */
 :root {
     /* colors */
-    --primary-purple: #6200EE;
+    /* --primary-purple: #6200EE;
     --primary-purple-hover: #7C3AED;
     --accent-purple: #03DAC6;
     --success-green: #22C55E;
-    --text-primary: #FFFFFF;
     --text-secondary:#A1A1AA;
     --text-muted: #71717A;
-    --border-divider: #1F1F2E;
     --surface: #11131A;
-    --surface-elevated: #1A1D27;
+    --surface-elevated: #1A1D27; */
+    --text-primary: #FFFFFF;
     --background: #0B0D14;
-
-    /* additional colors */
-    --vibrant-coral: #ff5e5bff;
-    --willow-green: #8ed081ff;
-    --apricot-cream: #ffcf9cff;
-    --air-force-blue: #598392ff;
-    --midnight-violet: #170a1cff;
-    --status-online: #22C55E;
-    --status-offline: #EF4444;
+    --border-divider: #1F1F2E;
 
     /* typography */
     --h1-font-size: 1.5rem; /* 24px / 16 */
@@ -44,8 +35,6 @@
     --caption-font-size: 0.75rem; /* 12px / 16 */
     --caption-line-height: 1rem; /* 16px / 16 */
     --caption-font-weight: 500; /* Medium */
-
-    --profile-avatar-size: 150px;
 }
 .h1-style {
     font-size: var(--h1-font-size);
@@ -82,17 +71,36 @@
     line-height: var(--caption-line-height);
     font-weight: var(--caption-font-weight);
 }
+/* end design system */
 
-html, body {
-  margin: 0;
-  height: 100%;
+html {
+  font-family: "Inter", system-ui, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--background);
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    height: clamp(48px, 2vw, 64px);
+    border-bottom: 2px solid var(--border-divider);
+}
+.nav-left {
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+    align-items: center;
+    justify-content: flex-start;
+}
+.nav-right {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 /*
-html {
-    font-size: 16px;
-}
-
 body {
     height: 100vh;
     display: flex;

@@ -1,23 +1,13 @@
-import React from "react";
-
+import LandingPage from "./components/LandingPage";
 export default function App() {
   return (
     <div className="App">
-      <h1>Hello world!</h1>
+      <LandingPage />
     </div>
   );
 }
 
 /*
-function NavBar(): string {
-  return `
-    <div><h2 class="h2-style">LobbyNest</h2></div>
-    <div>
-      <div><input id="search-input" type='text' placeholder='Search games...'></div>
-      <div><img id="profile-avatar" src="${profileAvatar}" alt='profile avatar'></div>
-    </div>
-  `;
-}
 
 function OnlineStatus(status: "online" | "offline"): string {
   return `
