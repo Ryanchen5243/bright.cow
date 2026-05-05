@@ -3,16 +3,26 @@
 /* Standardized Styles */
 :root {
     /* colors */
-    --primary-purple: #7C3AED;
-    --primary-purple-hover:#8B5CF6;
-    --accent-purple: #A855F7;
+    --primary-purple: #6200EE;
+    --primary-purple-hover: #7C3AED;
+    --accent-purple: #03DAC6;
     --success-green: #22C55E;
     --text-primary: #FFFFFF;
     --text-secondary:#A1A1AA;
     --text-muted: #71717A;
     --border-divider: #1F1F2E;
-    --surface-card: #1E3A5F;
+    --surface: #11131A;
+    --surface-elevated: #1A1D27;
     --background: #0B0D14;
+
+    /* additional colors */
+    --vibrant-coral: #ff5e5bff;
+    --willow-green: #8ed081ff;
+    --apricot-cream: #ffcf9cff;
+    --air-force-blue: #598392ff;
+    --midnight-violet: #170a1cff;
+    --status-online: #22C55E;
+    --status-offline: #EF4444;
 
     /* typography */
     --h1-font-size: 1.5rem; /* 24px / 16 */
@@ -36,6 +46,8 @@
     --caption-font-size: 0.75rem; /* 12px / 16 */
     --caption-line-height: 1rem; /* 16px / 16 */
     --caption-font-weight: 500; /* Medium */
+
+    --profile-avatar-size: 150px;
 }
 .h1-style {
     font-size: var(--h1-font-size);
@@ -96,7 +108,7 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 64px;
+    height: 48px;
     border-bottom: 1px solid var(--border-divider);
 }
 
@@ -112,6 +124,10 @@ nav > div {
     display: flex;
     flex-direction: column;
     flex: 1;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 16px;
+    max-width: 1440px;
 }
 
 .main {
@@ -152,7 +168,6 @@ nav > div {
 }
 #profile-main {
     flex: 3.5;
-    padding: 16px;
     border: 1px solid var(--border-divider);
 }
 #profile-main {
@@ -160,13 +175,80 @@ nav > div {
 }
 #profile-main-header {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+#profile-main-header-contents {
+    flex: 3;
+    display: flex;
+}
+#profile-main-avatar-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#profile-main-avatar {
+    flex: 0 0 auto;
+    width: var(--profile-avatar-size, 250px);
+    height: var(--profile-avatar-size, 250px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--text-primary);
+}
+#profile-user-info {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+}
+#profile-user-info > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-indicator {
+    border-radius: 8px;
+    background-color: var(--primary-purple);
+}
+.status-indicator.online {
+    background-color: var(--status-online);
+}
+.status-indicator.offline {
+    background-color: var(--status-offline);
+}
+
+#profile-user-cta {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+#profile-user-cta > button {
+    background: var(--accent-purple);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    width: calc(var(--cta-max-ch, 12) * 1ch + 32px);
+    max-width: 100%;
+}
+
+#profile-tabs-toggle {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 #profile-main-content {
     flex: 2;
 }
 #profile-aside {
     flex: 1;
-    padding: 16px;
     border: 1px solid var(--border-divider);
     display: flex;
 }
@@ -186,7 +268,7 @@ nav > div {
 }
 
 #profile-aside-donation-grid div {
-  background: var(--accent-purple);
+  background: var(--primary-purple);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,7 +276,7 @@ nav > div {
   border: 1px solid var(--border-divider);
 }
 .donate-button {
-    background: var(--primary-purple);
+    background: var(--accent-purple);
     color: var(--text-primary);
     border: none;
     padding: 8px 16px;
@@ -204,9 +286,7 @@ nav > div {
 }
 
 .level-one-card {
-    background: var(--surface-card);
+    background: var(--surface);
     border: 1px solid var(--border-divider);
     border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
 }
