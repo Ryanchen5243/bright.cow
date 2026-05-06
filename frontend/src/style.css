@@ -10,9 +10,9 @@
     
     --surface-elevated: #1A1D27; */
     --text-primary: #FFFFFF;
-    --background: #0A0E27;
+    --background: #000000;
     --border-divider: #2A2F4A;
-    --surface: #FDFBD4;
+    --surface: #000000;
 
     /* typography */
 
@@ -107,6 +107,7 @@ nav {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: #ffffff;
 }
 
 nav > div {
@@ -118,26 +119,54 @@ nav > div {
     align-items: center;
     gap: var(--spacing-sm);
 }
+
 .nav-search-container {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background-color: #000000;
-    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    padding: 0 16px;
+    min-width: 240px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav-search-container.focused {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 0 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 .nav-search-input {
     display: flex;
     align-items: center;
     flex-grow: 1;
 }
-
+.nav-search-container .MuiSvgIcon-root {
+    color: rgba(255, 255, 255, 0.6);
+}
+.nav-search-container.focused .MuiSvgIcon-root {
+    color: rgba(255, 255, 255, 0.9);
+}
 .nav-search-input input {
     background: transparent;
     border: none;
     color: var(--text-primary);
-    padding: var(--spacing-sm);
+    padding: 10px 8px;
     flex-grow: 1;
+    font-size: 14px;
+    transition: color 0.2s ease;
 }
+
+.nav-search-input input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
 .nav-search-container input:focus {
     outline: none;
     border: none;
@@ -149,6 +178,30 @@ nav > div {
     gap: var(--spacing-sm);
 }
 
+.nav-search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: -16px;
+    right: -16px;
+    width: auto;
+    background-color: rgba(26, 29, 39, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    margin-top: 4px;
+}
+.nav-search-suggestions .nav-search-suggestion {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+}
+.nav-search-suggestions .nav-search-suggestion:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-left-color: rgba(10, 102, 194, 0.8);
+    color: var(--text-primary);
+}
 /*
 body {
     height: 100vh;

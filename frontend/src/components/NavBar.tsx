@@ -2,12 +2,26 @@ import { AccountCircle } from "@mui/icons-material";
 import { Business } from "@mui/icons-material";
 import { Notifications } from '@mui/icons-material';
 import { Search } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 export default function NavBar() {
-    const [openModal, setOpenModal] = useState(false);
+    const [isFocused, setFocused] = useState(false);
     const [searchValue, setSearchValue] = useState('');
-    const [suggestions] = useState(['league of legends', 'valorant', 'minecraft', 'fortnite', 'apex legends']);
+    const [suggestions] = useState(['league of legends', 'valorant', 'minecraft', 
+        'fortnite', 'apex legends', 'overwatch', 'call of duty', 'cs:go', 'dota 2', 
+        'world of warcraft']);
     
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const searchContainer = document.querySelector('.nav-search-container');
+            if (searchContainer && !searchContainer.contains(event.target as Node)) {
+                setFocused(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isFocused]);
     
     return (
         <nav>
@@ -15,24 +29,24 @@ export default function NavBar() {
                 <Business className="nav-icon"/>
                 <p>UWU~VIBE</p>
             </div>
-            <div className="nav-search-container">
-                <div className="nav-search-input" onClick={() => setOpenModal(true)}>
+            <div className={`nav-search-container` + (isFocused ? ' focused' : '')}>
+                <div className="nav-search-input" onClick={() => setFocused(true)}>
                     <Search className="search-icon"/>
                     <input type="text"  placeholder="Search games..." 
                         value={searchValue} 
                         onChange={(e) => setSearchValue(e.target.value)} 
-                        onFocus={() => setOpenModal(true)} 
-                        onBlur={() => setTimeout(() => setOpenModal(false), 200)}/>
+                        onFocus={() => { setFocused(true) }}></input>
                 </div>
-                {/* {openModal && (
-                    <div className="search-suggestions-overlay">
-                        {suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).map((suggestion, index) => (
-                            <div key={index} className="search-suggestion-item">
-                                <span>{suggestion}</span>
-                            </div>
-                        ))}
+                {isFocused && (
+                    <div className="nav-search-suggestions">
+                        {(suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).length > 0) ? 
+                            suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).map((suggestion, index) => (
+                                <div key={index} className="nav-search-suggestion">{suggestion}</div>
+                            ))
+                            : <div className="nav-search-suggestion">{searchValue}</div>
+                        }
                     </div>
-                )} */}
+                )}
             </div>
             <div className="nav-profile-icon">
                 <Notifications className="nav-icon"/>
