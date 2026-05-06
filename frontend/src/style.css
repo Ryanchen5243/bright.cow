@@ -10,7 +10,7 @@
     
     --surface-elevated: #1A1D27; */
     --text-primary: #FFFFFF;
-    --background: #000000;
+    --background: #0B0D14;
     --border-divider: #2A2F4A;
     --surface: #000000;
 
@@ -90,6 +90,13 @@ html {
   font-family: "Inter", system-ui, sans-serif;
   color: var(--text-primary);
   background-color: var(--background);
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
 }
 
 nav {
@@ -176,6 +183,7 @@ nav > div {
     align-items: center;
     justify-content: flex-end;
     gap: var(--spacing-sm);
+    position: relative;
 }
 
 .nav-search-suggestions {
@@ -202,6 +210,42 @@ nav > div {
     border-left-color: rgba(10, 102, 194, 0.8);
     color: var(--text-primary);
 }
+
+.nav-profile-menu {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background-color: rgba(26, 29, 39, 0.95);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+    margin: 0;
+}
+.nav-profile-menu .nav-profile-menu-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+.nav-profile-menu .nav-profile-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+.nav-profile-menu .nav-profile-menu-item:first-child:hover {
+    border-radius: 16px 16px 0 0;
+}
+.nav-profile-menu .nav-profile-menu-item:last-child:hover {
+    border-radius: 0 0 16px 16px;
+}
+
 /*
 body {
     height: 100vh;
