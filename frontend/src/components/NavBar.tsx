@@ -1,23 +1,28 @@
 import { AccountCircle, Business, Notifications, Search, Settings, 
     Logout, Person } from "@mui/icons-material";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 export default function NavBar() {
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
+    const [isNotificationsOpen, setNotificationsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+    const searchContainerRef = useRef<HTMLDivElement>(null);
+    const notificationsRef = useRef<HTMLDivElement>(null);
+    const profileRef = useRef<HTMLDivElement>(null);
     const [suggestions] = useState(['League of Legends', 'Valorant', 'Minecraft', 
         'Fortnite', 'Apex Legends', 'Overwatch', 'Call of Duty', 'CS:GO', 'Dota 2', 
         'World of Warcraft', 'Creator Name 1', 'Creator Name 2', 'Creator Name 3']);
-    
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            const searchContainer = document.querySelector('.nav-search-container');
-            if (searchContainer && !searchContainer.contains(event.target as Node)) {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
                 setSearchFocused(false);
             }
-            const profileIconContainer = document.querySelector('.nav-profile-icon');
-            if (profileIconContainer && !profileIconContainer.contains(event.target as Node)) {
+            if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
                 setProfileMenuOpen(false);
+            }
+            if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
+                setNotificationsOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -25,14 +30,22 @@ export default function NavBar() {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-    
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log("is profile menu open?", isProfileMenuOpen);
+            console.log("is notifications open?", isNotificationsOpen);
+        }, 500);
+        return () => clearInterval(interval);
+    }, [isProfileMenuOpen, isNotificationsOpen]);
+
     return (
         <nav>
             <div className="nav-company-name">
                 <Business className="nav-icon"/>
                 <p>UWU~VIBE</p>
             </div>
-            <div className={`nav-search-container` + (isSearchFocused ? ' focused' : '')}>
+            <div ref={searchContainerRef} className={`nav-search-container` + (isSearchFocused ? ' focused' : '')}>
                 <div className="nav-search-input" onClick={() => setSearchFocused(true)}>
                     <Search className="search-icon"/>
                     <input type="text"  placeholder="Search games..." 
@@ -51,25 +64,40 @@ export default function NavBar() {
                     </div>
                 )}
             </div>
-            <div className="nav-profile-icon">
-                <Notifications className="nav-icon"/>
-                <AccountCircle className="nav-icon" onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}/>
-                {isProfileMenuOpen && (
-                    <div className="nav-profile-menu">
-                        <div className="nav-profile-menu-item">
-                            <Person className="nav-profile-menu-icon"/>
-                            <span>Profile</span>
-                        </div>
-                        <div className="nav-profile-menu-item">
-                            <Settings className="nav-profile-menu-icon"/>
-                            <span>Settings</span>
-                        </div>
-                        <div className="nav-profile-menu-item">
-                            <Logout className="nav-profile-menu-icon"/>
-                            <span>Logout</span>
-                        </div>
+            <div className="nav-profile-and-notifications-container">
+                <div className="notification-wrapper">
+                    <div ref={notificationsRef}> 
+                        <Notifications className={`nav-icon notifications-icon ${isNotificationsOpen ? 'active' : ''}`} onClick={() => setNotificationsOpen(!isNotificationsOpen)}/> 
                     </div>
-                )}
+                    {isNotificationsOpen && (!isProfileMenuOpen) && (
+                        <div className="nav-notifications-menu">
+                            <div className="nav-notifications-menu-item">Notification 1</div>
+                            <div className="nav-notifications-menu-item">Notification 2</div>
+                            <div className="nav-notifications-menu-item">Notification 3</div>
+                        </div>
+                    )}
+                </div>
+                <div className="profile-wrapper">
+                    <div ref={profileRef}>
+                        <AccountCircle className={`nav-icon profile-icon ${isProfileMenuOpen ? 'active' : ''}`} onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}/>
+                    </div>
+                    {isProfileMenuOpen && (!isNotificationsOpen) && (
+                        <div className="nav-profile-menu">
+                            <div className="nav-profile-menu-item">
+                                <Person className="nav-profile-menu-icon"/>
+                                <span>Profile</span>
+                            </div>
+                            <div className="nav-profile-menu-item">
+                                <Settings className="nav-profile-menu-icon"/>
+                                <span>Settings</span>
+                            </div>
+                            <div className="nav-profile-menu-item">
+                                <Logout className="nav-profile-menu-icon"/>
+                                <span>Logout</span>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </nav>
     )
