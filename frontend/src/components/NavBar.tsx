@@ -31,14 +31,6 @@ export default function NavBar() {
         };
     }, []);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            console.log("is profile menu open?", isProfileMenuOpen);
-            console.log("is notifications open?", isNotificationsOpen);
-        }, 500);
-        return () => clearInterval(interval);
-    }, [isProfileMenuOpen, isNotificationsOpen]);
-
     return (
         <nav>
             <div className="nav-company-name">
@@ -55,12 +47,14 @@ export default function NavBar() {
                 </div>
                 {isSearchFocused && (
                     <div className="nav-search-suggestions">
-                        {(suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).length > 0) ? 
-                            suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5).map((suggestion, index) => (
-                                <div key={index} className="nav-search-suggestion">{suggestion}</div>
-                            ))
-                            : <div className="nav-search-suggestion">{searchValue}</div>
-                        }
+                        {(() => {
+                            const filtered = suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5);
+                            return filtered.length > 0 ? 
+                                filtered.map((suggestion) => (
+                                    <div key={suggestion} className="nav-search-suggestion">{suggestion}</div>
+                                ))
+                                : <div className="nav-search-suggestion">{searchValue}</div>;
+                        })()}
                     </div>
                 )}
             </div>
@@ -69,7 +63,7 @@ export default function NavBar() {
                     <div ref={notificationsRef}> 
                         <Notifications className={`nav-icon notifications-icon ${isNotificationsOpen ? 'active' : ''}`} onClick={() => setNotificationsOpen(!isNotificationsOpen)}/> 
                     </div>
-                    {isNotificationsOpen && (!isProfileMenuOpen) && (
+                    {isNotificationsOpen && (
                         <div className="nav-notifications-menu">
                             <div className="nav-notifications-menu-item">Notification 1</div>
                             <div className="nav-notifications-menu-item">Notification 2</div>
@@ -81,7 +75,7 @@ export default function NavBar() {
                     <div ref={profileRef}>
                         <AccountCircle className={`nav-icon profile-icon ${isProfileMenuOpen ? 'active' : ''}`} onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}/>
                     </div>
-                    {isProfileMenuOpen && (!isNotificationsOpen) && (
+                    {isProfileMenuOpen && (
                         <div className="nav-profile-menu">
                             <div className="nav-profile-menu-item">
                                 <Person className="nav-profile-menu-icon"/>

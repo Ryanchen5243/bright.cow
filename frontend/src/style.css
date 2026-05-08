@@ -282,6 +282,17 @@ nav > div {
     transform: scale(1.08);
     border-radius: 8px;
 }
+.nav-notifications-menu .nav-notifications-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+.nav-notifications-menu .nav-notifications-menu-item:first-child:hover {
+    border-radius: 16px 16px 0 0;
+}
+.nav-notifications-menu .nav-notifications-menu-item:last-child:hover {
+    border-radius: 0 0 16px 16px;
+}
+
 
 /*
 body {
