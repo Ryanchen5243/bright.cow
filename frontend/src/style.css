@@ -213,7 +213,7 @@ nav > div {
     color: var(--text-primary);
 }
 
-.notifications-wrapper, .profile-wrapper {
+.notification-wrapper, .profile-wrapper {
     position: relative;
 }
 
