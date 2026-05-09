@@ -251,6 +251,7 @@ nav > div {
 .nav-profile-menu .nav-profile-menu-item:hover {
     background-color: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
+    cursor: pointer;
 }
 .nav-profile-menu .nav-profile-menu-item:first-child:hover {
     border-radius: 16px 16px 0 0;
@@ -288,10 +289,12 @@ nav > div {
     filter: drop-shadow(0 0 6px rgba(251, 0, 255, 0.4));
     transform: scale(1.08);
     border-radius: 8px;
+    cursor: pointer;
 }
 .nav-notifications-menu .nav-notifications-menu-item:hover {
     background-color: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
+    cursor: pointer;
 }
 .nav-notifications-menu .nav-notifications-menu-item:first-child:hover {
     border-radius: 16px 16px 0 0;
@@ -323,6 +326,7 @@ nav > div {
 }
 #left-aside-home:hover, #left-aside-messages:hover, #left-aside-following:hover, #left-aside-games:hover, #left-aside-bookings:hover, #left-aside-setting:hover {
     background-color: rgba(255, 255, 255, 0.08);
+    cursor: pointer;
 }
 #left-aside-need-help {
     margin-top: auto;
@@ -333,6 +337,10 @@ nav > div {
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.08);
     transition: background-color 0.2s ease;
+}
+#left-aside-need-help:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    cursor: pointer;
 }
 /* end left/right aside styles */
 
@@ -361,202 +369,3 @@ nav > div {
 .landing-main::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
 }
-
-/*
-body {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: "Inter", sans-serif;
-    color: var(--text-primary);
-    background-color: var(--background);
-    padding: 0;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 48px;
-    border-bottom: 1px solid var(--border-divider);
-}
-
-nav > div {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-#app {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 16px;
-    max-width: 1440px;
-}
-
-.main {
-    display: flex;
-    flex: 1;
-}
-
-#search-input {
-    border: 1px solid var(--border-divider);
-    border-radius: 4px;
-    padding: 6px;
-}
-
-#messages-icon {
-    background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
-    height: 40px;
-    width: 40px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    border: 2px solid var(--primary-purple);
-}
-
-#profile-avatar {
-    background: linear-gradient(135deg, var(--primary-purple), var(--accent-purple));
-    padding: 8px;
-    border-radius: 50%;
-    color: var(--text-primary);
-    border: 2px solid var(--primary-purple);
-    width: 40px;
-    height: 40px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-#profile-main, #profile-aside {
-    flex-direction: column;
-}
-#profile-main {
-    flex: 3.5;
-    border: 1px solid var(--border-divider);
-}
-#profile-main {
-    display: flex;
-}
-#profile-main-header {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-#profile-main-header-contents {
-    flex: 3;
-    display: flex;
-}
-#profile-main-avatar-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#profile-main-avatar {
-    flex: 0 0 auto;
-    width: var(--profile-avatar-size, 250px);
-    height: var(--profile-avatar-size, 250px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #ffffff;
-    color: var(--text-primary);
-}
-#profile-user-info {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-}
-#profile-user-info > div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.status-indicator {
-    border-radius: 8px;
-    background-color: var(--primary-purple);
-}
-.status-indicator.online {
-    background-color: var(--status-online);
-}
-.status-indicator.offline {
-    background-color: var(--status-offline);
-}
-
-#profile-user-cta {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-}
-#profile-user-cta > button {
-    background: var(--accent-purple);
-    color: var(--text-primary);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    width: calc(var(--cta-max-ch, 12) * 1ch + 32px);
-    max-width: 100%;
-}
-
-#profile-tabs-toggle {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-#profile-main-content {
-    flex: 2;
-}
-#profile-aside {
-    flex: 1;
-    border: 1px solid var(--border-divider);
-    display: flex;
-}
-#profile-aside-donation {
-    flex: 2;
-    border: 1px solid var(--border-divider);
-}
-#profile-aside-ads {
-    flex: 3;
-    border: 1px solid var(--border-divider);
-}
-#profile-aside-donation-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 40px);
-  gap: 8px;
-}
-
-#profile-aside-donation-grid div {
-  background: var(--primary-purple);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  border: 1px solid var(--border-divider);
-}
-.donate-button {
-    background: var(--accent-purple);
-    color: var(--text-primary);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 500;
-}
-
-.level-one-card {
-    background: var(--surface);
-    border: 1px solid var(--border-divider);
-    border-radius: 8px;
-}
-    */
