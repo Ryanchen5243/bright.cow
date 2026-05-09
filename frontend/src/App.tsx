@@ -1,8 +1,10 @@
-import LandingPage from "./components/LandingPage";
+import AppBody from "./components/AppBody";
+import NavBar from "./components/NavBar";
 export default function App() {
   return (
     <div className="App">
-      <LandingPage />
+      <NavBar />
+      <AppBody />
     </div>
   );
 }

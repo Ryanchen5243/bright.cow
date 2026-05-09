@@ -100,6 +100,12 @@ body {
     margin: 0;
 }
 
+#root, .App {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+/* begin nav styles */
 nav {
     display: flex;
     align-items: center;
@@ -293,6 +299,51 @@ nav > div {
     border-radius: 0 0 16px 16px;
 }
 
+/* end nav styles */
+
+/* begin left/right aside styles */
+.left-aside, .right-aside {
+    flex: 1;
+}
+.left-aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-right: 1px solid var(--border-divider);
+}
+#left-aside-home, #left-aside-messages, #left-aside-following, #left-aside-games, #left-aside-bookings, #left-aside-setting {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+#left-aside-home:hover, #left-aside-messages:hover, #left-aside-following:hover, #left-aside-games:hover, #left-aside-bookings:hover, #left-aside-setting:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+#left-aside-need-help {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-sm);
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.08);
+    transition: background-color 0.2s ease;
+}
+/* end left/right aside styles */
+
+/* begin app body styles */
+.app-body {
+    display: flex;
+    flex: 1;
+}
+.landing-main {
+    flex: 4;
+    overflow-y: auto;
+}
 
 /*
 body {
