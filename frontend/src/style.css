@@ -104,6 +104,7 @@ body {
     display: flex;
     flex-direction: column;
     flex: 1;
+    height: 100vh;
 }
 /* begin nav styles */
 nav {
@@ -339,10 +340,26 @@ nav > div {
 .app-body {
     display: flex;
     flex: 1;
+    min-height: 0;
 }
 .landing-main {
     flex: 4;
     overflow-y: auto;
+    min-height: 0;
+}
+.landing-main::-webkit-scrollbar {
+    width: 10px;
+}
+.landing-main::-webkit-scrollbar-track {
+    background: transparent;
+}
+.landing-main::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+.landing-main::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 /*
