@@ -1,6 +1,7 @@
 import { AccountCircle, Business, Notifications, Search, Settings, 
     Logout, Person } from "@mui/icons-material";
 import { useEffect, useState, useRef } from 'react';
+import { Link } from "react-router-dom";
 export default function NavBar() {
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
@@ -35,7 +36,7 @@ export default function NavBar() {
         <nav>
             <div className="nav-company-name">
                 <Business className="nav-icon"/>
-                <p>UWU~VIBE</p>
+                <Link to="/" className="nav-company-name-link">UWU~VIBE</Link>
             </div>
             <div ref={searchContainerRef} className={`nav-search-container` + (isSearchFocused ? ' focused' : '')}>
                 <div className="nav-search-input" onClick={() => setSearchFocused(true)}>

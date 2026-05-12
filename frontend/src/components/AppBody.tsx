@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LandingMain from "./LandingMain";
+import AppMain from "./AppMain";
 import LeftAside from "./LeftAside";
 import RightAside from "./RightAside";
 export default function AppBody() {
@@ -7,7 +7,7 @@ export default function AppBody() {
     return (
         <div className="app-body">
             <LeftAside setAppView={setAppView} />
-            <LandingMain appView={appView} />
+            <AppMain appView={appView} />
             <RightAside />
         </div>
     );

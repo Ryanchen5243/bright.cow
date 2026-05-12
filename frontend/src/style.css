@@ -134,6 +134,12 @@ nav > div {
     align-items: center;
     gap: var(--spacing-sm);
 }
+.nav-company-name-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
 
 .nav-search-container {
     display: flex;
@@ -353,24 +359,24 @@ nav > div {
     flex: 1;
     min-height: 0;
 }
-.landing-main {
+.app-main {
     flex: 6;
     overflow-y: auto;
     min-height: 0;
     padding-left: 32px;
     padding-right: 32px;
 }
-.landing-main::-webkit-scrollbar {
+.app-main::-webkit-scrollbar {
     width: 10px;
 }
-.landing-main::-webkit-scrollbar-track {
+.app-main::-webkit-scrollbar-track {
     background: transparent;
 }
-.landing-main::-webkit-scrollbar-thumb {
+.app-main::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.15);
     border-radius: 8px;
     transition: background-color 0.2s ease;
 }
-.landing-main::-webkit-scrollbar-thumb:hover {
+.app-main::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.25);
 }

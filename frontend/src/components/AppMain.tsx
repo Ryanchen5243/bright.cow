@@ -1,6 +1,6 @@
-export default function LandingMain({appView}: {appView: string}) {
+export default function AppMain({appView}: {appView: string}) {
   return (
-    <div className="landing-main">
+    <div className="app-main">
       {appView === "home" && <h1>Home View</h1>}
       {appView === "messages" && <h1>Messages View</h1>}
       {appView === "following" && <h1>Following View</h1>}
