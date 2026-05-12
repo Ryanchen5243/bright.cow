@@ -306,8 +306,11 @@ nav > div {
 /* end nav styles */
 
 /* begin left/right aside styles */
-.left-aside, .right-aside {
+.left-aside {
     flex: 1;
+}
+.right-aside {
+    flex: 1.5;
 }
 .left-aside {
     display: flex;
@@ -351,9 +354,11 @@ nav > div {
     min-height: 0;
 }
 .landing-main {
-    flex: 4;
+    flex: 6;
     overflow-y: auto;
     min-height: 0;
+    padding-left: 32px;
+    padding-right: 32px;
 }
 .landing-main::-webkit-scrollbar {
     width: 10px;

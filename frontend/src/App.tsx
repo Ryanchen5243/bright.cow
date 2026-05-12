@@ -1,11 +1,18 @@
 import AppBody from "./components/AppBody";
 import NavBar from "./components/NavBar";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 export default function App() {
   return (
-    <div className="App">
-      <NavBar />
-      <AppBody />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route path="/app" element={<><NavBar /><AppBody /></>} />
+          <Route path='/other' element={<h1>Other Page</h1>} />
+          <Route path="/" element={<h1>Landing Page</h1>} />
+          <Route path="*" element={<h1>404 Not Found</h1>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
