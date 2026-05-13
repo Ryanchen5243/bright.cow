@@ -2,7 +2,7 @@ import { AccountCircle, Business, Notifications, Search, Settings,
     Logout, Person } from "@mui/icons-material";
 import { useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
-export default function NavBar() {
+export default function NavBar({ setAppView }: { setAppView: React.Dispatch<React.SetStateAction<string>> }) {
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
     const [isNotificationsOpen, setNotificationsOpen] = useState(false);
@@ -72,13 +72,13 @@ export default function NavBar() {
                         </div>
                     )}
                 </div>
-                <div className="profile-wrapper">
-                    <div ref={profileRef}>
+                <div className="profile-wrapper" ref={profileRef}>
+                    <div>
                         <AccountCircle className={`nav-icon profile-icon ${isProfileMenuOpen ? 'active' : ''}`} onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}/>
                     </div>
                     {isProfileMenuOpen && (
                         <div className="nav-profile-menu">
-                            <div className="nav-profile-menu-item">
+                            <div className="nav-profile-menu-item" onClick={()=> setAppView("profile")}>
                                 <Person className="nav-profile-menu-icon"/>
                                 <span>Profile</span>
                             </div>
