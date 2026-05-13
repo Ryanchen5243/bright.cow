@@ -10,7 +10,7 @@ export default function App() {
           <Route path="/app" element={<><NavBar /><AppBody /></>} />
           <Route path='/other' element={<h1>Other Page</h1>} />
           <Route path="/" element={<LandingPage />} />
-          <Route path="*" element={<h1>404 Not Found</h1>} />
+          <Route path="*" element={<h1>404 Not Found hoo </h1>} />
         </Routes>
       </div>
     </BrowserRouter>
