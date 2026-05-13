@@ -6,7 +6,7 @@ export default function LandingPage() {
             <h1>Welcome to UWU~VIBE!</h1>
             <p>Your one-stop platform for gaming, socializing, and more. Explore our features and join the fun today!</p>
             <Link to="/app" className="landing-cta-button">Enter the App</Link>
-            <span>editing directly from the github website under profile-feature-branch </span>
+            <span>alternative edits </span>
         </div>
     );
 }
