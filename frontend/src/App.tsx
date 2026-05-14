@@ -1,5 +1,4 @@
-import AppBody from "./components/AppBody";
-import NavBar from "./components/NavBar";
+import ApplicationPage from "./components/ApplicationPage";
 import LandingPage from "./components/LandingPage";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 export default function App() {
@@ -7,7 +6,7 @@ export default function App() {
     <BrowserRouter>
       <div className="App">
         <Routes>
-          <Route path="/app" element={<><NavBar /><AppBody /></>} />
+          <Route path="/app" element={<ApplicationPage />} />
           <Route path='/other' element={<h1>Other Page</h1>} />
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<h1>404 Not Found hoo </h1>} />
