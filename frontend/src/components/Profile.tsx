@@ -13,15 +13,15 @@ export default function Profile() {
                 <div className="profile-header-user-details-container">
                     <div className="profile-header-user-details-and-cta">
                         <div className="profile-header-user-details">
-                            <div className="profile-header-user-headline">Luna</div>
+                            <div className="profile-header-user-headline"><h1 className="h1-style">Luna</h1></div>
                             <div className="profile-header-user-headline-supporting">
                                 <span>@itsluna</span>
                                 <span>online</span>
                             </div>
                         </div>
                         <div className="profile-header-cta">
-                            <button className="profile-header-cta-book">Book a Session</button>
-                            <button className="profile-header-cta-follow">Message</button>
+                            <button className="profile-header-cta-book" onClick={() => setProfileTab("schedule")}>Book a Session</button>
+                            <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}>Message</button>
                         </div>
                     </div>
                     <div className="profile-header-user-metrics-and-tags">
@@ -38,10 +38,10 @@ export default function Profile() {
                 </div>
             </div>
             <div className="profile-main-tabs">
-                <span onClick={()=> setProfileTab("overview")}>Overview</span>
-                <span onClick={()=> setProfileTab("games")}>Games</span>
-                <span onClick={()=> setProfileTab("schedule")}>Schedule</span>
-                <span onClick={()=> setProfileTab("media")}>Media</span>
+                <span className={profileTab === "overview" ? "active" : ""} onClick={()=> setProfileTab("overview")}>Overview</span>
+                <span className={profileTab === "games" ? "active" : ""} onClick={()=> setProfileTab("games")}>Games</span>
+                <span className={profileTab === "schedule" ? "active" : ""} onClick={()=> setProfileTab("schedule")}>Schedule</span>
+                <span className={profileTab === "media" ? "active" : ""} onClick={()=> setProfileTab("media")}>Media</span>
             </div>
             <div className="profile-main">
                 {profileTab === "overview" && <div className="profile-user-bio">
