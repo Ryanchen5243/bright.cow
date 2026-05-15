@@ -425,8 +425,7 @@ nav > div {
     flex: 3;
     overflow-y: auto;
     min-height: 0;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 16px;
     background-color: var(--background-primary);
     border-radius: 8px;
 }
@@ -466,88 +465,109 @@ nav > div {
 /* end app body styles */
 
 /* begin profile page styles */
+.profile-view {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
 .profile-header {
     display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    max-height: 350px;
-    background-position: center;
+    flex-direction: column;
+    position: relative;
+}
+.profile-header-background {
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+    height: 200px;
     background-size: cover;
-    color: var(--text-primary);
+    background-position: center;
 }
-.profile-header-content {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    flex: 1;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    background-color:rgba(0, 0, 0, 0.2);
-    padding-top: 48px;
+.profile-user-photo {
+    width: 25%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--vibrant-purple);
+    top: 40%;
+    left: 2.5%;
+    position: absolute;
+    z-index: 1;
 }
-.profile-avatar {
-    flex: 1;
+.profile-user-photo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.profile-avatar img {
-    height: 75%;
-    width: clamp(150px, 75%, 500px);
-    border-radius: 50%;
-    object-fit: cover;
-    border: clamp(2px, 4px, 6px) solid var(--primary-purple);
-}
-.profile-user-info {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-}
-.profile-user-info p,h1 {
-    margin: 0;
-}
 
-.profile-user-cta {
-    flex: 1;
+.profile-header-user-details-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: 8px;
+    padding: 16px;
+    margin-left: min(25% + 32px, 216px);
 }
-.profile-user-cta button {
-    background-color: #89CFF0;
-    color: var(--text-primary);
+.profile-header-user-details-and-cta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.profile-header-cta {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+.profile-header-cta button {
+    background-color: var(--vibrant-purple);
+    color: #ffffff;
     border: none;
-    border-radius: 24px;
+    border-radius: 8px;
     padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
 }
-.profile-user-cta button:hover {
-    background-color: #7C3AED;
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
-    transform: translateY(-2px);
-}
-.profile-main {
+.profile-header-user-metrics {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 24px;
 }
-.profile-main > div {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+.profile-header-user-tags {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
+.profile-header-user-tags > span {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+}
+.profile-header-user-tag-fps-games {
+    background-color: #FF6B6B;
+    color: #FFF;
+    font-weight: 500;
+}
+.profile-header-user-tag-variety-streamer {
+    background-color: #4ECDC4;
+    color: #FFF;
+    font-weight: 500;
+}
+.profile-header-user-tag-chill-vibes {
+    background-color: #FFD93D;
+    color: #2C3E50;
+    font-weight: 500;
+}
+
 .profile-main-tabs {
     display: flex;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--border-divider);
-}
-.profile-main-tabs span {
-    cursor: pointer;
-    padding-bottom: var(--spacing-xs);
-    transition: all 0.2s ease;
+    gap: 16px;
+    margin-top: 16px;
 }
 /* end profile page styles */

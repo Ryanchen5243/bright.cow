@@ -5,33 +5,45 @@ export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     return (
         <div className="profile-view">
-            <div className="profile-header" style={{ backgroundImage: `url(${bg})` }}>          
-                <div className="profile-header-content">
-                    <div className="profile-avatar">
-                        <img src={pfp} alt="Profile avatar" />
+            <div className="profile-header">
+                <div className="profile-header-background" style={{ backgroundImage: `url(${bg})` }}></div>
+                <div className="profile-user-photo">
+                    <img src={pfp} alt="profile photo" />
+                </div>
+                <div className="profile-header-user-details-container">
+                    <div className="profile-header-user-details-and-cta">
+                        <div className="profile-header-user-details">
+                            <div className="profile-header-user-headline">Luna</div>
+                            <div className="profile-header-user-headline-supporting">
+                                <span>@itsluna</span>
+                                <span>online</span>
+                            </div>
+                        </div>
+                        <div className="profile-header-cta">
+                            <button className="profile-header-cta-book">Book a Session</button>
+                            <button className="profile-header-cta-follow">Message</button>
+                        </div>
                     </div>
-                    <div className="profile-user-info">
-                        <h1 className='h1-style'>Emily Nova</h1>
-                        <p>@emily_gamer</p>
-                        <p>Boston, MA, 14:00 UTC</p>
-                    </div>
-                    <div className="profile-user-cta">
-                        <button>Book a Session</button>
-                        <button>Follow</button>
-                        <button>Message</button>
+                    <div className="profile-header-user-metrics-and-tags">
+                        <div className="profile-header-user-metrics">
+                            <span>4.9 (128 reviews)</span>
+                            <span>1.2k followers</span>
+                        </div>
+                        <div className="profile-header-user-tags">
+                            <span className="profile-header-user-tag-fps-games">FPS Games</span>
+                            <span className="profile-header-user-tag-variety-streamer">Variety Streamer</span>
+                            <span className="profile-header-user-tag-chill-vibes">Chill Vibes</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div className="profile-main-tabs">
+                <span onClick={()=> setProfileTab("overview")}>Overview</span>
+                <span onClick={()=> setProfileTab("games")}>Games</span>
+                <span onClick={()=> setProfileTab("schedule")}>Schedule</span>
+                <span onClick={()=> setProfileTab("media")}>Media</span>
+            </div>
             <div className="profile-main">
-                {/* <div> games section <br /> games section <br /> games section </div>
-                <div>Schedule section</div>
-                <div>Reviews Section</div> */}
-                <div className="profile-main-tabs">
-                    <span onClick={()=> setProfileTab("overview")}>Overview</span>
-                    <span onClick={()=> setProfileTab("games")}>Games</span>
-                    <span onClick={()=> setProfileTab("schedule")}>Schedule</span>
-                    <span onClick={()=> setProfileTab("media")}>Media</span>
-                </div>
                 {profileTab === "overview" && <div className="profile-user-bio">
                 <p>Born in Washington DC 1992 <br />
                 I am your girl next door <br />
