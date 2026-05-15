@@ -11,7 +11,7 @@ export default function AppMain({appView}: {appView: string}) {
         {appView === "bookings" && <h1>Bookings View</h1>}
         {appView === "profile" && <Profile />}
       </div>
-      <RightAside />
+      <RightAside appView={appView} />
     </>
   );
 }

@@ -151,7 +151,7 @@ nav > div {
 }
 .nav-search-container.focused {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     background-color: #ffffff;
     border-radius: 8px;
     padding: 0 16px;
@@ -425,8 +425,7 @@ nav > div {
     flex: 3;
     overflow-y: auto;
     min-height: 0;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 16px;
     background-color: var(--background-primary);
     border-radius: 8px;
 }
@@ -466,88 +465,226 @@ nav > div {
 /* end app body styles */
 
 /* begin profile page styles */
+.profile-view {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
 .profile-header {
     display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    max-height: 350px;
-    background-position: center;
+    flex-direction: column;
+    position: relative;
+}
+.profile-header-background {
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+    height: 200px;
     background-size: cover;
-    color: var(--text-primary);
+    background-position: center;
 }
-.profile-header-content {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    flex: 1;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    background-color:rgba(0, 0, 0, 0.2);
-    padding-top: 48px;
+.profile-user-photo {
+    width: 25%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--vibrant-purple);
+    top: 40%;
+    left: 2.5%;
+    position: absolute;
+    z-index: 1;
 }
-.profile-avatar {
-    flex: 1;
+.profile-user-photo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.profile-avatar img {
-    height: 75%;
-    width: clamp(150px, 75%, 500px);
-    border-radius: 50%;
-    object-fit: cover;
-    border: clamp(2px, 4px, 6px) solid var(--primary-purple);
-}
-.profile-user-info {
-    flex-grow: 1;
+
+.profile-header-user-details-container {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: 8px;
+    padding: 16px;
+    margin-left: min(25% + 32px, 216px);
 }
-.profile-user-info p,h1 {
-    margin: 0;
+.profile-header-user-details-and-cta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+.profile-header-cta {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+.profile-header-cta button {
+    background-color: var(--vibrant-purple);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.profile-header-user-metrics {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+.profile-header-user-tags {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+.profile-header-user-tags > span {
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+}
+.profile-header-user-tag-fps-games {
+    background-color: #FF6B6B;
+    color: #FFF;
+    font-weight: 500;
+}
+.profile-header-user-tag-variety-streamer {
+    background-color: #4ECDC4;
+    color: #FFF;
+    font-weight: 500;
+}
+.profile-header-user-tag-chill-vibes {
+    background-color: #FFD93D;
+    color: #2C3E50;
+    font-weight: 500;
 }
 
-.profile-user-cta {
-    flex: 1;
+.profile-main-tabs {
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+}
+.profile-main-tabs span {
+    font-weight: 500;
+    padding: 16px 24px;
+    border-bottom: 2px solid transparent;
+}
+.profile-main-tabs span:hover,
+.profile-main-tabs span.active {
+    color: var(--vibrant-purple);
+    cursor: pointer;
+    border-bottom-color: var(--vibrant-purple);
+}
+.profile-right-aside {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
 }
-.profile-user-cta button {
-    background-color: #89CFF0;
-    color: var(--text-primary);
+
+#profile-right-aside-donation-container {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+#profile-right-aside-donation-amount-container-general {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#profile-right-aside-donation-amount-container-1,
+#profile-right-aside-donation-amount-container-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    /* border: 1px solid #000000; */
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#profile-right-aside-donation-amount-container-1 span,
+#profile-right-aside-donation-amount-container-2 span {
+    flex: 1;
+    border-radius: 0;
+    background-color: var(--background-primary);
+    color: #000000;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+}
+
+#profile-right-aside-donation-amount-container-1 span:hover,
+#profile-right-aside-donation-amount-container-2 span:hover,
+#profile-right-aside-donation-amount-container-1 span.active,
+#profile-right-aside-donation-amount-container-2 span.active {
+    background-color: var(--vibrant-purple);
+    color: #FFF;
+}
+
+#profile-right-aside-donation-amount-container-1 span:hover span,
+#profile-right-aside-donation-amount-container-2 span:hover span,
+#profile-right-aside-donation-amount-container-1 span.active span,
+#profile-right-aside-donation-amount-container-2 span.active span {
+    background-color: var(--vibrant-purple);
+    color: #FFF;
+}
+
+#profile-right-aside-donation-amount-container-1 p,
+#profile-right-aside-donation-amount-container-2 p {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+#profile-right-aside-donation-amount-container-custom {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#profile-right-aside-donation-amount-container-custom input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+#profile-right-aside-donation-amount-container-custom input[type="number"]::-webkit-outer-spin-button,
+#profile-right-aside-donation-amount-container-custom input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#profile-right-aside-donation-button {
+    margin-top: 16px;
+    background-color: var(--vibrant-purple);
+    color: #ffffff;
     border: none;
-    border-radius: 24px;
+    border-radius: 8px;
     padding: 12px 24px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
-.profile-user-cta button:hover {
-    background-color: #7C3AED;
-    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
-    transform: translateY(-2px);
-}
-.profile-main {
-    display: flex;
-    flex-direction: column;
-}
-.profile-main > div {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-}
-.profile-main-tabs {
-    display: flex;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    border-bottom: 1px solid var(--border-divider);
-}
-.profile-main-tabs span {
-    cursor: pointer;
-    padding-bottom: var(--spacing-xs);
-    transition: all 0.2s ease;
-}
+
 /* end profile page styles */
