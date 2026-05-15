@@ -1,4 +1,4 @@
-import { AccountCircle, Business, Notifications, Search, Settings, 
+import { AccountCircle, Business, NotificationsNoneOutlined, Search, Settings, 
     Logout, Person } from "@mui/icons-material";
 import { useEffect, useState, useRef } from 'react';
 import { Link } from "react-router-dom";
@@ -41,7 +41,7 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
             <div ref={searchContainerRef} className={`nav-search-container` + (isSearchFocused ? ' focused' : '')}>
                 <div className="nav-search-input" onClick={() => setSearchFocused(true)}>
                     <Search className="search-icon"/>
-                    <input type="text"  placeholder="Search games..." 
+                    <input type="text"  placeholder="Search creators, games, or tags..." 
                         value={searchValue} 
                         onChange={(e) => setSearchValue(e.target.value)} 
                         onFocus={() => { setSearchFocused(true) }}></input>
@@ -62,7 +62,7 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
             <div className="nav-profile-and-notifications-container">
                 <div className="notification-wrapper">
                     <div ref={notificationsRef}> 
-                        <Notifications className={`nav-icon notifications-icon ${isNotificationsOpen ? 'active' : ''}`} onClick={() => setNotificationsOpen(!isNotificationsOpen)}/> 
+                        <NotificationsNoneOutlined className={`nav-icon notifications-icon ${isNotificationsOpen ? 'active' : ''}`} onClick={() => setNotificationsOpen(!isNotificationsOpen)}/> 
                     </div>
                     {isNotificationsOpen && (
                         <div className="nav-notifications-menu">
