@@ -581,6 +581,20 @@ nav > div {
     cursor: pointer;
     border-bottom-color: var(--vibrant-purple);
 }
+.profile-user-bio {
+    margin-top: 16px;
+    border-radius: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--background-secondary);
+}
+.profile-user-bio-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .profile-right-aside {
     display: flex;
     flex-direction: column;
