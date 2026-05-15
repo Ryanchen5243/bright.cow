@@ -6,7 +6,6 @@ import { Facebook } from "@mui/icons-material";
 import { Twitter } from "@mui/icons-material";
 import { Instagram } from "@mui/icons-material";
 import { YouTube } from "@mui/icons-material";
-import { KeyboardArrowRight } from "@mui/icons-material";
 export default function LeftAside({setAppView}: {setAppView: (view: string) => void}) {
     // make collapsable left-aside with icons for messages only
     return (
@@ -35,7 +34,7 @@ export default function LeftAside({setAppView}: {setAppView: (view: string) => v
                 </div>
                 <div id="left-aside-footer-content">
                     <div id="left-aside-footer-links">
-                        <p>@2025 UWUvibe</p>
+                        <p>@2026 UWUvibe</p>
                         <div>
                             <p>Terms</p>
                             <p>Privacy</p>
