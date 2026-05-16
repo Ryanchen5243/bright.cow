@@ -2,8 +2,8 @@ import { Home } from "@mui/icons-material";
 import { EmailOutlined }  from "@mui/icons-material";
 import { DateRangeOutlined }  from "@mui/icons-material";
 import { FavoriteBorderOutlined }  from "@mui/icons-material";
-import { Facebook } from "@mui/icons-material";
-import { Twitter } from "@mui/icons-material";
+import { LinkedIn } from "@mui/icons-material";
+import { X } from "@mui/icons-material";
 import { Instagram } from "@mui/icons-material";
 import { YouTube } from "@mui/icons-material";
 export default function LeftAside({setAppView}: {setAppView: (view: string) => void}) {
@@ -43,8 +43,8 @@ export default function LeftAside({setAppView}: {setAppView: (view: string) => v
                         </div>
                     </div>
                     <div id="left-aside-footer-social">
-                        <Facebook />
-                        <Twitter />
+                        <LinkedIn />
+                        <X />
                         <Instagram />
                         <YouTube />
                     </div>

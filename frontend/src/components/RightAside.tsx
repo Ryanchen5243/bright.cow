@@ -46,7 +46,7 @@ export default function RightAside({ appView }: { appView: string }) {
                     </button>
                 </div>
                 <div id="profile-right-aside-upcoming-sessions">
-                    <h2 className="h2-style">Upcoming Sessions</h2>
+                    <h2 className="h2-style">tbd</h2>
                     <div id="profile-right-aside-upcoming-session"></div>
                 </div>
             </div>}
