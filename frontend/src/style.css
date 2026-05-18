@@ -564,7 +564,9 @@ nav > div {
     color: #2C3E50;
     font-weight: 500;
 }
-
+.profile-main {
+    padding: 32px;
+}
 .profile-main-tabs {
     display: flex;
     flex-direction: row;

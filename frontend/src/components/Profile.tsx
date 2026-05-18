@@ -2,6 +2,7 @@ import bg from '../assets/default_background_photo.jpg';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useState } from 'react';
 import { Edit } from '@mui/icons-material';
+import CreatorSchedule from './CreatorSchedule';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     // user customizations
@@ -62,7 +63,7 @@ export default function Profile() {
                     </div>
                 }
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <h1>schedule</h1>}
+                {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
                 {profileTab === "media" && <h1>media</h1>}
             </div>
         </div>

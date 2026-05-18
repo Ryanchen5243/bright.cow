@@ -1,8 +1,15 @@
 import { FavoriteBorderOutlined } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RightAside({ appView }: { appView: string }) {
     const [donationAmount, setDonationAmount] = useState("");
+    const [currentTime, setCurrentTime] = useState(new Date())
+    useEffect( () => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
     return (
         <div className="right-aside">
             {appView !== "profile" && <div>generic right aside</div>}
@@ -46,8 +53,7 @@ export default function RightAside({ appView }: { appView: string }) {
                     </button>
                 </div>
                 <div id="profile-right-aside-upcoming-sessions">
-                    <h2 className="h2-style">tbd</h2>
-                    <div id="profile-right-aside-upcoming-session"></div>
+                    <p>{currentTime.toLocaleString()}</p>
                 </div>
             </div>}
         </div>
