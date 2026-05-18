@@ -6,8 +6,8 @@ import CreatorSchedule from './CreatorSchedule';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     // user customizations
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [userBio, setUserBio] = useState("Born in Washington DC 1992. I am your girl next door. looking for a man to play valorant with 😉. If you are interested hit me up. Dont be shy");
+    const [isLoggedIn] = useState(true);
+    const [userBio] = useState("Born in Washington DC 1992. I am your girl next door. looking for a man to play valorant with 😉. If you are interested hit me up. Dont be shy");
     return (
         <div className="profile-view">
             <div className="profile-header">

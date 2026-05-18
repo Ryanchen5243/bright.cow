@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useState } from 'react';
 export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
-    const [availabilities, setAvailabilities] = useState([
+    const [availabilities] = useState([
         {
             id: "1",
             title: "Available",
@@ -63,7 +63,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
         },
     ]);
 
-    const [bookings, setBookings] = useState([
+    const [bookings] = useState([
         {
             id: "1",
             title: "Booking A",
@@ -128,7 +128,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             backgroundColor: "#FF6961"
         },
     ]);
-    const [userTimeZone, setUserTimeZone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const [_] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
     return (
         <div className="creator-schedule">
             <FullCalendar
