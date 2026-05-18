@@ -422,7 +422,7 @@ nav > div {
     padding-right: 144px;
 }
 .app-main {
-    flex: 3;
+    flex: 4;
     overflow-y: auto;
     min-height: 0;
     padding: 16px;
@@ -484,7 +484,7 @@ nav > div {
     background-position: center;
 }
 .profile-user-photo {
-    width: 25%;
+    width: 22%;
     height: auto;
     border-radius: 50%;
     object-fit: cover;
@@ -509,7 +509,7 @@ nav > div {
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    margin-left: min(25% + 32px, 216px);
+    margin-left: min(22% + 32px, 216px);
 }
 .profile-header-user-details-and-cta {
     display: flex;
@@ -564,7 +564,9 @@ nav > div {
     color: #2C3E50;
     font-weight: 500;
 }
-
+.profile-main {
+    padding: 32px;
+}
 .profile-main-tabs {
     display: flex;
     flex-direction: row;
@@ -581,6 +583,20 @@ nav > div {
     cursor: pointer;
     border-bottom-color: var(--vibrant-purple);
 }
+.profile-user-bio {
+    margin-top: 16px;
+    border-radius: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--background-secondary);
+}
+.profile-user-bio-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .profile-right-aside {
     display: flex;
     flex-direction: column;
@@ -592,6 +608,11 @@ nav > div {
     flex-direction: column;
     padding: 16px;
     border-radius: 8px;
+}
+#profile-right-aside-donation-container h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
 #profile-right-aside-donation-amount-container-general {

@@ -1,8 +1,13 @@
 import bg from '../assets/default_background_photo.jpg';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useState } from 'react';
+import { Edit } from '@mui/icons-material';
+import CreatorSchedule from './CreatorSchedule';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
+    // user customizations
+    const [isLoggedIn, setIsLoggedIn] = useState(true);
+    const [userBio, setUserBio] = useState("Born in Washington DC 1992. I am your girl next door. looking for a man to play valorant with 😉. If you are interested hit me up. Dont be shy");
     return (
         <div className="profile-view">
             <div className="profile-header">
@@ -44,15 +49,21 @@ export default function Profile() {
                 <span className={profileTab === "media" ? "active" : ""} onClick={()=> setProfileTab("media")}>Media</span>
             </div>
             <div className="profile-main">
-                {profileTab === "overview" && <div className="profile-user-bio">
-                <p>Born in Washington DC 1992 <br />
-                I am your girl next door <br />
-                looking for a man to play valorant with 😉 <br />
-                if you are interested hit me up <br />
-                Dont be shy</p>
-            </div>}
+                {profileTab === "overview" && 
+                    <div className="profile-user-bio">
+                        <div className="profile-user-bio-header">
+                            <h3 className="h3-style">About Me</h3>
+                            <Edit />
+                        </div>
+                        <div className="profile-user-bio-content">
+                            <p>{userBio.split('. ').map((line, index) => (
+                                <span key={index}>{line}.<br /></span>
+                            ))}</p>
+                        </div>
+                    </div>
+                }
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <h1>schedule</h1>}
+                {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
                 {profileTab === "media" && <h1>media</h1>}
             </div>
         </div>
