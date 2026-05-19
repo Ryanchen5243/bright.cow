@@ -2,7 +2,9 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import Drawer from 'rc-drawer';
 import { useState } from 'react';
+import 'rc-drawer/assets/index.css';
 export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
     const [availabilities] = useState([
         {
@@ -10,7 +12,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             title: "Available",
             start: "2026-05-17T09:00:00",
             end: "2026-05-17T17:00:00",
-            backgroundColor: "#ff0037"
+            backgroundColor: "#A3D2CA"
         },
         {
             id: "2",
@@ -128,7 +130,10 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             backgroundColor: "#FF6961"
         },
     ]);
-    const [_] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const [selectedSlot, setSelectedSlot] = useState<string>("");
+    const [message, setMessage] = useState<string>("");
     return (
         <div className="creator-schedule">
             <FullCalendar
@@ -150,9 +155,50 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             }}
             timeZone="local"
             eventSources={[{ events: bookings }, { events: availabilities }]}
-            selectable={true}
-            editable={isLoggedIn ? true : false}
+            eventClick={
+                (info) => {
+                    if (isLoggedIn) {
+                        if (info.event.title === "Available") {
+                            setSelectedEvent(info.event);
+                            setIsDrawerOpen(true);
+                        }
+                    } else {
+                        alert('Please log in to book a session!');
+                    }
+                }
+            }
             />
+            <Drawer
+                placement="right"
+                onClose={() => setIsDrawerOpen(false)}
+                open={isDrawerOpen}
+                width="600px">
+                <div className="booking-drawer">
+                    <h1 className="h1-style">Booking Details</h1>
+                    <span>{selectedEvent ? 
+                        new Date(selectedEvent.start).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) : ""}</span>
+                    <div className="time-slots">
+                        {selectedEvent && (() => {
+                            const slots = [];
+                            const start = new Date(selectedEvent.start);
+                            const end = new Date(selectedEvent.end);
+                            while (start < end) {
+                                const slotEnd = new Date(start.getTime() + 30 * 60000);
+                                if (slotEnd > end) break;
+                                slots.push(`${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${slotEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+                                start.setTime(start.getTime() + 30 * 60000);
+                            }
+                            return <select className='selected-time-slot' value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+                                    {slots.map((slot: string, index: number) => (
+                                        <option key={index} value={slot}>{slot}</option>
+                                    ))}
+                                </select>;
+                        })()}
+                    </div>
+                    <textarea placeholder="Message to creator..." className="booking-message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                    <button onClick={() => alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ""} ${selectedSlot}! \nMessage: ${message}`)}>Confirm Booking</button>
+                </div>
+            </Drawer>
         </div>
     );
 }
