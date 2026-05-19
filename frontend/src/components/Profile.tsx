@@ -7,7 +7,22 @@ export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     // user customizations
     const [isLoggedIn] = useState(true);
-    const [userBio] = useState("Born in Washington DC 1992. I am your girl next door. looking for a man to play valorant with 😉. If you are interested hit me up. Dont be shy");
+    const [userBio, setUserBio] = useState("Born in Washington DC 1992. I am your girl next door. looking for a man to play valorant with 😉. If you are interested hit me up. Dont be shy");
+    const [isEditingBio, setIsEditingBio] = useState(false);
+    const [draftBio, setDraftBio] = useState(userBio);
+    const startEditBio = () => {
+        setDraftBio(userBio);
+        setIsEditingBio(true);
+    }
+    const saveBio = () => {
+        setUserBio(draftBio);
+        setIsEditingBio(false);
+    }
+    const cancelEditBio = () => {
+        setDraftBio(userBio);
+        setIsEditingBio(false);
+    }
+    
     return (
         <div className="profile-view">
             <div className="profile-header">
@@ -53,12 +68,19 @@ export default function Profile() {
                     <div className="profile-user-bio">
                         <div className="profile-user-bio-header">
                             <h3 className="h3-style">About Me</h3>
-                            <Edit />
+                            <Edit onClick={startEditBio} />
                         </div>
                         <div className="profile-user-bio-content">
-                            <p>{userBio.split('. ').map((line, index) => (
-                                <span key={index}>{line}.<br /></span>
-                            ))}</p>
+                            {!isEditingBio && <div className="profile-user-bio-display">
+                                <div>{userBio}</div>
+                            </div>}
+                            {isEditingBio && <div className="profile-user-bio-edit">
+                                <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
+                                <div className="profile-user-bio-edit-cta">
+                                    <button onClick={saveBio}>Save</button>
+                                    <button onClick={cancelEditBio}>Cancel</button>
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 }
