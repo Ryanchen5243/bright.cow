@@ -596,6 +596,50 @@ nav > div {
     justify-content: space-between;
     align-items: center;
 }
+.profile-user-bio-display {
+    display: flex;
+    flex-direction: column;
+}
+.profile-user-bio-display div {
+    display: inline-block;
+    margin: 16px 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+}
+.profile-user-bio-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.profile-user-bio-edit-cta {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+.profile-user-bio-edit button {
+    background-color: #000000;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+}
+.profile-user-bio-textarea {
+    width: auto;
+    min-height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    resize: vertical;
+}
+.profile-user-bio-textarea:focus {
+    outline: none;
+    border-color: var(--vibrant-purple);
+}
 
 .profile-right-aside {
     display: flex;
