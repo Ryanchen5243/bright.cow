@@ -707,5 +707,45 @@ nav > div {
     justify-content: center;
     gap: 8px;
 }
-
+.booking-drawer {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.booking-drawer button {
+    background-color: var(--vibrant-purple);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.selected-time-slot {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+.booking-message {
+    width: auto;
+    min-height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    resize: vertical;
+}
+.booking-message:focus {
+    outline: none;
+    border-color: var(--vibrant-purple);
+}
 /* end profile page styles */
