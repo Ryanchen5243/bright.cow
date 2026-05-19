@@ -10,7 +10,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             title: "Available",
             start: "2026-05-17T09:00:00",
             end: "2026-05-17T17:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#ff0037"
         },
         {
             id: "2",
