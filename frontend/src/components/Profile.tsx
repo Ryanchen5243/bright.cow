@@ -72,7 +72,7 @@ export default function Profile() {
                         </div>
                         <div className="profile-user-bio-content">
                             {!isEditingBio && <div className="profile-user-bio-display">
-                                <div>{userBio}</div>
+                                {userBio}
                             </div>}
                             {isEditingBio && <div className="profile-user-bio-edit">
                                 <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />

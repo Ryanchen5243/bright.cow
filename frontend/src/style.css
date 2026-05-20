@@ -10,6 +10,12 @@
     --light-purple: #E9D9FA;
     --medium-purple: #C69DE9;
 
+    --cta-button-color: linear-gradient(135deg,
+        #FF4FD8 0%,
+        #A855F7 50%,
+        #6366F1 100%
+        );
+
     /* typography */
 
     --h1-font-size: 1.5rem; /* 24px / 16 */
@@ -85,7 +91,7 @@
 html {
   font-family: "Inter", system-ui, sans-serif;
   color: #000000;
-  background-color: var(--white);
+  background-color: #ffffff;
 }
 
 body {
@@ -140,7 +146,7 @@ nav > div {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background-color: var(--background-primary);
+    background-color: #ffffff;
     border-radius: 8px;
     position: relative;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -347,13 +353,12 @@ nav > div {
     /* border: 1px solid black; */
 }
 #left-aside-footer-cta {
-    background-color: var(--light-purple);
     display: flex;
     flex-direction: column;
     gap: 16px;
     border-radius: 8px;
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #000000;
 }
 #left-aside-footer-cta h2 {
     margin: 0;
@@ -366,7 +371,7 @@ nav > div {
     font-weight: 400;
 }
 #left-aside-footer-cta button {
-    background-color: var(--vibrant-purple);
+    background: var(--cta-button-color);
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -424,9 +429,10 @@ nav > div {
 .app-main {
     flex: 4;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     min-height: 0;
-    padding: 16px;
-    background-color: var(--background-primary);
+    background-color: #000000;
     border-radius: 8px;
 }
 .app-main::-webkit-scrollbar {
@@ -484,7 +490,7 @@ nav > div {
     background-position: center;
 }
 .profile-user-photo {
-    width: 22%;
+    width: 22.3%;
     height: auto;
     border-radius: 50%;
     object-fit: cover;
@@ -524,14 +530,21 @@ nav > div {
     gap: 16px;
 }
 .profile-header-cta button {
-    background-color: var(--vibrant-purple);
+    background-color: #000000;
     color: #ffffff;
-    border: none;
     border-radius: 8px;
     padding: 12px 24px;
     font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+.profile-header-cta-book {
+    background: var(--cta-button-color);
+    border: none;
+}
+.profile-header-cta-book:hover {
+    background: #000000;
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
 }
 .profile-header-user-metrics {
     display: flex;
@@ -565,7 +578,10 @@ nav > div {
     font-weight: 500;
 }
 .profile-main {
-    padding: 32px;
+    padding-top: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
 }
 .profile-main-tabs {
     display: flex;
@@ -584,11 +600,8 @@ nav > div {
     border-bottom-color: var(--vibrant-purple);
 }
 .profile-user-bio {
-    margin-top: 16px;
     border-radius: 8px;
-    padding-left: 16px;
-    padding-right: 16px;
-    background-color: var(--background-secondary);
+    /* border: 1px solid black; */
 }
 .profile-user-bio-header {
     display: flex;
@@ -737,7 +750,7 @@ nav > div {
 }
 #profile-right-aside-donation-button {
     margin-top: 16px;
-    background-color: var(--vibrant-purple);
+    background: var(--cta-button-color);
     color: #ffffff;
     border: none;
     border-radius: 8px;
