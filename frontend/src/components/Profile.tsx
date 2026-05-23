@@ -26,7 +26,6 @@ export default function Profile() {
     return (
         <div className="profile-view">
             <div className="profile-header">
-                <div className="profile-header-background" style={{ backgroundImage: `url(${bg})` }}></div>
                 <div className="profile-user-photo">
                     <img src={pfp} alt="profile photo" />
                 </div>
