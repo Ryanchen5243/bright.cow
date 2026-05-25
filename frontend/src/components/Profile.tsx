@@ -130,7 +130,7 @@ export default function Profile() {
                     </div>
                     <div className="profile-user-bio">
                         <div className="profile-user-bio-header">
-                            <h2>Bio</h2>
+                            <h3>Bio</h3>
                             <Edit onClick={startEditBio} />
                         </div>
                         <div className="profile-user-bio-content">
@@ -147,8 +147,8 @@ export default function Profile() {
                         </div>
                     </div>
                     <div className="profile-gifts-donation">
-                        <h2>Gifts & Donations</h2>
-                        <p>Gift and donation feature coming soon!</p>
+                        <h3 className="profile-gifts-donation-header">Send a Gift</h3>
+                        <p>Show some love to Luna!</p>
                         <h1>this is h1</h1>
                         <h2>this is h2</h2>
                         <h3>this is h3</h3>

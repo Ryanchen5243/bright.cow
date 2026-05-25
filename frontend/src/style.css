@@ -392,7 +392,7 @@ nav > div {
     padding-right: 64px;
     display: flex;
     flex-direction: row;
-    gap: 64px;
+    gap: 32px;
 }
 .profile-main-tabs {
     display: flex;
@@ -480,16 +480,36 @@ nav > div {
 }
 .profile-user-bio {
     margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     border-radius: 8px;
-    padding-left: 16px;
-    padding-right: 16px;
-    border: 1px solid black;
+    border: 1px solid #D3D3D3;
     flex: 1.25;
 }
+
 .profile-gifts-donation {
     margin-top: 16px;
     flex: 1;
-    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: 8px;
+    border: 1px solid #D3D3D3;
+    flex: 1;
+}
+.profile-gifts-donation-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    color: #000000;
+}
+.profile-gifts-donation-header h3 {
+    margin: 0;
 }
 .profile-user-bio-header {
     display: flex;
