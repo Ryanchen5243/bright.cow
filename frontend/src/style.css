@@ -352,6 +352,10 @@ nav > div {
     cursor: pointer;
     transition: all 0.3s ease;
 }
+.profile-header-cta button h3 {
+    margin: 0;
+    font-weight: 500;
+}
 .profile-header-user-metrics {
     display: flex;
     flex-direction: row;
@@ -414,16 +418,73 @@ nav > div {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border: 1px solid black;
+    border-radius: 8px;
+    border: 1px solid #D3D3D3;
+}
+.profile-services-offered-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    color: #000000;
+}
+.profile-services-offered-header h3 {
+    margin: 0;
+}
+.profile-services-offered p {
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 0;
+    font-weight: 400;
+    color: #1F1F2C;
+}
+.profile-services-offered button {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 8px;
+    background-color: transparent;
+    border-radius: 8px;
+    border: 1px solid #D3D3D3;
+    color: #9333FF; /* tbd */
+}
+.profile-service-card {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    padding: 16px;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+.profile-service-card h3 {
+    margin: 0;
+}
+.profile-service-card p {
+    padding: 0;
+}
+.profile-service-card-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-left: 16px;
+}
+.profile-service-card-price {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-left: auto;
+    text-align: center;
 }
 .profile-user-bio {
     margin-top: 16px;
     border-radius: 8px;
     padding-left: 16px;
     padding-right: 16px;
-    background-color: var(--background-secondary);
     border: 1px solid black;
-    flex: 3;
+    flex: 1.25;
 }
 .profile-gifts-donation {
     margin-top: 16px;
@@ -481,116 +542,6 @@ nav > div {
     border-color: var(--vibrant-purple);
 }
 
-.profile-right-aside {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-#profile-right-aside-donation-container {
-    display: flex;
-    flex-direction: column;
-    padding: 16px;
-    border-radius: 8px;
-}
-#profile-right-aside-donation-container h2 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-#profile-right-aside-donation-amount-container-general {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-#profile-right-aside-donation-amount-container-1,
-#profile-right-aside-donation-amount-container-2 {
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    /* border: 1px solid #000000; */
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-#profile-right-aside-donation-amount-container-1 span,
-#profile-right-aside-donation-amount-container-2 span {
-    flex: 1;
-    border-radius: 0;
-    background-color: var(--background-primary);
-    color: #000000;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 8px 4px;
-}
-
-#profile-right-aside-donation-amount-container-1 span:hover,
-#profile-right-aside-donation-amount-container-2 span:hover,
-#profile-right-aside-donation-amount-container-1 span.active,
-#profile-right-aside-donation-amount-container-2 span.active {
-    background-color: var(--vibrant-purple);
-    color: #FFF;
-}
-
-#profile-right-aside-donation-amount-container-1 span:hover span,
-#profile-right-aside-donation-amount-container-2 span:hover span,
-#profile-right-aside-donation-amount-container-1 span.active span,
-#profile-right-aside-donation-amount-container-2 span.active span {
-    background-color: var(--vibrant-purple);
-    color: #FFF;
-}
-
-#profile-right-aside-donation-amount-container-1 p,
-#profile-right-aside-donation-amount-container-2 p {
-    margin: 0;
-    font-size: 0.75rem;
-    font-weight: 400;
-}
-
-#profile-right-aside-donation-amount-container-custom {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-#profile-right-aside-donation-amount-container-custom input {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.875rem;
-}
-
-#profile-right-aside-donation-amount-container-custom input[type="number"]::-webkit-outer-spin-button,
-#profile-right-aside-donation-amount-container-custom input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-#profile-right-aside-donation-button {
-    margin-top: 16px;
-    background-color: var(--vibrant-purple);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
 .booking-drawer {
     padding: 16px;
     display: flex;

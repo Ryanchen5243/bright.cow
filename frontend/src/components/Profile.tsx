@@ -1,7 +1,7 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useState } from 'react';
-import { Edit } from '@mui/icons-material';
+import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
@@ -66,14 +66,71 @@ export default function Profile() {
             <div className="profile-main">
                 {profileTab === "overview" && <>
                     <div className="profile-services-offered">
-                        <h1>Services</h1>
-                        <p>service 1</p>
-                        <p>service 2</p>
-                        <p>service 3</p>
+                        <div className="profile-services-offered-header">
+                            <SportsEsportsOutlined fontSize='large' htmlColor="#9557ED"/>
+                            <h3>Services</h3>
+                        </div>
+                        <p>Choose a service and game with Luna!</p>
+                        <div className="profile-service-card">
+                            <Group fontSize='large' htmlColor="#9557ED"/>
+                            <div className="profile-service-card-detail">
+                                <h3>Duo Gaming</h3>
+                                <p>Play together and have fun!</p>
+                            </div>
+                            <div className="profile-service-card-price">
+                                <h3>$30</h3>
+                                <p>/1 hour</p>
+                            </div>
+                        </div>
+                        <div className="profile-service-card">
+                            <Adjust fontSize='large' htmlColor="#9557ED"/>
+                            <div className="profile-service-card-detail">
+                                <h3>Valorant Coaching</h3>
+                                <p>Improve your skills & rank up!</p>
+                            </div>
+                            <div className="profile-service-card-price">
+                                <h3>$35</h3>
+                                <p>/1 hour</p>
+                            </div>
+                        </div>
+                        <div className="profile-service-card">
+                            <SmartDisplay fontSize='large' htmlColor="#9557ED"/>
+                            <div className="profile-service-card-detail">
+                                <h3>VOD Review</h3>
+                                <p>Detailed review and tips</p>
+                            </div>
+                            <div className="profile-service-card-price">
+                                <h3>$25</h3>
+                                <p>/1 session</p>
+                            </div>
+                        </div>
+                        <div className="profile-service-card">
+                            <Message fontSize='large' htmlColor="#9557ED"/>
+                            <div className="profile-service-card-detail">
+                                <h3>Chill & talk</h3>
+                                <p>Just vibe & talk about anything</p>
+                            </div>
+                            <div className="profile-service-card-price">
+                                <h3>$15</h3>
+                                <p>/1 hour</p>
+                            </div>
+                        </div>
+                        <div className="profile-service-card">
+                            <StarBorder fontSize='large' htmlColor="#9557ED"/>
+                            <div className="profile-service-card-detail">
+                                <h3>Custom Session</h3>
+                                <p>Tell me what you want!</p>
+                            </div>
+                            <div className="profile-service-card-price">
+                                <h3>$30+</h3>
+                                <p>/custom</p>
+                            </div>
+                        </div>
+                        <button><h3>View All Services</h3></button>
                     </div>
                     <div className="profile-user-bio">
                         <div className="profile-user-bio-header">
-                            <h1>About Me</h1>
+                            <h2>Bio</h2>
                             <Edit onClick={startEditBio} />
                         </div>
                         <div className="profile-user-bio-content">
@@ -90,7 +147,7 @@ export default function Profile() {
                         </div>
                     </div>
                     <div className="profile-gifts-donation">
-                        <h1>Gifts & Donations</h1>
+                        <h2>Gifts & Donations</h2>
                         <p>Gift and donation feature coming soon!</p>
                         <h1>this is h1</h1>
                         <h2>this is h2</h2>
