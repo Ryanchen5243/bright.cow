@@ -1,8 +1,16 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useState } from 'react';
-import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder } from '@mui/icons-material';
+import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
+import rose_gift from '../assets/rose_gift.png';
+import teddy_bear_gift from '../assets/teddy_bear_gift.png';
+import boquet_gift from '../assets/bouquet_gift.png';
+import hearts_gift from '../assets/hearts_gift.png';
+import gift_box_gift from '../assets/gift_box_gift.png';
+import lambo_gift from '../assets/lambo_gift.png';
+import champagne_gift from '../assets/champagne_gift.png';
+import shipppp_gift from '../assets/shipppp_gift.png';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     // user customizations
@@ -58,6 +66,7 @@ export default function Profile() {
             </div>
             <div className="profile-main-tabs">
                 <p className={`${profileTab === "overview" ? "active" : ""}`} onClick={()=> setProfileTab("overview")}>Overview</p>
+                <p className={`${profileTab === "posts" ? "active" : ""}`} onClick={()=> setProfileTab("posts")}>Posts</p>
                 <p className={`${profileTab === "games" ? "active" : ""}`} onClick={()=> setProfileTab("games")}>Games</p>
                 <p className={`${profileTab === "schedule" ? "active" : ""}`} onClick={()=> setProfileTab("schedule")}>Schedule</p>
                 <p className={`${profileTab === "media" ? "active" : ""}`} onClick={()=> setProfileTab("media")}>Media</p>
@@ -128,37 +137,96 @@ export default function Profile() {
                         </div>
                         <button><h3>View All Services</h3></button>
                     </div>
-                    <div className="profile-user-bio">
-                        <div className="profile-user-bio-header">
-                            <h3>Bio</h3>
-                            <Edit onClick={startEditBio} />
-                        </div>
-                        <div className="profile-user-bio-content">
-                            {!isEditingBio && <div className="profile-user-bio-display">
-                                <div>{userBio}</div>
-                            </div>}
-                            {isEditingBio && <div className="profile-user-bio-edit">
-                                <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
-                                <div className="profile-user-bio-edit-cta">
-                                    <button onClick={saveBio}>Save</button>
-                                    <button onClick={cancelEditBio}>Cancel</button>
+                    <div className="profile-user-bio-and-recent-posts">
+                        <div className="profile-user-bio">
+                            <div className="profile-user-bio-header">
+                                <h3>Bio</h3>
+                                <Edit onClick={startEditBio} />
+                            </div>
+                            <div className="profile-user-bio-content">
+                                {!isEditingBio && <div className="profile-user-bio-display">
+                                    <div>{userBio}</div>
+                                </div>}
+                                {isEditingBio && <div className="profile-user-bio-edit">
+                                    <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
+                                    <div className="profile-user-bio-edit-cta">
+                                        <button onClick={saveBio}>Save</button>
+                                        <button onClick={cancelEditBio}>Cancel</button>
+                                    </div>
+                                </div>}
+                            </div>
+                            <div className="profile-user-bio-footer">
+                                <div className="profile-user-bio-footer-item">
+                                    <Translate fontSize='large' htmlColor="#9557ED"/>
+                                    <div>
+                                        <p>Languages</p>
+                                        <h3>English, Korean</h3>
+                                    </div>
                                 </div>
-                            </div>}
+                                <div className="profile-user-bio-footer-item">
+                                    <Public fontSize='large' htmlColor="#9557ED"/>
+                                    <div>
+                                        <p>Location</p>
+                                        <h3>New York, USA</h3>
+                                    </div>
+                                </div>
+                                <div className="profile-user-bio-footer-item">
+                                    <WatchLater fontSize='large' htmlColor="#9557ED"/>
+                                    <div>
+                                        <p>Avg Response</p>
+                                        <h3>1 hour</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="profile-user-recent-posts">
+                            <h1>post 1</h1>
+                            <h1>post 2</h1>
+                            <h1>post 3</h1>
                         </div>
                     </div>
                     <div className="profile-gifts-donation">
                         <h3 className="profile-gifts-donation-header">Send a Gift</h3>
                         <p>Show some love to Luna!</p>
-                        <h1>this is h1</h1>
-                        <h2>this is h2</h2>
-                        <h3>this is h3</h3>
-                        <h4>this is h4</h4>
-                        <h5>this is h5</h5>
-                        <h6>this is h6</h6>
-                        <p>this is p</p>
+                        <div className="profile-gifts-donation-items">
+                            <div className="profile-gifts-donation-item">
+                                <img src={rose_gift} alt="rose gift" />
+                                <p>100</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={boquet_gift} alt="boquet gift" />
+                                <p>300</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={hearts_gift} alt="hearts gift" />
+                                <p>400</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={teddy_bear_gift} alt="teddy bear gift" />
+                                <p>200</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={gift_box_gift} alt="gift box gift" />
+                                <p>500</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={lambo_gift} alt="lambo gift" />
+                                <p>1000</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={champagne_gift} alt="champagne gift" />
+                                <p>1500</p>
+                            </div>
+                            <div className="profile-gifts-donation-item">
+                                <img src={shipppp_gift} alt="shipppp gift" />
+                                <p>2000</p>
+                            </div>
+                        </div>
+                        <button className="profile-gifts-donation-send-button"><h3>Send</h3></button>
                     </div>
                     </>
                 }
+                {profileTab === "posts" && <h1>posts</h1>}
                 {profileTab === "games" && <h1>games</h1>}
                 {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
                 {profileTab === "media" && <h1>media</h1>}

@@ -393,6 +393,7 @@ nav > div {
     display: flex;
     flex-direction: row;
     gap: 32px;
+    align-items: flex-start;
 }
 .profile-main-tabs {
     display: flex;
@@ -444,13 +445,14 @@ nav > div {
 .profile-services-offered button {
     margin-left: 16px;
     margin-right: 16px;
+    margin-bottom: 16px;
     margin-top: 8px;
     background-color: transparent;
     border-radius: 8px;
     border: 1px solid #D3D3D3;
     color: #9333FF; /* tbd */
 }
-.profile-service-card {
+.profile-service-card, .profile-gifts-donation {
     display: flex;
     flex-direction: row;
     border: 1px solid #D3D3D3;
@@ -459,10 +461,14 @@ nav > div {
     margin-left: 16px;
     margin-right: 16px;
 }
-.profile-service-card h3 {
+.profile-service-card h3, .profile-gifts-donation h3 {
     margin: 0;
 }
-.profile-service-card p {
+.profile-gifts-donation h3 {
+    padding-left: 0;
+    padding-top: 0;
+}
+.profile-service-card p, .profile-gifts-donation p {
     padding: 0;
 }
 .profile-service-card-detail {
@@ -478,6 +484,12 @@ nav > div {
     margin-left: auto;
     text-align: center;
 }
+.profile-user-bio-and-recent-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    flex: 1.25;
+}
 .profile-user-bio {
     margin-top: 16px;
     display: flex;
@@ -485,7 +497,6 @@ nav > div {
     gap: 8px;
     border-radius: 8px;
     border: 1px solid #D3D3D3;
-    flex: 1.25;
 }
 
 .profile-gifts-donation {
@@ -511,11 +522,62 @@ nav > div {
 .profile-gifts-donation-header h3 {
     margin: 0;
 }
+.profile-gifts-donation p {
+    margin: 0;
+    font-weight: 400;
+    color: #1F1F2C;
+}
+.profile-gifts-donation-items {
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+.profile-gifts-donation-item {
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.profile-gifts-donation-item:hover {
+    border-color: var(--vibrant-purple);
+    cursor: pointer;
+}
+.profile-gifts-donation-item img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+}
+.profile-gifts-donation-item p {
+    margin: 8px 0;
+    font-weight: 500;
+    color: #1F1F2C;
+}
+.profile-gifts-donation-send-button {
+    background-color: #ffffff;
+    color: #9333FF;
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* align-self: flex-end; */
+}
 .profile-user-bio-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+.profile-user-bio-header h3 {
+    margin: 0;
 }
 .profile-user-bio-display {
     display: flex;
@@ -523,14 +585,17 @@ nav > div {
 }
 .profile-user-bio-display div {
     display: inline-block;
-    margin: 16px 0;
     font-size: 0.875rem;
     font-weight: 400;
+    margin: 0 16px;
+    margin-bottom: 16px;
 }
 .profile-user-bio-edit {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    padding: 0 16px;
+    padding-bottom: 16px;
 }
 .profile-user-bio-edit-cta {
     display: flex;
@@ -561,7 +626,33 @@ nav > div {
     outline: none;
     border-color: var(--vibrant-purple);
 }
-
+.profile-user-bio-footer {
+    display: flex;
+    flex-direction: row;
+    padding: 0 16px;
+    padding-bottom: 16px;
+    gap: 16px;
+}
+.profile-user-bio-footer-item {
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    gap: 8px;
+    padding: 8px 16px;
+    align-items: center;
+}
+.profile-user-bio-footer-item > div > h3 {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+.profile-user-bio-footer-item > div > p {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 400;
+}
 .booking-drawer {
     padding: 16px;
     display: flex;
