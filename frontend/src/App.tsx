@@ -1,22 +1,23 @@
 import ApplicationPage from "./components/ApplicationPage";
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
-import SignUp from "./components/SignUp";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from "./contexts/authContext";
 export default function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Routes>
-          <Route path="/app" element={<ApplicationPage />} />
-          <Route path='/other' element={<h1>Other Page</h1>} />
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="*" element={<h1>404 Not Found hoo </h1>} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <AuthProvider>
+        <BrowserRouter>
+          <div className="App">
+            <Routes>
+              <Route path="/app" element={<ApplicationPage />} />
+              <Route path='/other' element={<h1>Other Page</h1>} />
+              <Route path='/login' element={<Login />} />
+              <Route path="/" element={<LandingPage />} />
+              <Route path="*" element={<h1>404 Not Found hoo </h1>} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

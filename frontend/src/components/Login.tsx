@@ -1,87 +1,67 @@
-import {useState} from 'react';
-import {  signInWithEmailAndPassword   } from 'firebase/auth';
-import { auth } from '../firebase';
-import { NavLink, useNavigate } from 'react-router-dom'
-
-const Login = () => {
+import { useState, useEffect } from 'react';
+// @ts-ignore
+import { doSignInWithEmailAndPassword, doSignInWithGoogle } from '../firebase/auth';
+import { useAuth } from '../contexts/authContext';
+import { useNavigate } from 'react-router-dom';
+export default function Login() {
+    const { currentUser } = useAuth();
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isSigningIn, setIsSigningIn] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        if (currentUser) {
+            // Redirect to the application page or perform any other action
+            navigate('/app');
+        }
+    }, [currentUser, navigate]);
+
+    const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            navigate("/")
-            console.log(user);
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage)
-            alert("Error logging in: " + errorMessage)
-        });
+        if (!isSigningIn) {
+            setIsSigningIn(true);
+            await doSignInWithEmailAndPassword(email, password).catch((error: Error) => {
+                setErrorMessage(error.message);
+                setIsSigningIn(false);
+            });
+        }
+    };
+    const onGoogleSignIn = async () => {
+        if (!isSigningIn) {
+            setIsSigningIn(true);
+            await doSignInWithGoogle().catch((error: Error) => {
+                setErrorMessage(error.message);
+                setIsSigningIn(false);
+            });
+        }
+    };
 
-    }
-
-    return(
+    return (
         <>
-            <main >        
-                <section>
-                    <div>                                            
-                        <h1> Login Page </h1>
-                        <form onSubmit={onLogin}>                                              
-                            <div>
-                                <label htmlFor="email-address">
-                                    Email address
-                                </label>
-                                <input
-                                    id="email-address"
-                                    name="email"
-                                    type="email"                                    
-                                    required                                                                                
-                                    placeholder="Email address"
-                                    onChange={(e)=>setEmail(e.target.value)}
-                                />
-                            </div>
-
-                            <div>
-                                <label htmlFor="password">
-                                    Password
-                                </label>
-                                <input
-                                    id="password"
-                                    name="password"
-                                    type="password"                                    
-                                    required                                                                                
-                                    placeholder="Password"
-                                    onChange={(e)=>setPassword(e.target.value)}
-                                />
-                            </div>
-
-                            <div>
-                                <button                                    
-                                    type="submit"                                        
-                                >      
-                                    Login                                                                  
-                                </button>
-                            </div>                               
-                        </form>
-
-                        <p className="text-sm text-white text-center">
-                            No account yet? {' '}
-                            <NavLink to="/signup">
-                                Sign up
-                            </NavLink>
-                        </p>
-
-                    </div>
-                </section>
-            </main>
+            <div>Login Page </div>
+            <form onSubmit={onSubmit}>
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                />
+                <button type="submit" disabled={isSigningIn}>
+                    Sign In
+                </button>
+                <button type="button" onClick={onGoogleSignIn} disabled={isSigningIn}>
+                    Sign In with Google
+                </button>
+                {errorMessage && <p>{errorMessage}</p>}
+            </form>
         </>
-    )
+    );
 }
-
-export default Login
