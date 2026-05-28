@@ -3,14 +3,15 @@ import pfp from '../assets/default_profile_photo.jpg';
 import { useState } from 'react';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
-import rose_gift from '../assets/rose_gift.png';
-import teddy_bear_gift from '../assets/teddy_bear_gift.png';
-import boquet_gift from '../assets/bouquet_gift.png';
-import hearts_gift from '../assets/hearts_gift.png';
-import gift_box_gift from '../assets/gift_box_gift.png';
-import lambo_gift from '../assets/lambo_gift.png';
-import champagne_gift from '../assets/champagne_gift.png';
-import shipppp_gift from '../assets/shipppp_gift.png';
+import rose_gift from '../assets/profile_gifts/rose_gift.png';
+import teddy_bear_gift from '../assets/profile_gifts/teddy_bear_gift.png';
+import boquet_gift from '../assets/profile_gifts/bouquet_gift.png';
+import hearts_gift from '../assets/profile_gifts/hearts_gift.png';
+import gift_box_gift from '../assets/profile_gifts/gift_box_gift.png';
+import lambo_gift from '../assets/profile_gifts/lambo_gift.png';
+import champagne_gift from '../assets/profile_gifts/champagne_gift.png';
+import shipppp_gift from '../assets/profile_gifts/shipppp_gift.png';
+import UserPost from './UserPost';
 export default function Profile() {
     const [profileTab, setProfileTab] = useState("overview");
     // user customizations
@@ -38,28 +39,28 @@ export default function Profile() {
                     <img src={pfp} alt="profile photo" />
                 </div>
                 <div className="profile-header-user-details-container">
-                    <div className="profile-header-user-details-and-cta">
-                        <div className="profile-header-user-details">
-                            <div className="profile-header-user-headline"><h1>Luna</h1></div>
-                            <div className="profile-header-user-headline-supporting">
-                                <span>@itsluna</span>
-                                <span>online</span>
+                    <div className="profile-header-user-details">
+                        <div className="profile-header-user-headline"><h1>Luna</h1></div>
+                        <div className="profile-header-user-headline-supporting">
+                            <span>@itsluna</span>
+                            <span>online</span>
+                        </div>
+                    </div>
+                    <div className="profile-header-footer">
+                        <div className="profile-header-user-metrics-and-tags">
+                            <div className="profile-header-user-metrics">
+                                <span>4.9 (128 reviews)</span>
+                                <span>1.2k followers</span>
+                            </div>
+                            <div className="profile-header-user-tags">
+                                <span className="profile-header-user-tag-fps-games">FPS Games</span>
+                                <span className="profile-header-user-tag-variety-streamer">Variety Streamer</span>
+                                <span className="profile-header-user-tag-chill-vibes">Chill Vibes</span>
                             </div>
                         </div>
                         <div className="profile-header-cta">
                             <button className="profile-header-cta-book" onClick={() => setProfileTab("schedule")}><h3>Book a Session</h3></button>
                             <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
-                        </div>
-                    </div>
-                    <div className="profile-header-user-metrics-and-tags">
-                        <div className="profile-header-user-metrics">
-                            <span>4.9 (128 reviews)</span>
-                            <span>1.2k followers</span>
-                        </div>
-                        <div className="profile-header-user-tags">
-                            <span className="profile-header-user-tag-fps-games">FPS Games</span>
-                            <span className="profile-header-user-tag-variety-streamer">Variety Streamer</span>
-                            <span className="profile-header-user-tag-chill-vibes">Chill Vibes</span>
                         </div>
                     </div>
                 </div>
@@ -180,9 +181,9 @@ export default function Profile() {
                             </div>
                         </div>
                         <div className="profile-user-recent-posts">
-                            <h1>post 1</h1>
-                            <h1>post 2</h1>
-                            <h1>post 3</h1>
+                            <UserPost />
+                            <UserPost />
+                            <UserPost />
                         </div>
                     </div>
                     <div className="profile-gifts-donation">

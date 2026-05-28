@@ -330,12 +330,19 @@ nav > div {
     min-width: 0;
 }
 
-.profile-header-user-details-and-cta {
+.profile-header-user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+}
+.profile-header-user-details h1 {
+    margin: 0;
+}
+.profile-header-footer {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
-    gap: 16px;
 }
 .profile-header-cta {
     display: flex;
@@ -653,6 +660,24 @@ nav > div {
     font-size: 0.75rem;
     font-weight: 400;
 }
+/* begin user post styles */
+.user-post {
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+.user-post-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.user-post-content h3, .user-post-content p {
+    margin: 0;
+}
+/* end user post styles */
 .booking-drawer {
     padding: 16px;
     display: flex;

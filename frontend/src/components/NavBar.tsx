@@ -82,7 +82,7 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
                                 <Person className="nav-profile-menu-icon"/>
                                 <span>Profile</span>
                             </div>
-                            <div className="nav-profile-menu-item">
+                            <div className="nav-profile-menu-item" onClick={()=> setAppView("settings")}>
                                 <Settings className="nav-profile-menu-icon"/>
                                 <span>Settings</span>
                             </div>
