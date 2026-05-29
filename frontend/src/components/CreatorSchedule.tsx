@@ -134,50 +134,95 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [selectedSlot, setSelectedSlot] = useState<string>("");
     const [message, setMessage] = useState<string>("");
+
+    const upcomingBookings = bookings.filter((booking) => new Date(booking.start) >= new Date()).length;
+    const avgSessionMinutes = Math.round(
+        bookings.reduce((total, booking) => {
+            const start = new Date(booking.start).getTime();
+            const end = new Date(booking.end).getTime();
+            return total + (end - start) / 60000;
+        }, 0) / bookings.length
+    );
+
     return (
         <div className="creator-schedule">
-            <FullCalendar
-            plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
-            initialView="timeGridWeek"
-            height="auto"
-            contentHeight="auto"
-            headerToolbar={{
-                start: "title",
-                center: "",
-                end: "today prev,next"            }}
-            stickyHeaderDates={true}
-            slotLabelFormat={{
-                hour: "numeric",
-                minute: "2-digit",
-                omitZeroMinute: false,
-                meridiem: "short",
-                hour12: true
-            }}
-            timeZone="local"
-            eventSources={[{ events: bookings }, { events: availabilities }]}
-            eventClick={
-                (info) => {
-                    if (isLoggedIn) {
-                        if (info.event.title === "Available") {
-                            setSelectedEvent(info.event);
-                            setIsDrawerOpen(true);
+            <div className="creator-schedule-shell">
+                <div className="creator-schedule-header">
+                    <div>
+                        <p>Booking ops</p>
+                        <h2>Session Calendar</h2>
+                        <span>Ship a booking in under 60 seconds with clear availability and fast confirmation.</span>
+                    </div>
+                    <div className="creator-schedule-metrics">
+                        <div>
+                            <p>Open windows</p>
+                            <h3>{availabilities.length}</h3>
+                        </div>
+                        <div>
+                            <p>Upcoming bookings</p>
+                            <h3>{upcomingBookings}</h3>
+                        </div>
+                        <div>
+                            <p>Avg session</p>
+                            <h3>{avgSessionMinutes}m</h3>
+                        </div>
+                    </div>
+                </div>
+                <div className="creator-schedule-calendar-card">
+                    <div className="creator-schedule-legend">
+                        <span className="creator-schedule-legend-item available">Available slots</span>
+                        <span className="creator-schedule-legend-item booked">Booked sessions</span>
+                    </div>
+                    <FullCalendar
+                    plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+                    initialView="timeGridWeek"
+                    height="auto"
+                    contentHeight="auto"
+                    headerToolbar={{
+                        start: "title",
+                        center: "",
+                        end: "today prev,next"            }}
+                    stickyHeaderDates={true}
+                    slotLabelFormat={{
+                        hour: "numeric",
+                        minute: "2-digit",
+                        omitZeroMinute: false,
+                        meridiem: "short",
+                        hour12: true
+                    }}
+                    timeZone="local"
+                    eventSources={[{ events: bookings }, { events: availabilities }]}
+                    eventClick={
+                        (info) => {
+                            if (isLoggedIn) {
+                                if (info.event.title === "Available") {
+                                    setSelectedEvent(info.event);
+                                    setSelectedSlot("");
+                                    setMessage("");
+                                    setIsDrawerOpen(true);
+                                }
+                            } else {
+                                alert('Please log in to book a session!');
+                            }
                         }
-                    } else {
-                        alert('Please log in to book a session!');
                     }
-                }
-            }
-            />
+                    />
+                </div>
+            </div>
             <Drawer
                 placement="right"
                 onClose={() => setIsDrawerOpen(false)}
                 open={isDrawerOpen}
-                width="600px">
-                <div className="booking-drawer">
-                    <h1 className="h1-style">Booking Details</h1>
-                    <span>{selectedEvent ? 
+                width="520px">
+                <div className="creator-booking-drawer">
+                    <div className="creator-booking-head">
+                        <p>Checkout</p>
+                        <h2>Book Session</h2>
+                    </div>
+                    <span className="creator-booking-date">{selectedEvent ? 
                         new Date(selectedEvent.start).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) : ""}</span>
-                    <div className="time-slots">
+                    <div className="creator-booking-field">
+                        <label htmlFor="time-slot-select">Choose time slot</label>
                         {selectedEvent && (() => {
                             const slots = [];
                             const start = new Date(selectedEvent.start);
@@ -188,15 +233,19 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                                 slots.push(`${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${slotEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
                                 start.setTime(start.getTime() + 30 * 60000);
                             }
-                            return <select className='selected-time-slot' value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+                            return <select id="time-slot-select" className='creator-booking-time-select' value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
+                                    <option value="" disabled>Select a time slot</option>
                                     {slots.map((slot: string, index: number) => (
                                         <option key={index} value={slot}>{slot}</option>
                                     ))}
                                 </select>;
                         })()}
                     </div>
-                    <textarea placeholder="Message to creator..." className="booking-message" value={message} onChange={(e) => setMessage(e.target.value)} />
-                    <button onClick={() => alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ""} ${selectedSlot}! \nMessage: ${message}`)}>Confirm Booking</button>
+                    <div className="creator-booking-field">
+                        <label htmlFor="booking-message">Message to creator</label>
+                        <textarea id="booking-message" placeholder="Tell Luna your goals for this session..." className="creator-booking-message" value={message} onChange={(e) => setMessage(e.target.value)} />
+                    </div>
+                    <button className="creator-booking-confirm" disabled={!selectedSlot} onClick={() => alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ""} ${selectedSlot}! \nMessage: ${message}`)}>Confirm Booking</button>
                 </div>
             </Drawer>
         </div>
