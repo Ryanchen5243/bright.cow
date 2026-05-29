@@ -1,6 +1,10 @@
 import { Business } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/authContext";
+
 export default function LandingPage() {
+    const { currentUser } = useAuth();
+
     return (
         <div className="landing-page">
             <nav>
@@ -9,7 +13,7 @@ export default function LandingPage() {
                     <Link to="/" className="nav-company-name-link">UWU~VIBE</Link>
                 </div>
                 <div className="nav-links">
-                    <Link to="/app" className="nav-link">Home</Link>
+                    <Link to={currentUser ? "/app" : "/login"} className="nav-link">Home</Link>
                     <a href="#features" className="nav-link">Features</a>
                     <a href="#about" className="nav-link">About Us</a>
                     <a href="#contact" className="nav-link">Contact</a>
@@ -17,7 +21,7 @@ export default function LandingPage() {
             </nav>
             <h1>Konevo LLC</h1>
             <p>Your one-stop platform for gaming, socializing, and more. Explore our features and join the fun today!</p>
-            <Link to="/login" className="landing-cta-button">Get Started</Link>
+            <Link to={currentUser ? "/app" : "/login"} className="landing-cta-button">Get Started</Link>
         </div>
     );
 }

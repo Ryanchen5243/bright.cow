@@ -18,7 +18,7 @@ export default function UserPost() {
         { attachment_id: 2, type: "video", url: "https://example.com/video1.mp4" }
     ];
   return (
-    <div className="user-post">
+        <div className="user-post" data-user-id={user_id} data-post-id={post_id}>
         <div className="user-post-avatar">
             <img src={pfp} alt="avatar" />
         </div>
@@ -36,7 +36,7 @@ export default function UserPost() {
             <div>
                 {timestamp.toLocaleString()}
                 <button onClick={() => alert("Liked!")}>Like {likes}</button>
-                <button onClick={() => alert("Commented!")}>Comment</button>
+                <button onClick={() => alert("Commented!")}>Comment ({comments.length})</button>
             </div>
         </div>
     </div>
