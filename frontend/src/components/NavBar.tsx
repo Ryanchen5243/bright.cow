@@ -1,8 +1,11 @@
 import { AccountCircle, Business, NotificationsNoneOutlined, Search, Settings, 
     Logout, Person } from "@mui/icons-material";
 import { useEffect, useState, useRef } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { doSignOut } from "../firebase/auth.ts";
+
 export default function NavBar({ setAppView }: { setAppView: React.Dispatch<React.SetStateAction<string>> }) {
+    const navigate = useNavigate();
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
     const [isNotificationsOpen, setNotificationsOpen] = useState(false);
@@ -31,6 +34,17 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    const handleLogout = async () => {
+        try {
+            await doSignOut();
+            setAppView("home");
+            setProfileMenuOpen(false);
+            navigate("/", { replace: true });
+        } catch (error) {
+            console.error("Failed to sign out", error);
+        }
+    };
 
     return (
         <nav>
@@ -82,11 +96,11 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
                                 <Person className="nav-profile-menu-icon"/>
                                 <span>Profile</span>
                             </div>
-                            <div className="nav-profile-menu-item">
+                            <div className="nav-profile-menu-item" onClick={()=> setAppView("settings")}>
                                 <Settings className="nav-profile-menu-icon"/>
                                 <span>Settings</span>
                             </div>
-                            <div className="nav-profile-menu-item">
+                            <div className="nav-profile-menu-item" onClick={handleLogout}>
                                 <Logout className="nav-profile-menu-icon"/>
                                 <span>Logout</span>
                             </div>
