@@ -12,56 +12,56 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             title: "Available",
             start: "2026-05-17T09:00:00",
             end: "2026-05-17T17:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "2",
             title: "Available",
             start: "2026-05-18T10:00:00",
             end: "2026-05-18T16:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "3",
             title: "Available",
             start: "2026-05-19T09:30:00",
             end: "2026-05-19T15:30:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "4",
             title: "Available",
             start: "2026-05-20T11:00:00",
             end: "2026-05-20T17:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "5",
             title: "Available",
             start: "2026-05-21T10:00:00",
             end: "2026-05-21T16:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "6",
             title: "Available",
             start: "2026-05-22T09:00:00",
             end: "2026-05-22T15:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "7",
             title: "Available",
             start: "2026-05-23T10:00:00",
             end: "2026-05-23T14:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
         {
             id: "8",
             title: "Available",
             start: "2026-05-24T11:00:00",
             end: "2026-05-24T17:00:00",
-            backgroundColor: "#A3D2CA"
+            backgroundColor: "#000000"
         },
     ]);
 
@@ -147,27 +147,6 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
     return (
         <div className="creator-schedule">
             <div className="creator-schedule-shell">
-                <div className="creator-schedule-header">
-                    <div>
-                        <p>Booking ops</p>
-                        <h2>Session Calendar</h2>
-                        <span>Ship a booking in under 60 seconds with clear availability and fast confirmation.</span>
-                    </div>
-                    <div className="creator-schedule-metrics">
-                        <div>
-                            <p>Open windows</p>
-                            <h3>{availabilities.length}</h3>
-                        </div>
-                        <div>
-                            <p>Upcoming bookings</p>
-                            <h3>{upcomingBookings}</h3>
-                        </div>
-                        <div>
-                            <p>Avg session</p>
-                            <h3>{avgSessionMinutes}m</h3>
-                        </div>
-                    </div>
-                </div>
                 <div className="creator-schedule-calendar-card">
                     <div className="creator-schedule-legend">
                         <span className="creator-schedule-legend-item available">Available slots</span>

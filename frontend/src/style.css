@@ -376,7 +376,8 @@ nav > div {
 
 .app-footer {
   margin-top: auto;
-  padding: 20px 16px 24px;
+  padding: 16px 24px;
+  padding-top: 0;
 }
 
 .app-footer-shell {
@@ -1535,6 +1536,7 @@ nav > div {
 /* begin creator schedule styles */
 .creator-schedule {
   margin-top: 16px;
+  padding: 0 18px;
 }
 
 .creator-schedule-shell {
@@ -1594,6 +1596,9 @@ nav > div {
 }
 
 .creator-schedule-calendar-card {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
   border-radius: 18px;
   border: 1px solid rgba(149, 87, 237, 0.12);
   background: rgba(255, 255, 255, 0.88);
@@ -1627,6 +1632,7 @@ nav > div {
 }
 
 .creator-schedule-calendar-card .fc {
+  font-size: 0.92rem;
   color: #251b39;
   --fc-border-color: rgba(149, 87, 237, 0.1);
   --fc-page-bg-color: transparent;
