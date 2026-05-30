@@ -112,7 +112,6 @@ export default function Profile() {
                             <div className="profile-header-user-metrics">
                                 <span>4.9 (128 reviews)</span>
                                 <span>1.2k followers</span>
-                                <span>Top 5% response rate</span>
                             </div>
                             <div className="profile-header-user-tags">
                                 <span className="profile-header-user-tag-fps-games">FPS Games</span>
@@ -141,7 +140,6 @@ export default function Profile() {
                             <div className="profile-panel-heading">
                                 <SportsEsportsOutlined fontSize="large" htmlColor="#9557ED" />
                                 <div>
-                                    <p>Offer stack</p>
                                     <h3>Services</h3>
                                 </div>
                             </div>
@@ -167,7 +165,6 @@ export default function Profile() {
                             <div className="profile-user-bio profile-panel">
                                 <div className="profile-user-bio-header">
                                     <div>
-                                        <p>Founder note</p>
                                         <h3>Bio</h3>
                                     </div>
                                     <button type="button" className="profile-icon-button" onClick={startEditBio}>
@@ -201,7 +198,6 @@ export default function Profile() {
                             <div className="profile-user-recent-posts profile-panel">
                                 <div className="profile-panel-heading">
                                     <div>
-                                        <p>Signal feed</p>
                                         <h3>Recent posts</h3>
                                     </div>
                                 </div>
@@ -215,7 +211,6 @@ export default function Profile() {
                         <div className="profile-gifts-donation profile-panel">
                             <div className="profile-panel-heading">
                                 <div>
-                                    <p>Support</p>
                                     <h3 className="profile-gifts-donation-header">Send a Gift</h3>
                                 </div>
                             </div>
