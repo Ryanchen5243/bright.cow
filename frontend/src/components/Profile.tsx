@@ -16,10 +16,10 @@ import UserPost from './UserPost';
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 
 const serviceCards = [
-    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/1 hour', icon: Group },
-    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/1 hour', icon: Adjust },
-    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/1 session', icon: SmartDisplay },
-    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/1 hour', icon: Message },
+    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/hour', icon: Group },
+    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/hour', icon: Adjust },
+    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/session', icon: SmartDisplay },
+    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/hour', icon: Message },
     { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', price: '$30+', unit: '/custom', icon: StarBorder }
 ];
 
