@@ -12,6 +12,7 @@ import lambo_gift from '../assets/profile_gifts/lambo_gift.png';
 import champagne_gift from '../assets/profile_gifts/champagne_gift.png';
 import shipppp_gift from '../assets/profile_gifts/shipppp_gift.png';
 import UserPost from './UserPost';
+import Posts from './Posts';
 
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 
@@ -35,24 +36,21 @@ const recentPosts = [
         body: 'Tightening up my late-night Valorant sessions so it is easier to book ranked, VOD review, or a low-key duo queue without the back-and-forth.',
         timestamp: '2h ago',
         likes: 84,
-        comments: 12,
-        tag: 'Product update'
+        comments: 12
     },
     {
         title: 'Current focus: confidence + comms',
         body: 'Most players do not need more raw mechanics first. They need sharper comms, cleaner pacing, and someone to make the next game feel winnable again.',
         timestamp: 'Yesterday',
         likes: 61,
-        comments: 8,
-        tag: 'Coaching note'
+        comments: 8
     },
     {
         title: 'Open slots for weekend sessions',
         body: 'Added extra availability for Friday and Saturday. If you want structured help without the rigid coaching vibe, this is the best window to grab.',
         timestamp: '3d ago',
         likes: 49,
-        comments: 5,
-        tag: 'Availability'
+        comments: 5
     }
 ];
 
@@ -235,7 +233,7 @@ export default function Profile() {
                     </div>
                     </>
                 }
-                {profileTab === "posts" && <h1>posts</h1>}
+                {profileTab === "posts" && <Posts />}
                 {profileTab === "games" && <h1>games</h1>}
                 {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
                 {profileTab === "media" && <h1>media</h1>}

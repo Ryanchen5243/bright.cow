@@ -8,7 +8,6 @@ type UserPostProps = {
     timestamp?: string;
     likes?: number;
     comments?: number;
-    tag?: string;
 };
 
 export default function UserPost({
@@ -16,8 +15,7 @@ export default function UserPost({
     body = 'content for the post',
     timestamp,
     likes = 234,
-    comments = 12,
-    tag
+    comments = 12
 }: UserPostProps) {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(likes);
@@ -73,9 +71,7 @@ export default function UserPost({
                         <h3>{title}</h3>
                         <p>@lunawang</p>
                     </div>
-                    <span className="user-post-dot">•</span>
                     <span className="user-post-timestamp">{formattedTimestamp}</span>
-                    {tag && <span className="user-post-tag">{tag}</span>}
                 </div>
                 <p className="user-post-body">{body}</p>
                 <div className="user-post-metrics">
