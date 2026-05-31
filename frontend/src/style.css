@@ -686,11 +686,41 @@ nav > div {
 }
 
 .profile-panel-heading {
-  display: flex;
   align-items: center;
   gap: 12px;
 }
+.profile-panel-heading > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
 
+.profile-panel-heading > div > button {
+  border: 1px solid rgba(149, 87, 237, 0.2);
+  background: #ffffff;
+  color: #6b42bb;
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.profile-panel-heading > div > button h3 {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.profile-panel-heading > div > button:hover {
+  background: #f5edff;
+  border-color: rgba(149, 87, 237, 0.35);
+  color: #5b35a3;
+  transform: translateY(-1px);
+}
 .profile-panel-heading p,
 .profile-user-bio-header p {
   margin: 0;

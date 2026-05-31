@@ -199,6 +199,7 @@ export default function Profile() {
                                 <div className="profile-panel-heading">
                                     <div>
                                         <h3>Recent posts</h3>
+                                        <button type="button" onClick={() => setProfileTab("posts")}><h3>View All</h3></button>
                                     </div>
                                 </div>
                                 <div className="profile-user-recent-posts-list">
