@@ -1,8 +1,28 @@
-import { AccountCircle, Business, NotificationsNoneOutlined, Search, Settings, 
-    Logout, Person } from "@mui/icons-material";
+import { NotificationsNoneOutlined, Search, Settings, Logout, Person } from "@mui/icons-material";
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { doSignOut } from "../firebase/auth.ts";
+
+const suggestions = [
+    { label: 'Valorant', type: 'Game' },
+    { label: 'League of Legends', type: 'Game' },
+    { label: 'Minecraft', type: 'Game' },
+    { label: 'Apex Legends', type: 'Game' },
+    { label: 'Luna', type: 'Creator' },
+    { label: 'Creator Name 1', type: 'Creator' },
+    { label: 'Late Night Ranked', type: 'Tag' },
+    { label: 'Chill Vibes', type: 'Tag' },
+    { label: 'VOD Review', type: 'Service' }
+];
+
+function BrandMark() {
+    return (
+        <svg className="nav-brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="5" width="24" height="22" rx="8" />
+            <path d="M11 21V11h2.6l5.4 6.4V11H21v10h-2.4l-5.6-6.6V21H11Z" />
+        </svg>
+    );
+}
 
 export default function NavBar({ setAppView }: { setAppView: React.Dispatch<React.SetStateAction<string>> }) {
     const navigate = useNavigate();
@@ -13,9 +33,10 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
     const searchContainerRef = useRef<HTMLDivElement>(null);
     const notificationsRef = useRef<HTMLDivElement>(null);
     const profileRef = useRef<HTMLDivElement>(null);
-    const [suggestions] = useState(['League of Legends', 'Valorant', 'Minecraft', 
-        'Fortnite', 'Apex Legends', 'Overwatch', 'Call of Duty', 'CS:GO', 'Dota 2', 
-        'World of Warcraft', 'Creator Name 1', 'Creator Name 2', 'Creator Name 3']);
+
+    const filteredSuggestions = suggestions
+        .filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase()))
+        .slice(0, 6);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -49,8 +70,10 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
     return (
         <nav>
             <div className="nav-company-name">
-                <Business className="nav-icon"/>
-                <Link to="/" className="nav-company-name-link">UWU~VIBE</Link>
+                <Link to="/" className="nav-company-name-link" aria-label="Konevo home">
+                    <BrandMark />
+                    <span className="nav-company-name-text">Konevo</span>
+                </Link>
             </div>
             <div ref={searchContainerRef} className={`nav-search-container` + (isSearchFocused ? ' focused' : '')}>
                 <div className="nav-search-input" onClick={() => setSearchFocused(true)}>
@@ -62,36 +85,68 @@ export default function NavBar({ setAppView }: { setAppView: React.Dispatch<Reac
                 </div>
                 {isSearchFocused && (
                     <div className="nav-search-suggestions">
-                        {(() => {
-                            const filtered = suggestions.filter(suggestion => suggestion.toLowerCase().includes(searchValue.toLowerCase())).slice(0, 5);
-                            return filtered.length > 0 ? 
-                                filtered.map((suggestion) => (
-                                    <div key={suggestion} className="nav-search-suggestion">{suggestion}</div>
-                                ))
-                                : <div className="nav-search-suggestion">{searchValue}</div>;
-                        })()}
+                        <div className="nav-search-suggestions-header">Suggested matches</div>
+                        {filteredSuggestions.length > 0 ? 
+                            filteredSuggestions.map((suggestion) => (
+                                <button
+                                    key={suggestion.label}
+                                    type="button"
+                                    className="nav-search-suggestion"
+                                    onClick={() => {
+                                        setSearchValue(suggestion.label);
+                                        setSearchFocused(false);
+                                    }}
+                                >
+                                    <span className="nav-search-suggestion-label">{suggestion.label}</span>
+                                    <span className="nav-search-suggestion-type">{suggestion.type}</span>
+                                </button>
+                            ))
+                            : <div className="nav-search-empty-state">No matches for "{searchValue}"</div>}
                     </div>
                 )}
             </div>
             <div className="nav-profile-and-notifications-container">
-                <div className="notification-wrapper">
-                    <div ref={notificationsRef}> 
-                        <NotificationsNoneOutlined className={`nav-icon notifications-icon ${isNotificationsOpen ? 'active' : ''}`} onClick={() => setNotificationsOpen(!isNotificationsOpen)}/> 
+                <div className="notification-wrapper" ref={notificationsRef}>
+                    <div>
+                        <button
+                            type="button"
+                            className={`nav-action-button ${isNotificationsOpen ? 'active' : ''}`}
+                            aria-label="Open notifications"
+                            onClick={() => setNotificationsOpen(!isNotificationsOpen)}
+                        >
+                            <NotificationsNoneOutlined className="nav-icon notifications-icon" />
+                        </button>
                     </div>
                     {isNotificationsOpen && (
                         <div className="nav-notifications-menu">
-                            <div className="nav-notifications-menu-item">Notification 1</div>
-                            <div className="nav-notifications-menu-item">Notification 2</div>
-                            <div className="nav-notifications-menu-item">Notification 3</div>
+                            <div className="nav-menu-section-label">Notifications</div>
+                            <div className="nav-notifications-menu-item">
+                                <strong>Session request</strong>
+                                <span>Luna accepted a Friday evening booking request.</span>
+                            </div>
+                            <div className="nav-notifications-menu-item">
+                                <strong>New message</strong>
+                                <span>You have a reply in your coaching thread.</span>
+                            </div>
+                            <div className="nav-notifications-menu-item">
+                                <strong>Product update</strong>
+                                <span>Search and scheduling received a small polish pass.</span>
+                            </div>
                         </div>
                     )}
                 </div>
                 <div className="profile-wrapper" ref={profileRef}>
-                    <div>
-                        <AccountCircle className={`nav-icon profile-icon ${isProfileMenuOpen ? 'active' : ''}`} onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}/>
-                    </div>
+                    <button
+                        type="button"
+                        className={`nav-profile-trigger ${isProfileMenuOpen ? 'active' : ''}`}
+                        aria-label="Open profile menu"
+                        onClick={() => setProfileMenuOpen(!isProfileMenuOpen)}
+                    >
+                        <span className="nav-profile-avatar">KV</span>
+                    </button>
                     {isProfileMenuOpen && (
                         <div className="nav-profile-menu">
+                            <div className="nav-menu-section-label">Account</div>
                             <div className="nav-profile-menu-item" onClick={()=> setAppView("profile")}>
                                 <Person className="nav-profile-menu-icon"/>
                                 <span>Profile</span>

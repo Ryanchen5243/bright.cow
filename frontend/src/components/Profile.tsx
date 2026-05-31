@@ -12,14 +12,15 @@ import lambo_gift from '../assets/profile_gifts/lambo_gift.png';
 import champagne_gift from '../assets/profile_gifts/champagne_gift.png';
 import shipppp_gift from '../assets/profile_gifts/shipppp_gift.png';
 import UserPost from './UserPost';
+import Posts from './Posts';
 
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 
 const serviceCards = [
-    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/1 hour', icon: Group },
-    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/1 hour', icon: Adjust },
-    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/1 session', icon: SmartDisplay },
-    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/1 hour', icon: Message },
+    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/hour', icon: Group },
+    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/hour', icon: Adjust },
+    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/session', icon: SmartDisplay },
+    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/hour', icon: Message },
     { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', price: '$30+', unit: '/custom', icon: StarBorder }
 ];
 
@@ -35,24 +36,21 @@ const recentPosts = [
         body: 'Tightening up my late-night Valorant sessions so it is easier to book ranked, VOD review, or a low-key duo queue without the back-and-forth.',
         timestamp: '2h ago',
         likes: 84,
-        comments: 12,
-        tag: 'Product update'
+        comments: 12
     },
     {
         title: 'Current focus: confidence + comms',
         body: 'Most players do not need more raw mechanics first. They need sharper comms, cleaner pacing, and someone to make the next game feel winnable again.',
         timestamp: 'Yesterday',
         likes: 61,
-        comments: 8,
-        tag: 'Coaching note'
+        comments: 8
     },
     {
         title: 'Open slots for weekend sessions',
         body: 'Added extra availability for Friday and Saturday. If you want structured help without the rigid coaching vibe, this is the best window to grab.',
         timestamp: '3d ago',
         likes: 49,
-        comments: 5,
-        tag: 'Availability'
+        comments: 5
     }
 ];
 
@@ -112,7 +110,6 @@ export default function Profile() {
                             <div className="profile-header-user-metrics">
                                 <span>4.9 (128 reviews)</span>
                                 <span>1.2k followers</span>
-                                <span>Top 5% response rate</span>
                             </div>
                             <div className="profile-header-user-tags">
                                 <span className="profile-header-user-tag-fps-games">FPS Games</span>
@@ -141,7 +138,6 @@ export default function Profile() {
                             <div className="profile-panel-heading">
                                 <SportsEsportsOutlined fontSize="large" htmlColor="#9557ED" />
                                 <div>
-                                    <p>Offer stack</p>
                                     <h3>Services</h3>
                                 </div>
                             </div>
@@ -167,7 +163,6 @@ export default function Profile() {
                             <div className="profile-user-bio profile-panel">
                                 <div className="profile-user-bio-header">
                                     <div>
-                                        <p>Founder note</p>
                                         <h3>Bio</h3>
                                     </div>
                                     <button type="button" className="profile-icon-button" onClick={startEditBio}>
@@ -201,8 +196,8 @@ export default function Profile() {
                             <div className="profile-user-recent-posts profile-panel">
                                 <div className="profile-panel-heading">
                                     <div>
-                                        <p>Signal feed</p>
                                         <h3>Recent posts</h3>
+                                        <button type="button" onClick={() => setProfileTab("posts")}><h3>View All</h3></button>
                                     </div>
                                 </div>
                                 <div className="profile-user-recent-posts-list">
@@ -215,7 +210,6 @@ export default function Profile() {
                         <div className="profile-gifts-donation profile-panel">
                             <div className="profile-panel-heading">
                                 <div>
-                                    <p>Support</p>
                                     <h3 className="profile-gifts-donation-header">Send a Gift</h3>
                                 </div>
                             </div>
@@ -239,7 +233,7 @@ export default function Profile() {
                     </div>
                     </>
                 }
-                {profileTab === "posts" && <h1>posts</h1>}
+                {profileTab === "posts" && <Posts />}
                 {profileTab === "games" && <h1>games</h1>}
                 {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
                 {profileTab === "media" && <h1>media</h1>}
