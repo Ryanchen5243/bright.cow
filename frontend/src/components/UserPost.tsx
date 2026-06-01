@@ -8,14 +8,20 @@ type UserPostProps = {
     timestamp?: string;
     likes?: number;
     comments?: number;
+    displayName?: string;
+    username?: string;
+    mediaUrls?: string[];
 };
 
 export default function UserPost({
-    title = 'Luna Wang',
+    title,
     body = 'content for the post',
     timestamp,
     likes = 234,
-    comments = 12
+    comments = 12,
+    displayName = 'Luna Wang',
+    username = '@lunawang',
+    mediaUrls = []
 }: UserPostProps) {
     const [isLiked, setIsLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(likes);
@@ -53,7 +59,7 @@ export default function UserPost({
     const sharePost = async () => {
         try {
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(`${title}: ${body}`);
+                await navigator.clipboard.writeText(`${displayName} (${username}): ${body}`);
             }
         } finally {
             setShareCount((count) => count + 1);
@@ -68,12 +74,20 @@ export default function UserPost({
             <div className="user-post-content">
                 <div className="user-post-header">
                     <div className="user-post-identity">
-                        <h3>{title}</h3>
-                        <p>@lunawang</p>
+                        <h3>{displayName}</h3>
+                        <p>{username}</p>
                     </div>
                     <span className="user-post-timestamp">{formattedTimestamp}</span>
                 </div>
+                {title && <p className="user-post-title">{title}</p>}
                 <p className="user-post-body">{body}</p>
+                {mediaUrls.length > 0 && (
+                    <div className="user-post-media-grid" aria-label="Post media attachments">
+                        {mediaUrls.map((url, index) => (
+                            <img key={`${url}-${index}`} src={url} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />
+                        ))}
+                    </div>
+                )}
                 <div className="user-post-metrics">
                     <span>{likeCount} Likes</span>
                     <span>{commentCount} Comments</span>

@@ -21,6 +21,8 @@
     "vite": "^8.0.10"
   },
   "dependencies": {
+    "@calendarjs/ce": "^1.1.0",
+    "@calendarjs/react": "^1.0.3",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@fullcalendar/core": "^6.1.20",
