@@ -1,141 +1,81 @@
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import timeGridPlugin from '@fullcalendar/timegrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
+import { Schedule, useSchedule } from '@calendarjs/react';
+import '@calendarjs/react/style.css';
+
+type ScheduleEvent = {
+    guid: string;
+    title: string;
+    date: string;
+    start: string;
+    end: string;
+    color: string;
+};
+
+const parseTimeToMinutes = (value: string) => {
+    const [hours, minutes] = value.split(':').map(Number);
+    return hours * 60 + minutes;
+};
+
+const formatMinutesToTime = (totalMinutes: number) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    const time = new Date(2026, 0, 1, hours, minutes);
+    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
 export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
-    const [availabilities] = useState([
+    const { ref: scheduleRef, instance: scheduleInstance } = useSchedule();
+    const [events] = useState<ScheduleEvent[]>([
         {
-            id: "1",
-            title: "Available",
-            start: "2026-05-17T09:00:00",
-            end: "2026-05-17T17:00:00",
-            backgroundColor: "#000000"
+            guid: '1',
+            title: 'Team Standup',
+            date: '2026-06-01',
+            start: '09:00',
+            end: '14:00',
+            color: '#3498db'
         },
         {
-            id: "2",
-            title: "Available",
-            start: "2026-05-18T10:00:00",
-            end: "2026-05-18T16:00:00",
-            backgroundColor: "#000000"
+            guid: '2',
+            title: 'Office Hours',
+            date: '2026-06-02',
+            start: '10:00',
+            end: '12:00',
+            color: '#e74c3c'
         },
         {
-            id: "3",
-            title: "Available",
-            start: "2026-05-19T09:30:00",
-            end: "2026-05-19T15:30:00",
-            backgroundColor: "#000000"
+            guid: '3',
+            title: 'Content Creation',
+            date: '2026-06-03',
+            start: '13:00',
+            end: '17:00',
+            color: '#2ecc71'
         },
         {
-            id: "4",
-            title: "Available",
-            start: "2026-05-20T11:00:00",
-            end: "2026-05-20T17:00:00",
-            backgroundColor: "#000000"
+            guid: '4',
+            title: 'Project Meeting',
+            date: '2026-06-04',
+            start: '14:00',
+            end: '16:00',
+            color: '#f1c40f'
         },
         {
-            id: "5",
-            title: "Available",
-            start: "2026-05-21T10:00:00",
-            end: "2026-05-21T16:00:00",
-            backgroundColor: "#000000"
-        },
-        {
-            id: "6",
-            title: "Available",
-            start: "2026-05-22T09:00:00",
-            end: "2026-05-22T15:00:00",
-            backgroundColor: "#000000"
-        },
-        {
-            id: "7",
-            title: "Available",
-            start: "2026-05-23T10:00:00",
-            end: "2026-05-23T14:00:00",
-            backgroundColor: "#000000"
-        },
-        {
-            id: "8",
-            title: "Available",
-            start: "2026-05-24T11:00:00",
-            end: "2026-05-24T17:00:00",
-            backgroundColor: "#000000"
-        },
+            guid: '5',
+            title: 'Client Call',
+            date: '2026-06-05',
+            start: '15:00',
+            end: '16:00',
+            color: '#9b59b6'
+        }
     ]);
 
-    const [bookings] = useState([
-        {
-            id: "1",
-            title: "Booking A",
-            start: "2026-05-17T09:00:00",
-            end: "2026-05-17T10:00:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "2",
-            title: "Booking B",
-            start: "2026-05-17T13:30:00",
-            end: "2026-05-17T14:30:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "3",
-            title: "Booking C",
-            start: "2026-05-18T10:00:00",
-            end: "2026-05-18T11:30:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "4",
-            title: "Booking D",
-            start: "2026-05-19T09:30:00",
-            end: "2026-05-19T10:15:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "5",
-            title: "Booking E",
-            start: "2026-05-20T14:00:00",
-            end: "2026-05-20T15:00:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "6",
-            title: "Booking F",
-            start: "2026-05-21T11:00:00",
-            end: "2026-05-21T12:00:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "7",
-            title: "Booking G",
-            start: "2026-05-22T16:00:00",
-            end: "2026-05-22T17:30:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "8",
-            title: "Booking H",
-            start: "2026-05-23T10:00:00",
-            end: "2026-05-23T11:00:00",
-            backgroundColor: "#FF6961"
-        },
-        {
-            id: "9",
-            title: "Booking I",
-            start: "2026-05-24T11:00:00",
-            end: "2026-05-24T12:00:00",
-            backgroundColor: "#FF6961"
-        },
-    ]);
     const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(null);
     const [selectedSlot, setSelectedSlot] = useState<string>("");
     const [message, setMessage] = useState<string>("");
 
     const selectedDateLabel = selectedEvent
-        ? new Date(selectedEvent.start).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })
+        ? new Date(`${selectedEvent.date}T00:00:00`).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })
         : '';
 
     const selectedEventSlots = (() => {
@@ -144,16 +84,15 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
         }
 
         const slots: string[] = [];
-        const start = new Date(selectedEvent.start);
-        const end = new Date(selectedEvent.end);
+        const start = parseTimeToMinutes(selectedEvent.start);
+        const end = parseTimeToMinutes(selectedEvent.end);
 
-        while (start < end) {
-            const slotEnd = new Date(start.getTime() + 30 * 60000);
+        for (let minute = start; minute < end; minute += 30) {
+            const slotEnd = minute + 30;
             if (slotEnd > end) {
                 break;
             }
-            slots.push(`${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${slotEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
-            start.setTime(start.getTime() + 30 * 60000);
+            slots.push(`${formatMinutesToTime(minute)} - ${formatMinutesToTime(slotEnd)}`);
         }
 
         return slots;
@@ -166,55 +105,62 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
     };
 
     const confirmBooking = () => {
-        alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ''} ${selectedSlot}! \nMessage: ${message}`);
+        alert(`Booking confirmed for ${selectedEvent ? new Date(`${selectedEvent.date}T00:00:00`).toLocaleDateString() : ''} ${selectedSlot}! \nMessage: ${message}`);
         closeBookingDialog();
     };
 
+    const openBookingDialogForEvent = (event: ScheduleEvent) => {
+        if (!isLoggedIn) {
+            alert('Please log in to book a session!');
+            return;
+        }
+
+        setSelectedEvent(event);
+        setSelectedSlot('');
+        setMessage('');
+        setIsBookingDialogOpen(true);
+    };
+
+    useEffect(() => {
+        if (!scheduleInstance?.el) {
+            return;
+        }
+
+        const rootElement = scheduleInstance.el;
+
+        const handleSingleClick = (domEvent: Event) => {
+            const target = domEvent.target as HTMLElement | null;
+            const eventElement = target?.closest('.lm-schedule-item') as (HTMLElement & { event?: ScheduleEvent }) | null;
+            if (!eventElement?.event) {
+                return;
+            }
+
+            openBookingDialogForEvent(eventElement.event);
+        };
+
+        rootElement.addEventListener('click', handleSingleClick);
+        return () => {
+            rootElement.removeEventListener('click', handleSingleClick);
+        };
+    }, [scheduleInstance, isLoggedIn]);
+
     return (
         <div className="creator-schedule">
-            <div className="creator-schedule-shell">
-                <div className="creator-schedule-calendar-card">
-                    <div className="creator-schedule-legend">
-                        <span className="creator-schedule-legend-item available">Available slots</span>
-                        <span className="creator-schedule-legend-item booked">Booked sessions</span>
-                    </div>
-                    <FullCalendar
-                    plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
-                    initialView="timeGridWeek"
-                    height="auto"
-                    contentHeight="auto"
-                    headerToolbar={{
-                        start: "title",
-                        center: "",
-                        end: "today prev,next"            }}
-                    stickyHeaderDates={true}
-                    slotLabelFormat={{
-                        hour: "numeric",
-                        minute: "2-digit",
-                        omitZeroMinute: false,
-                        meridiem: "short",
-                        hour12: true
-                    }}
-                    timeZone="local"
-                    eventSources={[{ events: bookings }, { events: availabilities }]}
-                    eventClick={
-                        (info) => {
-                            if (isLoggedIn) {
-                                if (info.event.title === "Available") {
-                                    setSelectedEvent(info.event);
-                                    setSelectedSlot("");
-                                    setMessage("");
-                                    setIsBookingDialogOpen(true);
-                                }
-                            } else {
-                                alert('Please log in to book a session!');
-                            }
-                        }
-                    }
-                    />
-                </div>
-            </div>
-
+            <Schedule
+                ref={scheduleRef}
+                type="week"
+                value="2026-06-01"
+                data={events}
+                grid={30}
+                validRange={['08:00', '22:00']}
+                style={{
+                    width: '100%',
+                    maxWidth: '1120px',
+                    minHeight: '620px',
+                    height: '72vh',
+                    margin: '0 auto'
+                }}
+            />
             <Dialog open={isBookingDialogOpen} onClose={closeBookingDialog} fullWidth maxWidth="sm">
                 <DialogTitle>Book Session</DialogTitle>
                 <DialogContent>
