@@ -2,9 +2,8 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import Drawer from 'rc-drawer';
 import { useState } from 'react';
-import 'rc-drawer/assets/index.css';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextField, Typography } from '@mui/material';
 export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
     const [availabilities] = useState([
         {
@@ -130,19 +129,46 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
             backgroundColor: "#FF6961"
         },
     ]);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isBookingDialogOpen, setIsBookingDialogOpen] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
     const [selectedSlot, setSelectedSlot] = useState<string>("");
     const [message, setMessage] = useState<string>("");
 
-    const upcomingBookings = bookings.filter((booking) => new Date(booking.start) >= new Date()).length;
-    const avgSessionMinutes = Math.round(
-        bookings.reduce((total, booking) => {
-            const start = new Date(booking.start).getTime();
-            const end = new Date(booking.end).getTime();
-            return total + (end - start) / 60000;
-        }, 0) / bookings.length
-    );
+    const selectedDateLabel = selectedEvent
+        ? new Date(selectedEvent.start).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })
+        : '';
+
+    const selectedEventSlots = (() => {
+        if (!selectedEvent) {
+            return [];
+        }
+
+        const slots: string[] = [];
+        const start = new Date(selectedEvent.start);
+        const end = new Date(selectedEvent.end);
+
+        while (start < end) {
+            const slotEnd = new Date(start.getTime() + 30 * 60000);
+            if (slotEnd > end) {
+                break;
+            }
+            slots.push(`${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${slotEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+            start.setTime(start.getTime() + 30 * 60000);
+        }
+
+        return slots;
+    })();
+
+    const closeBookingDialog = () => {
+        setIsBookingDialogOpen(false);
+        setSelectedSlot('');
+        setMessage('');
+    };
+
+    const confirmBooking = () => {
+        alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ''} ${selectedSlot}! \nMessage: ${message}`);
+        closeBookingDialog();
+    };
 
     return (
         <div className="creator-schedule">
@@ -178,7 +204,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                                     setSelectedEvent(info.event);
                                     setSelectedSlot("");
                                     setMessage("");
-                                    setIsDrawerOpen(true);
+                                    setIsBookingDialogOpen(true);
                                 }
                             } else {
                                 alert('Please log in to book a session!');
@@ -188,45 +214,48 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                     />
                 </div>
             </div>
-            <Drawer
-                placement="right"
-                onClose={() => setIsDrawerOpen(false)}
-                open={isDrawerOpen}
-                width="520px">
-                <div className="creator-booking-drawer">
-                    <div className="creator-booking-head">
-                        <p>Checkout</p>
-                        <h2>Book Session</h2>
-                    </div>
-                    <span className="creator-booking-date">{selectedEvent ? 
-                        new Date(selectedEvent.start).toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) : ""}</span>
-                    <div className="creator-booking-field">
-                        <label htmlFor="time-slot-select">Choose time slot</label>
-                        {selectedEvent && (() => {
-                            const slots = [];
-                            const start = new Date(selectedEvent.start);
-                            const end = new Date(selectedEvent.end);
-                            while (start < end) {
-                                const slotEnd = new Date(start.getTime() + 30 * 60000);
-                                if (slotEnd > end) break;
-                                slots.push(`${start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${slotEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
-                                start.setTime(start.getTime() + 30 * 60000);
-                            }
-                            return <select id="time-slot-select" className='creator-booking-time-select' value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-                                    <option value="" disabled>Select a time slot</option>
-                                    {slots.map((slot: string, index: number) => (
-                                        <option key={index} value={slot}>{slot}</option>
-                                    ))}
-                                </select>;
-                        })()}
-                    </div>
-                    <div className="creator-booking-field">
-                        <label htmlFor="booking-message">Message to creator</label>
-                        <textarea id="booking-message" placeholder="Tell Luna your goals for this session..." className="creator-booking-message" value={message} onChange={(e) => setMessage(e.target.value)} />
-                    </div>
-                    <button className="creator-booking-confirm" disabled={!selectedSlot} onClick={() => alert(`Booking confirmed for ${selectedEvent ? new Date(selectedEvent.start).toLocaleDateString() : ""} ${selectedSlot}! \nMessage: ${message}`)}>Confirm Booking</button>
-                </div>
-            </Drawer>
+
+            <Dialog open={isBookingDialogOpen} onClose={closeBookingDialog} fullWidth maxWidth="sm">
+                <DialogTitle>Book Session</DialogTitle>
+                <DialogContent>
+                    <Stack spacing={2} sx={{ pt: 1 }} className="creator-booking-dialog">
+                        <div className="creator-booking-head">
+                            <p>Checkout</p>
+                            <h2>Reserve your slot</h2>
+                        </div>
+
+                        <Typography className="creator-booking-date">{selectedDateLabel}</Typography>
+
+                        <TextField
+                            select
+                            SelectProps={{ native: true }}
+                            value={selectedSlot}
+                            onChange={(e) => setSelectedSlot(e.target.value)}
+                            inputProps={{ 'aria-label': 'Choose time slot' }}
+                            fullWidth
+                        >
+                            <option value="">Select a time slot</option>
+                            {selectedEventSlots.map((slot: string) => (
+                                <option key={slot} value={slot}>{slot}</option>
+                            ))}
+                        </TextField>
+
+                        <TextField
+                            label="Message to creator"
+                            placeholder="Tell Luna your goals for this session..."
+                            multiline
+                            minRows={4}
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            fullWidth
+                        />
+                    </Stack>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeBookingDialog}>Cancel</Button>
+                    <Button variant="contained" onClick={confirmBooking} disabled={!selectedSlot}>Confirm Booking</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
