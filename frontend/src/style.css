@@ -1564,62 +1564,21 @@ nav > div {
 }
 /* end profile page styles */
 
-/* begin creator booking dialog styles */
-
-.creator-booking-dialog {
+/* begin bookings schedule styles */
+.schedule-overview {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
 }
-
-.creator-booking-head p {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.7rem;
-  color: #64748b;
-  font-weight: 700;
+.full-schedule {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 18px;
 }
-
-.creator-booking-head h2 {
-  margin: 4px 0 0;
-  color: #0f172a;
-  font-size: 1.05rem;
-}
-
-.creator-booking-date {
-  border-radius: 10px;
-  background: #f8fafc;
-  border: 1px solid #dbe2ea;
-  color: #334155;
-  font-weight: 600;
-  padding: 10px 12px;
-  font-size: 0.86rem;
-}
-
-.creator-booking-dialog .MuiFormLabel-root {
-  color: #475569;
-  font-size: 0.84rem;
-}
-
-.creator-booking-dialog .MuiInputBase-root {
-  border-radius: 12px;
-  background: #ffffff;
-}
-
-.creator-booking-dialog .MuiOutlinedInput-notchedOutline {
-  border-color: #dbe2ea;
-}
-
-.creator-booking-dialog .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #cbd5e1;
-}
-
-.creator-booking-dialog .MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #64748b;
-  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.18);
-}
-/* end creator booking dialog styles */
+/* end bookings schedule styles */
 
 /* begin posts page layout styles */
 .posts-page {
