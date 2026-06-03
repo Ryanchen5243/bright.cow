@@ -12,7 +12,11 @@ const getLocalDateString = () => {
 
 export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
     const [selectedDate, setSelectedDate] = useState<string | number>(getLocalDateString());
-
+    const [availability] = useState<Record<string, string>>({
+        [getLocalDateString()]: '9:00 AM - 10:00 AM',
+        '2026-06-04': '2:00 PM - 3:00 PM',
+    });
+    const selectedDateKey = String(selectedDate);
     return (
         <div className="creator-schedule">
             <div className="schedule-overview">
@@ -42,7 +46,14 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                     />
                 </div>
                 <div className="availability-container">
-                    {selectedDate}
+                    {availability[selectedDateKey] ? (
+                        <div className="availability">
+                            <h3>Availability for {selectedDateKey}</h3>
+                            <p>{availability[selectedDateKey]}</p>
+                        </div>
+                    ) : (
+                        <p>No availability for {selectedDateKey}.</p>
+                    )}
                 </div>
             </div>
         </div>
