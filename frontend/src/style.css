@@ -1564,62 +1564,195 @@ nav > div {
 }
 /* end profile page styles */
 
-/* begin creator booking dialog styles */
-
-.creator-booking-dialog {
+/* begin bookings schedule styles */
+.schedule-overview {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 22px;
+}
+.full-schedule {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 18px;
+}
+.upcoming-schedule {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 93, 191, 0.2);
+  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
-
-.creator-booking-head p {
+.upcoming-schedule p {
   margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 0.7rem;
-  color: #64748b;
-  font-weight: 700;
-}
-
-.creator-booking-head h2 {
-  margin: 4px 0 0;
-  color: #0f172a;
-  font-size: 1.05rem;
-}
-
-.creator-booking-date {
-  border-radius: 10px;
-  background: #f8fafc;
-  border: 1px solid #dbe2ea;
-  color: #334155;
-  font-weight: 600;
-  padding: 10px 12px;
-  font-size: 0.86rem;
-}
-
-.creator-booking-dialog .MuiFormLabel-root {
-  color: #475569;
+  color: #63567f;
   font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
-
-.creator-booking-dialog .MuiInputBase-root {
-  border-radius: 12px;
-  background: #ffffff;
+.upcoming-schedule h3 {
+  margin: 2px 0 0;
+  color: #1c1430;
+  font-size: 1.08rem;
+  line-height: 1.35;
 }
-
-.creator-booking-dialog .MuiOutlinedInput-notchedOutline {
-  border-color: #dbe2ea;
+.upcoming-schedule-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(124, 93, 191, 0.18);
 }
-
-.creator-booking-dialog .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #cbd5e1;
+.upcoming-schedule-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-
-.creator-booking-dialog .MuiInputBase-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #64748b;
-  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.18);
+.schedule-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 93, 191, 0.14);
 }
-/* end creator booking dialog styles */
+.schedule-times {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.schedule-times > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #2f244b;
+}
+.schedule-times > div button {
+  border: 0;
+  border-radius: 999px;
+  padding: 7px 14px;
+  min-width: 68px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  background: linear-gradient(135deg, #7c5dbf, #5f43a4);
+  box-shadow: 0 6px 14px rgba(95, 67, 164, 0.28);
+  cursor: pointer;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+.schedule-times > div button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(95, 67, 164, 0.34);
+  filter: brightness(1.03);
+}
+.schedule-times > div button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(95, 67, 164, 0.26);
+}
+.schedule-times > div button:focus-visible {
+  outline: 2px solid rgba(124, 93, 191, 0.45);
+  outline-offset: 2px;
+}
+.recent-schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 93, 191, 0.2);
+  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
+}
+.recent-schedule-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(124, 93, 191, 0.18);
+}
+.recent-schedule-header p {
+  margin: 0;
+  color: #63567f;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.recent-schedule-header h2 {
+  margin: 2px 0 0;
+  color: #1c1430;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+.recent-schedule-contents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.recent-activity-item {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(124, 93, 191, 0.14);
+}
+.recent-activity-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.recent-activity-item > div p {
+  margin: 0;
+}
+.recent-activity-item > div p:first-child {
+  color: #2f244b;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.recent-activity-item > div p:last-child {
+  color: #6d6484;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.recent-schedule-footer {
+  padding-top: 4px;
+}
+.recent-schedule-footer p {
+  margin: 0;
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(124, 93, 191, 0.1);
+  color: #5f4f83;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+/* end bookings schedule styles */
 
 /* begin posts page layout styles */
 .posts-page {
