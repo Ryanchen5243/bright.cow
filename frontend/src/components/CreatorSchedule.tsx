@@ -11,7 +11,7 @@ const getLocalDateString = () => {
     return `${year}-${month}-${day}`;
 };
 
-export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean }) {
+export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
     const [selectedDate, setSelectedDate] = useState<string | number>(getLocalDateString());
     const [availability] = useState<Record<string, string>>({
         [getLocalDateString()]: '9:00 AM - 10:00 AM',
@@ -63,10 +63,31 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                     </div>
                     {/* <p>No upcoming events.</p> */}
                 </div>
+                <div className="full-schedule">
+                    <div className="monthly-calendar">
+                        <Calendar
+                            type="inline"
+                            value={selectedDate}
+                            footer={false}
+                            grid={true}
+                            onChange={(date) => setSelectedDate(date)}
+                        />
+                    </div>
+                    <div className="availability-container">
+                        {availability[selectedDateKey] ? (
+                            <div className="availability">
+                                <h3>Availability for {selectedDateKey}</h3>
+                                <p>{availability[selectedDateKey]}</p>
+                            </div>
+                        ) : (
+                            <p>No availability for {selectedDateKey}.</p>
+                        )}
+                    </div>
+                </div>
                 <div className="recent-schedule">
                     <div className="recent-schedule-header">
                         <h2>Recent Activity</h2>
-                        <p>No past events.</p>
+                        {/* <p>No past events.</p> */}
                     </div>
                     <div className="recent-schedule-contents">
                         <div className="recent-activity-item">
@@ -101,31 +122,6 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                     <div className="recent-schedule-footer">
                         <p>Live feed updates automatically</p>
                     </div>
-                </div>
-                <div className="schedule-actions">
-                    <button className="add-schedule-btn">Add Schedule</button>
-                    <button className="edit-schedule-btn">Edit Schedule</button>
-                </div>
-            </div>
-            <div className="full-schedule">
-                <div className="monthly-calendar">
-                    <Calendar
-                        type="inline"
-                        value={selectedDate}
-                        footer={false}
-                        grid={true}
-                        onChange={(date) => setSelectedDate(date)}
-                    />
-                </div>
-                <div className="availability-container">
-                    {availability[selectedDateKey] ? (
-                        <div className="availability">
-                            <h3>Availability for {selectedDateKey}</h3>
-                            <p>{availability[selectedDateKey]}</p>
-                        </div>
-                    ) : (
-                        <p>No availability for {selectedDateKey}.</p>
-                    )}
                 </div>
             </div>
         </div>

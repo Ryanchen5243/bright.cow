@@ -1569,14 +1569,60 @@ nav > div {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
   gap: 18px;
   padding: 22px;
 }
 .full-schedule {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 18px;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1 1 320px;
+  min-width: 280px;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 93, 191, 0.2);
+  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
+}
+.schedule-overview > .upcoming-schedule,
+.schedule-overview > .recent-schedule {
+  flex: 1 1 320px;
+  min-width: 280px;
+}
+.monthly-calendar {
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(124, 93, 191, 0.14);
+  padding: 10px;
+}
+.availability-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.availability,
+.availability-container > p {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(124, 93, 191, 0.14);
+  background: rgba(255, 255, 255, 0.9);
+}
+.availability h3 {
+  margin: 0 0 6px;
+  color: #2f244b;
+  font-size: 0.94rem;
+  font-weight: 700;
+}
+.availability p,
+.availability-container > p {
+  margin: 0;
+  color: #63567f;
+  font-size: 0.84rem;
+  font-weight: 600;
 }
 .upcoming-schedule {
   display: flex;
@@ -1597,6 +1643,12 @@ nav > div {
   text-transform: uppercase;
 }
 .upcoming-schedule h3 {
+  margin: 2px 0 0;
+  color: #1c1430;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+.upcoming-schedule-header h2 {
   margin: 2px 0 0;
   color: #1c1430;
   font-size: 1.08rem;
@@ -1679,9 +1731,9 @@ nav > div {
 .recent-schedule-header {
   display: flex;
   flex-direction: row;
+  gap: 12px;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(124, 93, 191, 0.18);
 }
@@ -1707,7 +1759,7 @@ nav > div {
 .recent-activity-item {
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 10px;
   align-items: flex-start;
   padding: 10px 12px;
   border-radius: 10px;
@@ -1717,39 +1769,35 @@ nav > div {
 .recent-activity-item > div {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 .recent-activity-item > div p {
   margin: 0;
 }
 .recent-activity-item > div p:first-child {
   color: #2f244b;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  line-height: 1.45;
+  line-height: 1.35;
   text-transform: none;
   letter-spacing: normal;
 }
 .recent-activity-item > div p:last-child {
-  color: #6d6484;
+  color: #63567f;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
 }
 .recent-schedule-footer {
   padding-top: 4px;
 }
 .recent-schedule-footer p {
   margin: 0;
-  width: fit-content;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(124, 93, 191, 0.1);
-  color: #5f4f83;
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  color: #63567f;
+  font-size: 0.84rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 /* end bookings schedule styles */
