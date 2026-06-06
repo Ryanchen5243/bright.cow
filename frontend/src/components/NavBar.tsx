@@ -24,7 +24,7 @@ function BrandMark() {
     );
 }
 
-export default function NavBar({ setAppView }: { setAppView: React.Dispatch<React.SetStateAction<string>> }) {
+export default function NavBar({ setAppView }: { setAppView: (view: string) => void }) {
     const navigate = useNavigate();
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);

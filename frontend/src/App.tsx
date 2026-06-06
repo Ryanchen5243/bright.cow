@@ -1,6 +1,7 @@
 import ApplicationPage from "./components/ApplicationPage";
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
+import BookingPage from "./components/BookingPage";
 import { type ReactElement } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./contexts/authContext";
@@ -44,6 +45,7 @@ export default function App() {
           <div className="App">
             <Routes>
               <Route path="/app" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
+              <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />
               <Route path='/login' element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
               <Route path="/" element={<LandingPage />} />
