@@ -1,0 +1,53 @@
+{
+    "users": [
+        {
+        "id": 1,
+        "name": "Alice Smith",
+        "bio": "Alice is a passionate content creator who loves sharing her knowledge on technology and lifestyle. With over 10 years of experience in the industry, she has built a strong following on various social media platforms.",
+        "email": "alice.smith@example.com",
+        "languages": ["English", "Spanish"],
+        "profile_picture": "s3_url",
+        "reviews": [
+            {
+                "id": 1,
+                "content": "Alice's content is always insightful and engaging. I highly recommend following her for the latest trends in tech and lifestyle.",
+                "rating": 5
+            },
+            {
+                "id": 2,
+                "content": "I appreciate Alice's dedication to providing valuable information. Her videos are well-produced and informative.",
+                "rating": 4
+            }
+        ],
+        "followers": [
+            {
+                "id": 2,
+                "name": "John Doe"
+            },
+            {
+                "id": 3,
+                "name": "Jane Doe"
+            }
+        ],
+        "tags": [
+            "FPS-Games",
+            "Variety-Streamer",
+            "Chill-Vibes"
+        ],
+        "services": [
+            {
+                "id": 1,
+                "name": "Tech Reviews",
+                "pricing": 100,
+                "description": "In-depth reviews of the latest tech products."
+            },
+            {
+                "id": 2,
+                "name": "Lifestyle Tips",
+                "pricing": 50,
+                "description": "Practical advice for improving your daily life."
+            }
+        ]
+        }
+    ]
+}

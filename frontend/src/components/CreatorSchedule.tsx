@@ -25,7 +25,7 @@ export default function CreatorSchedule({ isLoggedIn }: { isLoggedIn: boolean })
                     <div className="upcoming-schedule-header">
                         <Schedule fontSize="large" htmlColor="#9557ED" />
                         <div>
-                            <h2>Upcoming Availability</h2>
+                            <h2>Upcoming vincent li</h2>
                             <p>Book a session in the next 24h</p>
                         </div>
                     </div>
