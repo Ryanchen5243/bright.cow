@@ -61,6 +61,45 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
                             </div>
                         </div>
                     </div>
+                    <div className="activity-schedule">
+                        <div className="activity-schedule-header">
+                            <h2>Recent Activity</h2>
+                            {/* <p>No past events.</p> */}
+                        </div>
+                        <div className="activity-schedule-contents">
+                            <div className="recent-activity-item">
+                                <Check fontSize="medium" htmlColor="#9557ED" />
+                                <div>
+                                    <p>A user booked a Duo Gaming session.</p>
+                                    <p>2 min ago</p>
+                                </div>
+                            </div>
+                            <div className="recent-activity-item">
+                                <Check fontSize="medium" htmlColor="#9557ED" />
+                                <div>
+                                    <p>Someone from USA booked a Coaching session.</p>
+                                    <p>5 min ago</p>
+                                </div>
+                            </div>
+                            <div className="recent-activity-item">
+                                <Check fontSize="medium" htmlColor="#9557ED" />
+                                <div>
+                                    <p>A user completed a Chill & Talk session.</p>
+                                    <p>15 min ago</p>
+                                </div>
+                            </div>
+                            <div className="recent-activity-item">
+                                <Check fontSize="medium" htmlColor="#9557ED" />
+                                <div>
+                                    <p>A user booked a Custom Session</p>
+                                    <p>22 min ago</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="activity-schedule-footer">
+                            <p>Live feed updates automatically</p>
+                        </div>
+                    </div>
                     {/* <p>No upcoming events.</p> */}
                 </div>
                 <div className="full-schedule">
@@ -73,55 +112,16 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
                             onChange={(date) => setSelectedDate(date)}
                         />
                     </div>
-                    <div className="availability-container">
-                        {availability[selectedDateKey] ? (
-                            <div className="availability">
-                                <h3>Availability for {selectedDateKey}</h3>
-                                <p>{availability[selectedDateKey]}</p>
-                            </div>
-                        ) : (
-                            <p>No availability for {selectedDateKey}.</p>
-                        )}
-                    </div>
                 </div>
-                <div className="recent-schedule">
-                    <div className="recent-schedule-header">
-                        <h2>Recent Activity</h2>
-                        {/* <p>No past events.</p> */}
-                    </div>
-                    <div className="recent-schedule-contents">
-                        <div className="recent-activity-item">
-                            <Check fontSize="medium" htmlColor="#9557ED" />
-                            <div>
-                                <p>A user booked a Duo Gaming session.</p>
-                                <p>2 min ago</p>
-                            </div>
+                <div className="availability-container availability-panel">
+                    {availability[selectedDateKey] ? (
+                        <div className="availability">
+                            <h3>Availability for {selectedDateKey}</h3>
+                            <p>{availability[selectedDateKey]}</p>
                         </div>
-                        <div className="recent-activity-item">
-                            <Check fontSize="medium" htmlColor="#9557ED" />
-                            <div>
-                                <p>Someone from USA booked a Coaching session.</p>
-                                <p>5 min ago</p>
-                            </div>
-                        </div>
-                        <div className="recent-activity-item">
-                            <Check fontSize="medium" htmlColor="#9557ED" />
-                            <div>
-                                <p>A user completed a Chill & Talk session.</p>
-                                <p>15 min ago</p>
-                            </div>
-                        </div>
-                        <div className="recent-activity-item">
-                            <Check fontSize="medium" htmlColor="#9557ED" />
-                            <div>
-                                <p>A user booked a Custom Session</p>
-                                <p>22 min ago</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="recent-schedule-footer">
-                        <p>Live feed updates automatically</p>
-                    </div>
+                    ) : (
+                        <p>No availability for {selectedDateKey}.</p>
+                    )}
                 </div>
             </div>
         </div>

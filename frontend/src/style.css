@@ -1587,7 +1587,7 @@ nav > div {
   box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
 .schedule-overview > .upcoming-schedule,
-.schedule-overview > .recent-schedule {
+.schedule-overview > .availability-panel {
   flex: 1 1 320px;
   min-width: 280px;
 }
@@ -1602,6 +1602,13 @@ nav > div {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.availability-panel {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(124, 93, 191, 0.2);
+  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
 .availability,
 .availability-container > p {
@@ -1718,17 +1725,13 @@ nav > div {
   outline: 2px solid rgba(124, 93, 191, 0.45);
   outline-offset: 2px;
 }
-.recent-schedule {
+.activity-schedule {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(124, 93, 191, 0.2);
-  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
-  box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
+  margin-top: 6px;
 }
-.recent-schedule-header {
+.activity-schedule-header {
   display: flex;
   flex-direction: row;
   gap: 12px;
@@ -1737,7 +1740,7 @@ nav > div {
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(124, 93, 191, 0.18);
 }
-.recent-schedule-header p {
+.activity-schedule-header p {
   margin: 0;
   color: #63567f;
   font-size: 0.84rem;
@@ -1745,13 +1748,13 @@ nav > div {
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
-.recent-schedule-header h2 {
+.activity-schedule-header h2 {
   margin: 2px 0 0;
   color: #1c1430;
   font-size: 1.08rem;
   line-height: 1.35;
 }
-.recent-schedule-contents {
+.activity-schedule-contents {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1789,10 +1792,10 @@ nav > div {
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
-.recent-schedule-footer {
+.activity-schedule-footer {
   padding-top: 4px;
 }
-.recent-schedule-footer p {
+.activity-schedule-footer p {
   margin: 0;
   color: #63567f;
   font-size: 0.84rem;
