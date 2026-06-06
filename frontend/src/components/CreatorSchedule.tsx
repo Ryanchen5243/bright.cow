@@ -2,6 +2,7 @@ import { Calendar } from '@calendarjs/react';
 import '@calendarjs/react/style.css';
 import { useState } from 'react';
 import { Schedule, Check } from "@mui/icons-material";
+import { useNavigate } from 'react-router-dom';
 
 const getLocalDateString = () => {
     const now = new Date();
@@ -12,11 +13,19 @@ const getLocalDateString = () => {
 };
 
 export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
+    const navigate = useNavigate();
     const [selectedDate, setSelectedDate] = useState<string | number>(getLocalDateString());
     const [availability] = useState<Record<string, string>>({
         [getLocalDateString()]: '9:00 AM - 10:00 AM',
         '2026-06-04': '2:00 PM - 3:00 PM',
     });
+    const creatorDetails = {
+        name: 'vincent li',
+        username: '@vincentli',
+    };
+    const goToBooking = () => {
+        navigate('/booking', { state: { creator: creatorDetails } });
+    };
     const selectedDateKey = String(selectedDate);
     return (
         <div className="creator-schedule">
@@ -36,12 +45,12 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
                                 <div>
                                     <p>7:00 PM</p>
                                     <p>30 min</p>
-                                    <button>Book</button>
+                                    <button onClick={goToBooking}>Book</button>
                                 </div>
                                 <div>
                                     <p>8:00 PM</p>
                                     <p>30 min</p>
-                                    <button>Book</button>
+                                    <button onClick={goToBooking}>Book</button>
                                 </div>
                             </div>
                         </div>
@@ -51,12 +60,12 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
                                 <div>
                                     <p>2:00 PM</p>
                                     <p>1 hr</p>
-                                    <button>Book</button>
+                                    <button onClick={goToBooking}>Book</button>
                                 </div>
                                 <div>
                                     <p>3:00 PM</p>
                                     <p>30 min</p>
-                                    <button>Book</button>
+                                    <button onClick={goToBooking}>Book</button>
                                 </div>
                             </div>
                         </div>
@@ -103,15 +112,14 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
                     {/* <p>No upcoming events.</p> */}
                 </div>
                 <div className="full-schedule">
-                    <div className="monthly-calendar">
                         <Calendar
                             type="inline"
                             value={selectedDate}
                             footer={false}
                             grid={true}
+                            wheel={false}
                             onChange={(date) => setSelectedDate(date)}
                         />
-                    </div>
                 </div>
                 <div className="availability-container availability-panel">
                     {availability[selectedDateKey] ? (

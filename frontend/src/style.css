@@ -1665,7 +1665,7 @@ nav > div {
   display: flex;
   flex-direction: row;
   gap: 12px;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(124, 93, 191, 0.18);
