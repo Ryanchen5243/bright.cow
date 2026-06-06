@@ -3,6 +3,7 @@ import '@calendarjs/react/style.css';
 import { useState } from 'react';
 import { Schedule, Check } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
+import profilePhoto from '../assets/default_profile_photo.jpg';
 
 const getLocalDateString = () => {
     const now = new Date();
@@ -22,6 +23,7 @@ export default function CreatorSchedule({ }: { isLoggedIn: boolean }) {
     const creatorDetails = {
         name: 'vincent li',
         username: '@vincentli',
+        photoUrl: profilePhoto,
     };
     const goToBooking = () => {
         navigate('/booking', { state: { creator: creatorDetails } });

@@ -2369,3 +2369,47 @@ nav > div {
   }
 }
 /* end login page styles */
+
+/* begin booking page styles */
+.booking-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px;
+}
+.booking-page-body {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+.booking-summary-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: stretch;
+}
+.booking-summary-profile-photo {
+  align-self: center;
+  aspect-ratio: 1 / 1;
+  width: clamp(64px, 8vw, 96px);
+  flex: 0 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.booking-summary-profile-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.booking-summary-creator-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+.booking-summary-creator-details h3,
+.booking-summary-creator-details p {
+  margin: 0;
+}
+/* end booking page styles */
