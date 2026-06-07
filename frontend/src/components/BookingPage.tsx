@@ -3,15 +3,20 @@ import defaultProfilePhoto from '../assets/default_profile_photo.jpg';
 
 export default function BookingPage() {
     const location = useLocation();
-    const creator = (location.state as { creator?: { name?: string; username?: string; photoUrl?: string } } | null)?.creator;
+    const state = (location.state as {
+        creator?: { name?: string; username?: string; photoUrl?: string };
+        creatorId?: string;
+    } | null);
+    const creator = state?.creator;
+    const creatorId = state?.creatorId;
     const creatorName = creator?.name ?? 'vincent li';
-    const creatorUsername = creator?.username ?? '@vincentli';
     const creatorPhotoUrl = creator?.photoUrl ?? defaultProfilePhoto;
+    const backToProfilePath = creatorId ? `/app/profile/${creatorId}` : '/app?view=profile';
 
     return (
         <div className="booking-page">
             <div className="booking-page-header">
-                <Link to="/app?view=profile">Back to creator profile page</Link>
+                <Link to={backToProfilePath}>Back to creator profile page</Link>
             </div>
             <div className="booking-page-body">
                 <div className="booking-form">

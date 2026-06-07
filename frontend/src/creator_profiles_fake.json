@@ -1,53 +1,58 @@
 {
-    "users": [
+    "creators": [
         {
-        "id": 1,
-        "name": "Alice Smith",
-        "bio": "Alice is a passionate content creator who loves sharing her knowledge on technology and lifestyle. With over 10 years of experience in the industry, she has built a strong following on various social media platforms.",
-        "email": "alice.smith@example.com",
-        "languages": ["English", "Spanish"],
-        "profile_picture": "s3_url",
-        "reviews": [
-            {
-                "id": 1,
-                "content": "Alice's content is always insightful and engaging. I highly recommend following her for the latest trends in tech and lifestyle.",
-                "rating": 5
+            "id": "luna",
+            "name": "Luna",
+            "username": "@itsluna",
+            "bio": "Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.",
+            "photoUrl": "",
+            "availability": {
+                "2026-06-06": "9:00 AM - 10:00 AM",
+                "2026-06-07": "2:00 PM - 3:00 PM"
             },
-            {
-                "id": 2,
-                "content": "I appreciate Alice's dedication to providing valuable information. Her videos are well-produced and informative.",
-                "rating": 4
-            }
-        ],
-        "followers": [
-            {
-                "id": 2,
-                "name": "John Doe"
+            "upcoming": {
+                "today": [
+                    { "time": "7:00 PM", "duration": "30 min" },
+                    { "time": "8:00 PM", "duration": "30 min" }
+                ],
+                "tomorrow": [
+                    { "time": "2:00 PM", "duration": "1 hr" },
+                    { "time": "3:00 PM", "duration": "30 min" }
+                ]
             },
-            {
-                "id": 3,
-                "name": "Jane Doe"
-            }
-        ],
-        "tags": [
-            "FPS-Games",
-            "Variety-Streamer",
-            "Chill-Vibes"
-        ],
-        "services": [
-            {
-                "id": 1,
-                "name": "Tech Reviews",
-                "pricing": 100,
-                "description": "In-depth reviews of the latest tech products."
+            "recentActivity": [
+                { "message": "A user booked a Duo Gaming session.", "timeAgo": "2 min ago" },
+                { "message": "Someone from USA booked a Coaching session.", "timeAgo": "5 min ago" },
+                { "message": "A user completed a Chill and Talk session.", "timeAgo": "15 min ago" },
+                { "message": "A user booked a Custom Session.", "timeAgo": "22 min ago" }
+            ]
+        },
+        {
+            "id": "vincentli",
+            "name": "Vincent Li",
+            "username": "@vincentli",
+            "bio": "Late-night ranked specialist helping players build consistency, confidence, and cleaner decision-making through practical sessions.",
+            "photoUrl": "",
+            "availability": {
+                "2026-06-06": "10:30 AM - 11:30 AM",
+                "2026-06-07": "6:00 PM - 7:00 PM"
             },
-            {
-                "id": 2,
-                "name": "Lifestyle Tips",
-                "pricing": 50,
-                "description": "Practical advice for improving your daily life."
-            }
-        ]
+            "upcoming": {
+                "today": [
+                    { "time": "6:30 PM", "duration": "1 hr" },
+                    { "time": "8:30 PM", "duration": "30 min" }
+                ],
+                "tomorrow": [
+                    { "time": "1:00 PM", "duration": "30 min" },
+                    { "time": "4:00 PM", "duration": "1 hr" }
+                ]
+            },
+            "recentActivity": [
+                { "message": "A user booked a Ranked Climb session.", "timeAgo": "4 min ago" },
+                { "message": "A user completed a VOD Review.", "timeAgo": "11 min ago" },
+                { "message": "Someone booked a Custom Training block.", "timeAgo": "19 min ago" },
+                { "message": "A new follower joined from Canada.", "timeAgo": "30 min ago" }
+            ]
         }
     ]
 }

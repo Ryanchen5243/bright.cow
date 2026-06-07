@@ -1,6 +1,6 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
 import rose_gift from '../assets/profile_gifts/rose_gift.png';
@@ -65,14 +65,70 @@ const giftItems = [
     { id: 'ship', image: shipppp_gift, alt: 'ship gift', price: 2000, name: 'Ship' }
 ];
 
-export default function Profile() {
+type CreatorProfileData = {
+    id: string;
+    name: string;
+    username: string;
+    bio: string;
+    photoUrl?: string;
+};
+
+const fallbackCreatorProfile: CreatorProfileData = {
+    id: 'luna',
+    name: 'Luna',
+    username: '@itsluna',
+    bio: 'Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.',
+    photoUrl: pfp,
+};
+
+export default function Profile({ creatorId }: { creatorId?: string }) {
     const [profileTab, setProfileTab] = useState("overview");
-    // user customizations
-    const [isLoggedIn] = useState(true);
-    const [userBio, setUserBio] = useState('Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.');
+    const [creatorProfile, setCreatorProfile] = useState<CreatorProfileData>(fallbackCreatorProfile);
+    const [userBio, setUserBio] = useState(fallbackCreatorProfile.bio);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        const loadCreatorProfile = async () => {
+            try {
+                const response = await fetch(new URL('../creator_profiles_fake.json', import.meta.url).href);
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json() as { creators?: CreatorProfileData[] };
+                const creators = data.creators ?? [];
+                const resolvedCreator = creators.find((creator) => creator.id === creatorId) ?? creators.find((creator) => creator.id === 'luna') ?? fallbackCreatorProfile;
+
+                if (!isCancelled) {
+                    const hydratedCreator: CreatorProfileData = {
+                        ...resolvedCreator,
+                        photoUrl: resolvedCreator.photoUrl || pfp,
+                    };
+                    setCreatorProfile(hydratedCreator);
+                    setUserBio(hydratedCreator.bio);
+                    setDraftBio(hydratedCreator.bio);
+                    setIsEditingBio(false);
+                }
+            } catch {
+                if (!isCancelled) {
+                    setCreatorProfile(fallbackCreatorProfile);
+                    setUserBio(fallbackCreatorProfile.bio);
+                    setDraftBio(fallbackCreatorProfile.bio);
+                    setIsEditingBio(false);
+                }
+            }
+        };
+
+        loadCreatorProfile();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [creatorId]);
 
     const startEditBio = () => {
         setDraftBio(userBio);
@@ -94,14 +150,14 @@ export default function Profile() {
             <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="profile-user-photo-shell">
                     <div className="profile-user-photo">
-                        <img src={pfp} alt="profile photo" />
+                        <img src={creatorProfile.photoUrl || pfp} alt="profile photo" />
                     </div>
                 </div>
                 <div className="profile-header-user-details-container">
                     <div className="profile-header-user-details">
-                        <div className="profile-header-user-headline"><h1>Luna</h1></div>
+                        <div className="profile-header-user-headline"><h1>{creatorProfile.name}</h1></div>
                         <div className="profile-header-user-headline-supporting">
-                            <span>@itsluna</span>
+                            <span>{creatorProfile.username}</span>
                             <span>online</span>
                         </div>
                     </div>
@@ -235,7 +291,7 @@ export default function Profile() {
                 }
                 {profileTab === "posts" && <Posts />}
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
+                {profileTab === "schedule" && <CreatorSchedule creatorId={creatorId} />}
                 {profileTab === "media" && <h1>media</h1>}
                 {profileTab === "reviews" && <h1>reviews</h1>}
             </div>

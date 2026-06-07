@@ -1,41 +1,90 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import AppMain from "./AppMain";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import AppMain, { type AppView } from "./AppMain";
 import NavBar from "./NavBar";
 
-const allowedViews = new Set(["home", "profile", "settings"]);
-
-const normalizeView = (view: string | null) => {
-    if (!view || !allowedViews.has(view)) {
-        return "home";
-    }
-    return view;
-};
-
 export default function ApplicationPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [appView, setAppView] = useState(() => normalizeView(searchParams.get("view")));
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { creatorId } = useParams();
+    const [creatorExists, setCreatorExists] = useState<boolean | null>(null);
 
     useEffect(() => {
-        const nextView = normalizeView(searchParams.get("view"));
-        setAppView((currentView) => (currentView === nextView ? currentView : nextView));
-    }, [searchParams]);
+        let isCancelled = false;
 
-    const handleSetAppView = (nextView: string) => {
-        const normalizedView = normalizeView(nextView);
-        setAppView(normalizedView);
-        if (normalizedView === "home") {
-            setSearchParams({});
+        if (!creatorId) {
+            setCreatorExists(null);
+            return () => {
+                isCancelled = true;
+            };
+        }
+
+        const validateCreatorId = async () => {
+            try {
+                const response = await fetch(new URL('../creator_profiles_fake.json', import.meta.url).href);
+                if (!response.ok) {
+                    if (!isCancelled) {
+                        setCreatorExists(false);
+                    }
+                    return;
+                }
+
+                const data = await response.json() as { creators?: Array<{ id: string }> };
+                const exists = (data.creators ?? []).some((creator) => creator.id === creatorId);
+
+                if (!isCancelled) {
+                    setCreatorExists(exists);
+                }
+            } catch {
+                if (!isCancelled) {
+                    setCreatorExists(false);
+                }
+            }
+        };
+
+        validateCreatorId();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [creatorId]);
+
+    const params = new URLSearchParams(location.search);
+    const viewParam = params.get("view");
+    const appView: AppView = creatorId
+        ? creatorExists === null
+            ? "creator-loading"
+            : creatorExists
+                ? "profile"
+                : "creator-not-found"
+        : viewParam === "settings"
+            ? "settings"
+            : "home";
+
+    const handleSetAppView = (nextView: AppView) => {
+        if (nextView === "profile") {
+            navigate(`/app/profile/${creatorExists === false ? "luna" : creatorId ?? "luna"}`);
             return;
         }
-        setSearchParams({ view: normalizedView });
+
+        if (nextView === "settings") {
+            navigate(`/app?view=settings`);
+            return;
+        }
+
+        if (nextView === "home") {
+            navigate("/app");
+            return;
+        }
+
+        navigate("/app");
     };
 
     return (
         <>
             <NavBar setAppView={handleSetAppView} />
             <div className="app-body">
-                <AppMain appView={appView} />
+                <AppMain appView={appView} creatorId={creatorId} />
             </div>
         </>
     );
