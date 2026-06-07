@@ -2412,4 +2412,57 @@ nav > div {
 .booking-summary-creator-details p {
   margin: 0;
 }
+.booking-services-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.booking-services-list ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.booking-service-card {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+.booking-service-card > li {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(149, 87, 237, 0.1);
+  color: #6b42bb;
+  font-size: 0.85rem;
+}
+
+.booking-service-card {
+  cursor: pointer;
+}
+
+.booking-service-card > li {
+  width: 100%;
+  border: 1px solid transparent;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.booking-service-card:hover > li {
+  background: rgba(149, 87, 237, 0.16);
+}
+
+.booking-service-card:focus-visible > li {
+  border-color: rgba(149, 87, 237, 0.7);
+  box-shadow: 0 0 0 2px rgba(149, 87, 237, 0.2);
+}
+
+.booking-service-card.selected > li {
+  background: rgba(149, 87, 237, 0.22);
+  border-color: rgba(149, 87, 237, 0.75);
+  color: #4a238c;
+  box-shadow: 0 8px 18px rgba(89, 42, 161, 0.2);
+}
+
 /* end booking page styles */

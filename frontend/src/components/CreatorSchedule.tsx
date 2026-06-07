@@ -23,11 +23,20 @@ type ActivityItem = {
     timeAgo: string;
 };
 
+type CreatorService = {
+    service_id: string;
+    base_service_id: string;
+    label?: string;
+    session_length_minutes: number | null;
+    cost: number | null;
+};
+
 type CreatorData = {
     id: string;
     name: string;
     username: string;
     photoUrl?: string;
+    services?: CreatorService[];
     availability: Record<string, string>;
     upcoming: {
         today: TimeSlot[];
@@ -41,6 +50,7 @@ const defaultCreator: CreatorData = {
     name: 'Luna',
     username: '@itsluna',
     photoUrl: profilePhoto,
+    services: [],
     availability: {
         [getLocalDateString()]: '9:00 AM - 10:00 AM',
     },

@@ -16,13 +16,13 @@ import Posts from './Posts';
 
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 
-const serviceCards = [
-    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/hour', icon: Group },
-    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/hour', icon: Adjust },
-    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/session', icon: SmartDisplay },
-    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/hour', icon: Message },
-    { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', price: '$30+', unit: '/custom', icon: StarBorder }
-];
+const serviceCatalog = {
+    'duo-gaming': { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', defaultPriceLabel: '$30', defaultUnit: '/hour', icon: Group },
+    'valorant-coaching': { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', defaultPriceLabel: '$35', defaultUnit: '/hour', icon: Adjust },
+    'vod-review': { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', defaultPriceLabel: '$25', defaultUnit: '/session', icon: SmartDisplay },
+    'chill-talk': { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', defaultPriceLabel: '$15', defaultUnit: '/hour', icon: Message },
+    'custom-session': { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', defaultPriceLabel: '$30+', defaultUnit: '/custom', icon: StarBorder }
+} as const;
 
 const quickFacts = [
     { label: 'Languages', value: 'English, Korean', icon: Translate },
@@ -71,6 +71,13 @@ type CreatorProfileData = {
     username: string;
     bio: string;
     photoUrl?: string;
+    services?: {
+        service_id: string;
+        base_service_id: string;
+        label?: string;
+        session_length_minutes: number | null;
+        cost: number | null;
+    }[];
 };
 
 const fallbackCreatorProfile: CreatorProfileData = {
@@ -79,6 +86,12 @@ const fallbackCreatorProfile: CreatorProfileData = {
     username: '@itsluna',
     bio: 'Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.',
     photoUrl: pfp,
+    services: [
+        { service_id: 'duo-gaming-60', base_service_id: 'duo-gaming', label: 'Duo Gaming 60 min', session_length_minutes: 60, cost: null },
+        { service_id: 'valorant-coaching-60', base_service_id: 'valorant-coaching', label: 'Valorant Coaching 60 min', session_length_minutes: 60, cost: null },
+        { service_id: 'vod-review', base_service_id: 'vod-review', label: 'VOD Review', session_length_minutes: 60, cost: null },
+        { service_id: 'custom-session', base_service_id: 'custom-session', label: 'Custom Session', session_length_minutes: null, cost: null },
+    ],
 };
 
 export default function Profile({ creatorId }: { creatorId?: string }) {
@@ -145,6 +158,24 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         setIsEditingBio(false);
     };
 
+    const renderedServices = (creatorProfile.services ?? [])
+        .map((service) => {
+            const catalogEntry = serviceCatalog[service.base_service_id as keyof typeof serviceCatalog];
+            if (!catalogEntry) {
+                return null;
+            }
+
+            return {
+                key: service.service_id,
+                title: service.label || catalogEntry.title,
+                description: catalogEntry.description,
+                price: service.cost === null ? catalogEntry.defaultPriceLabel : `$${service.cost}`,
+                unit: service.session_length_minutes ? `/${service.session_length_minutes} min` : catalogEntry.defaultUnit,
+                icon: catalogEntry.icon,
+            };
+        })
+        .filter((service): service is NonNullable<typeof service> => service !== null);
+
     return (
         <div className="profile-view">
             <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -198,8 +229,8 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
                                 </div>
                             </div>
                             <p>Pick a format that matches the energy you want from the session.</p>
-                            {serviceCards.map(({ title, description, price, unit, icon: Icon }) => (
-                                <div className="profile-service-card" key={title}>
+                            {renderedServices.map(({ key, title, description, price, unit, icon: Icon }) => (
+                                <div className="profile-service-card" key={key}>
                                     <div className="profile-service-card-icon">
                                         <Icon fontSize="medium" htmlColor="#9557ED" />
                                     </div>
