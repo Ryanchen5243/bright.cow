@@ -2,7 +2,9 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 
-const AUTH_LOADING_DELAY_MS = Number(import.meta.env.VITE_AUTH_LOADING_MS ?? 5500);
+const AUTH_LOADING_DELAY_MS = import.meta.env.DEV
+    ? Number(import.meta.env.VITE_AUTH_LOADING_MS ?? 5500)
+    : 0;
 
 const AuthContext = createContext<{
     currentUser: User | null;
