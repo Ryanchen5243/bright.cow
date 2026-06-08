@@ -1,6 +1,7 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
 import rose_gift from '../assets/profile_gifts/rose_gift.png';
@@ -16,13 +17,13 @@ import Posts from './Posts';
 
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 
-const serviceCards = [
-    { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', price: '$30', unit: '/hour', icon: Group },
-    { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', price: '$35', unit: '/hour', icon: Adjust },
-    { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', price: '$25', unit: '/session', icon: SmartDisplay },
-    { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', price: '$15', unit: '/hour', icon: Message },
-    { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', price: '$30+', unit: '/custom', icon: StarBorder }
-];
+const serviceCatalog = {
+    'duo-gaming': { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', defaultPriceLabel: '$30', defaultUnit: '/hour', icon: Group },
+    'valorant-coaching': { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', defaultPriceLabel: '$35', defaultUnit: '/hour', icon: Adjust },
+    'vod-review': { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', defaultPriceLabel: '$25', defaultUnit: '/session', icon: SmartDisplay },
+    'chill-talk': { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', defaultPriceLabel: '$15', defaultUnit: '/hour', icon: Message },
+    'custom-session': { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', defaultPriceLabel: '$30+', defaultUnit: '/custom', icon: StarBorder }
+} as const;
 
 const quickFacts = [
     { label: 'Languages', value: 'English, Korean', icon: Translate },
@@ -65,14 +66,89 @@ const giftItems = [
     { id: 'ship', image: shipppp_gift, alt: 'ship gift', price: 2000, name: 'Ship' }
 ];
 
-export default function Profile() {
-    const [profileTab, setProfileTab] = useState("overview");
-    // user customizations
-    const [isLoggedIn] = useState(true);
-    const [userBio, setUserBio] = useState('Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.');
+type CreatorProfileData = {
+    id: string;
+    name: string;
+    username: string;
+    bio: string;
+    photoUrl?: string;
+    services?: {
+        service_id: string;
+        base_service_id: string;
+        label?: string;
+        session_length_minutes: number | null;
+        cost: number | null;
+    }[];
+};
+
+const fallbackCreatorProfile: CreatorProfileData = {
+    id: 'luna',
+    name: 'Luna',
+    username: '@itsluna',
+    bio: 'Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.',
+    photoUrl: pfp,
+    services: [
+        { service_id: 'duo-gaming-60', base_service_id: 'duo-gaming', label: 'Duo Gaming 60 min', session_length_minutes: 60, cost: null },
+        { service_id: 'valorant-coaching-60', base_service_id: 'valorant-coaching', label: 'Valorant Coaching 60 min', session_length_minutes: 60, cost: null },
+        { service_id: 'vod-review', base_service_id: 'vod-review', label: 'VOD Review', session_length_minutes: 60, cost: null },
+        { service_id: 'custom-session', base_service_id: 'custom-session', label: 'Custom Session', session_length_minutes: null, cost: null },
+    ],
+};
+
+export default function Profile({ creatorId }: { creatorId?: string }) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const rawTab = searchParams.get('tab');
+    const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
+
+    const setProfileTab = (tab: string) => {
+        setSearchParams((prev) => { prev.set('tab', tab); return prev; }, { replace: true });
+    };
+    const [creatorProfile, setCreatorProfile] = useState<CreatorProfileData>(fallbackCreatorProfile);
+    const [userBio, setUserBio] = useState(fallbackCreatorProfile.bio);
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        const loadCreatorProfile = async () => {
+            try {
+                const response = await fetch(new URL('../creator_profiles_fake.json', import.meta.url).href);
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json() as { creators?: CreatorProfileData[] };
+                const creators = data.creators ?? [];
+                const resolvedCreator = creators.find((creator) => creator.id === creatorId) ?? creators.find((creator) => creator.id === 'luna') ?? fallbackCreatorProfile;
+
+                if (!isCancelled) {
+                    const hydratedCreator: CreatorProfileData = {
+                        ...resolvedCreator,
+                        photoUrl: resolvedCreator.photoUrl || pfp,
+                    };
+                    setCreatorProfile(hydratedCreator);
+                    setUserBio(hydratedCreator.bio);
+                    setDraftBio(hydratedCreator.bio);
+                    setIsEditingBio(false);
+                }
+            } catch {
+                if (!isCancelled) {
+                    setCreatorProfile(fallbackCreatorProfile);
+                    setUserBio(fallbackCreatorProfile.bio);
+                    setDraftBio(fallbackCreatorProfile.bio);
+                    setIsEditingBio(false);
+                }
+            }
+        };
+
+        loadCreatorProfile();
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [creatorId]);
 
     const startEditBio = () => {
         setDraftBio(userBio);
@@ -89,19 +165,37 @@ export default function Profile() {
         setIsEditingBio(false);
     };
 
+    const renderedServices = (creatorProfile.services ?? [])
+        .map((service) => {
+            const catalogEntry = serviceCatalog[service.base_service_id as keyof typeof serviceCatalog];
+            if (!catalogEntry) {
+                return null;
+            }
+
+            return {
+                key: service.service_id,
+                title: service.label || catalogEntry.title,
+                description: catalogEntry.description,
+                price: service.cost === null ? catalogEntry.defaultPriceLabel : `$${service.cost}`,
+                unit: service.session_length_minutes ? `/${service.session_length_minutes} min` : catalogEntry.defaultUnit,
+                icon: catalogEntry.icon,
+            };
+        })
+        .filter((service): service is NonNullable<typeof service> => service !== null);
+
     return (
         <div className="profile-view">
             <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="profile-user-photo-shell">
                     <div className="profile-user-photo">
-                        <img src={pfp} alt="profile photo" />
+                        <img src={creatorProfile.photoUrl || pfp} alt="profile photo" />
                     </div>
                 </div>
                 <div className="profile-header-user-details-container">
                     <div className="profile-header-user-details">
-                        <div className="profile-header-user-headline"><h1>Luna</h1></div>
+                        <div className="profile-header-user-headline"><h1>{creatorProfile.name}</h1></div>
                         <div className="profile-header-user-headline-supporting">
-                            <span>@itsluna</span>
+                            <span>{creatorProfile.username}</span>
                             <span>online</span>
                         </div>
                     </div>
@@ -142,8 +236,8 @@ export default function Profile() {
                                 </div>
                             </div>
                             <p>Pick a format that matches the energy you want from the session.</p>
-                            {serviceCards.map(({ title, description, price, unit, icon: Icon }) => (
-                                <div className="profile-service-card" key={title}>
+                            {renderedServices.map(({ key, title, description, price, unit, icon: Icon }) => (
+                                <div className="profile-service-card" key={key}>
                                     <div className="profile-service-card-icon">
                                         <Icon fontSize="medium" htmlColor="#9557ED" />
                                     </div>
@@ -235,7 +329,7 @@ export default function Profile() {
                 }
                 {profileTab === "posts" && <Posts />}
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <CreatorSchedule isLoggedIn={isLoggedIn} />}
+                {profileTab === "schedule" && <CreatorSchedule creatorId={creatorId} />}
                 {profileTab === "media" && <h1>media</h1>}
                 {profileTab === "reviews" && <h1>reviews</h1>}
             </div>

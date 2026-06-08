@@ -7,7 +7,125 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./contexts/authContext";
 
 function AuthLoading() {
-  return <h1>Loading...</h1>;
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
+        background:
+          "radial-gradient(circle at 10% 20%, #dbeafe 0%, #eff6ff 35%, #f8fafc 100%)",
+      }}
+    >
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          width: "20rem",
+          height: "20rem",
+          borderRadius: "9999px",
+          background: "rgba(14, 165, 233, 0.22)",
+          filter: "blur(35px)",
+          top: "-5rem",
+          left: "-4rem",
+          animation: "authOrbFloat 6s ease-in-out infinite",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          width: "18rem",
+          height: "18rem",
+          borderRadius: "9999px",
+          background: "rgba(250, 204, 21, 0.22)",
+          filter: "blur(32px)",
+          bottom: "-6rem",
+          right: "-3rem",
+          animation: "authOrbFloat 7s ease-in-out infinite reverse",
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.9rem",
+          width: "min(28rem, 90vw)",
+          padding: "2rem",
+          borderRadius: "18px",
+          backgroundColor: "rgba(255, 255, 255, 0.82)",
+          border: "1px solid rgba(148, 163, 184, 0.25)",
+          backdropFilter: "blur(8px)",
+          boxShadow: "0 24px 40px rgba(15, 23, 42, 0.12)",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "0.72rem",
+            letterSpacing: "0.14em",
+            fontWeight: 700,
+            color: "#0369a1",
+            textTransform: "uppercase",
+            padding: "0.35rem 0.7rem",
+            borderRadius: "9999px",
+            background: "rgba(14, 165, 233, 0.12)",
+          }}
+        >
+          CreatorOS
+        </span>
+        <div
+          aria-hidden="true"
+          style={{
+            width: "2.4rem",
+            height: "2.4rem",
+            border: "3px solid #bfdbfe",
+            borderTopColor: "#0284c7",
+            borderRadius: "9999px",
+            animation: "authLoadingSpin 0.85s linear infinite",
+          }}
+        />
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "1.15rem",
+            fontWeight: 700,
+            color: "#0f172a",
+            letterSpacing: "0.01em",
+          }}
+        >
+          Warming up your workspace
+        </h2>
+        <p
+          style={{
+            margin: 0,
+            fontSize: "0.95rem",
+            fontWeight: 500,
+            color: "#475569",
+            textAlign: "center",
+          }}
+        >
+          Verifying your account and loading your creator dashboard...
+        </p>
+      </div>
+      <style>{`
+        @keyframes authLoadingSpin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes authOrbFloat {
+          0%, 100% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(14px) translateX(8px); }
+        }
+      `}</style>
+    </div>
+  );
 }
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
@@ -27,7 +145,7 @@ function ProtectedRoute({ children }: { children: ReactElement }) {
 function PublicOnlyRoute({ children }: { children: ReactElement }) {
   const { currentUser, loading } = useAuth();
 
-  if (loading) {
+  if (loading && currentUser) {
     return <AuthLoading />;
   }
 
@@ -45,6 +163,7 @@ export default function App() {
           <div className="App">
             <Routes>
               <Route path="/app" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
+              <Route path="/app/profile/:creatorId" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
               <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />
               <Route path='/login' element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
@@ -56,98 +175,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-/*
-
-function OnlineStatus(status: "online" | "offline"): string {
-  return `
-    <span class="status-indicator ${status}">${status}</span>`;
-}
-
-function ProfileConents(): string {
-  return `
-    <div id="profile-main">
-      <div id="profile-main-header" class="level-one-card">
-        <div id="profile-main-header-contents">
-          <div id="profile-main-avatar-container">
-            <img id="profile-main-avatar" src="${profileAvatar}" alt='profile avatar'>
-          </div>
-          <div id="profile-user-info">
-              <p class="body-style">Emily</p>
-              <p class="body-style">Username: @emily_gamer</p>
-              <div>
-                <p class="body-style">Boston, MA, 14:00 UTC</p>
-                ${OnlineStatus("online")}
-                ${OnlineStatus("offline")}
-              </div>
-          </div>
-          <div id="profile-user-cta">
-            <button>Book a Session</button>
-            <button>Follow</button>
-            <button>Message</button>
-          </div>
-        </div>
-        <div id="profile-tabs-toggle">
-          button overview
-          button games
-          button reviews
-        </div>
-      </div>
-      <div id="profile-main-content" class="level-one-card">main content will go here...</div>
-    </div>
-    <div id="profile-aside">
-      <div id="profile-aside-donation" class="level-one-card">
-        <p class="body-style">Support Emily</p>
-        <p class="body-style">Love Emily's Content? Support her directly!</p>
-        <div id="profile-aside-donation-grid">
-          <div>$5</div>
-          <div>$10</div>
-          <div>$15</div>
-          <div>$20</div>
-          <div>$50</div>
-          <div>$100</div>
-        </div>
-        <button class="donate-button">Donate</button>
-      </div>
-      <div id="profile-aside-ads">ads will go here...</div>
-    </div>
-    `;
-}
-
-function Footer(): string {
-  return `
-    <footer>
-      <div>© Konevo 2026</div>
-      <div> terms of service | privacy policy </div>
-    </footer>`;
-}
-
-function applyCtaButtonMaxWidth(): void {
-  const ctaContainer = document.getElementById("profile-user-cta");
-  if (!ctaContainer) return;
-
-  const buttons = ctaContainer.querySelectorAll("button");
-  if (!buttons.length) return;
-
-  const maxCharacters = Math.max(
-    ...Array.from(buttons, (button) => button.textContent?.trim().length ?? 0),
-  );
-
-  ctaContainer.style.setProperty("--cta-max-ch", String(maxCharacters));
-}
-
-function InitLandingPage(): void {
-  const nav = document.getElementById("nav-bar") as HTMLElement;
-  const app = document.getElementById("app") as HTMLElement;
-  if (!nav || !app) return;
-  nav.innerHTML = NavBar();
-  app.innerHTML = `
-    <div class="main"></div>
-    ${Footer()}`;
-  document.getElementsByClassName("main")[0].innerHTML = ProfileConents();
-  applyCtaButtonMaxWidth();
-}
-
-InitLandingPage();
-
-*/
