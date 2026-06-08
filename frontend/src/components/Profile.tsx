@@ -1,6 +1,7 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater } from '@mui/icons-material';
 import CreatorSchedule from './CreatorSchedule';
 import rose_gift from '../assets/profile_gifts/rose_gift.png';
@@ -95,7 +96,13 @@ const fallbackCreatorProfile: CreatorProfileData = {
 };
 
 export default function Profile({ creatorId }: { creatorId?: string }) {
-    const [profileTab, setProfileTab] = useState("overview");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const rawTab = searchParams.get('tab');
+    const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
+
+    const setProfileTab = (tab: string) => {
+        setSearchParams((prev) => { prev.set('tab', tab); return prev; }, { replace: true });
+    };
     const [creatorProfile, setCreatorProfile] = useState<CreatorProfileData>(fallbackCreatorProfile);
     const [userBio, setUserBio] = useState(fallbackCreatorProfile.bio);
     const [isEditingBio, setIsEditingBio] = useState(false);

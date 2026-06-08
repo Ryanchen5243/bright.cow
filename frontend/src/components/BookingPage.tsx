@@ -22,7 +22,7 @@ export default function BookingPage() {
     const creatorPhotoUrl = creator?.photoUrl ?? defaultProfilePhoto;
     const creatorServices = creator?.services ?? [];
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
-    const backToProfilePath = creatorId ? `/app/profile/${creatorId}` : '/app?view=profile';
+    const backToProfilePath = creatorId ? `/app/profile/${creatorId}?tab=schedule` : '/app?view=profile&tab=schedule';
 
     const formatServiceCost = (cost: number | null) => {
         if (cost === null) {
