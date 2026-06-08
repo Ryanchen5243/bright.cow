@@ -2,6 +2,8 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 
+const AUTH_LOADING_DELAY_MS = Number(import.meta.env.VITE_AUTH_LOADING_MS ?? 5500);
+
 const AuthContext = createContext<{
     currentUser: User | null;
     loading: boolean;
@@ -24,11 +26,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return () => unsubscribe();
     }, []);
     async function initializeUser(user: User | null) {
+        const shouldShowAuthLoading = Boolean(user);
+
+        if (shouldShowAuthLoading) {
+            setLoading(true);
+        }
+
         if (user) {
             setCurrentUser(user);
         } else {
             setCurrentUser(null);
         }
+
+        if (shouldShowAuthLoading) {
+            await new Promise((resolve) => setTimeout(resolve, AUTH_LOADING_DELAY_MS));
+        }
+
         setLoading(false);
     }
     const value = {

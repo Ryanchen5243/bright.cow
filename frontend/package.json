@@ -8,17 +8,24 @@
     "clean": "rimraf node_modules/.vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:auth": "vitest run src/App.auth-loading.test.tsx",
     "deploy:s3": "npm run build && aws s3 sync dist/ s3://lobbynest.com --delete"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
+    "jsdom": "^27.0.0",
     "rimraf": "^6.1.0",
     "typescript": "~6.0.2",
-    "vite": "^8.0.10"
+    "vite": "^8.0.10",
+    "vitest": "^4.0.8"
   },
   "dependencies": {
     "@calendarjs/ce": "^1.1.0",
