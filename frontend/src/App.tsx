@@ -5,6 +5,7 @@ import BookingPage from "./components/BookingPage";
 import { type ReactElement } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./contexts/authContext";
+import TermsPage from "./components/TermsPage";
 
 function AuthLoading() {
   return (
@@ -167,6 +168,7 @@ export default function App() {
               <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />
               <Route path='/login' element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
+              <Route path='/terms' element={<TermsPage />} />
               <Route path="/" element={<LandingPage />} />
               <Route path="*" element={<h1>404 Not Found hoo </h1>} />
           </Routes>
