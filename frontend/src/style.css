@@ -2466,3 +2466,30 @@ nav > div {
 }
 
 /* end booking page styles */
+
+/* begin terms page styles */
+.terms-page {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  padding: 22px;
+}
+
+.terms-page-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 200px;
+}
+.terms-page-tab:hover {
+  cursor: pointer;
+  color: var(--vibrant-purple);
+}
+
+.terms-page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+/* end terms page styles */
