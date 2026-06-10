@@ -2,6 +2,7 @@ import { NotificationsNoneOutlined, Search, Settings, Logout, Person } from "@mu
 import { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { doSignOut } from "../firebase/auth.ts";
+import { type AppView } from "./AppMain";
 
 const suggestions = [
     { label: 'Valorant', type: 'Game' },
@@ -24,7 +25,7 @@ function BrandMark() {
     );
 }
 
-export default function NavBar({ setAppView }: { setAppView: (view: string) => void }) {
+export default function NavBar({ setAppView }: { setAppView: (view: AppView) => void }) {
     const navigate = useNavigate();
     const [isSearchFocused, setSearchFocused] = useState(false);
     const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
