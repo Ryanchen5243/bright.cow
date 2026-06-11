@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import defaultProfilePhoto from '../assets/default_profile_photo.jpg';
-
+import { defineCreatorServices } from '../mocks/defaultServices.js'; // old API, superseded by defineCreatorServices
 type CreatorService = {
     service_id: string;
     base_service_id: string;
@@ -37,6 +37,39 @@ export default function BookingPage() {
         }
         return `${minutes} min`;
     };
+    useEffect(() => {
+        console.log(defineCreatorServices([
+            {
+        templateId: 'gamingDuo',
+        durations: [30, 60],
+        prices: [5, 10],
+    },
+    {
+        templateId: 'privateChat',
+        durations: [15, 30],
+        pricePerMinute: 0.33,
+    },
+    {
+        templateId: 'faceCall',
+        durations: [15, 30, 60],
+        pricePerMinute: 0.66,
+    },
+    {
+        templateId: 'exclusivePhotos',
+        bundles: [
+            { size: 1,  price: 3  },
+            { size: 10, price: 20 },
+        ],
+    },
+    {
+        templateId: 'asmrVoiceMessage',
+        bundles: [
+            { size: 1, price: 5  },
+            { size: 4, price: 15 },
+        ],
+    },
+        ]));
+    }, []);
 
     return (
         <div className="booking-page">
