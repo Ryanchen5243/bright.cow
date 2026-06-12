@@ -3,70 +3,328 @@ export const ServiceType = {
     Session: 'session',
     Bundle: 'bundle',
 }
-const services = {
-    /*
-        Default Services [creator -> minimum 2 services (e.g. gaming session + photo request @ $3 per photo), no restrictions on 2+ of same kind service
-        -> creator selection of services capped at 10, exclusive of custom session [with custom message (e.g. DM me for more etc)] -> total is max 11 services for any profile
-        Gaming Session (1 on 1, $[5-10] per session) [Gaming Duo]
-        Message Chat (texting, $[2-5] per 15 min) [Private Chat]
-        Video Conversation (casual video call, $[5-10] per 15 min) [1-on-1 Face Call]
-        Photo Request (tier list -> $[2-5] per photo, $[20] per bundle of 10 photos) [Exclusive Photos]
-        Voice Message Request ($[5] per message, $[15] per bundle of 4 (buy3get1free) [ASMR/Voice Message]
-        Custom Session -> (e.g. Private Forum/Page/Discord Server/Instagram, $ tbd)
-    */
-    gamingSession: {
-        name: 'Gaming Session',
-        description: '1 on 1 gaming session',
+/*
+    Default Services [creator -> minimum 2 services (e.g. gaming session + photo request @ $3 per photo), no restrictions on 2+ of same kind service
+    -> creator selection of services capped at 10, exclusive of custom session [with custom message (e.g. DM me for more etc)] -> total is max 11 services for any profile
+    Gaming Session (1 on 1, $[5-10] per session) [Gaming Duo]
+    Message Chat (texting, $[2-5] per 15 min) [Private Chat]
+    Video Conversation (casual video call, $[5-10] per 15 min) [1-on-1 Face Call]
+    Photo Request (tier list -> $[2-5] per photo, $[20] per bundle of 10 photos) [Exclusive Photos]
+    Voice Message Request ($[5] per message, $[15] per bundle of 4 (buy3get1free) [ASMR/Voice Message]
+    Custom Session -> (e.g. Private Forum/Page/Discord Server/Instagram, $ tbd)
+*/
+
+function createService(type, config) {
+    switch (type) {
+        case ServiceType.Minute:
+            return {
+                type: ServiceType.Minute,
+                name: config.name,
+                description: config.description,
+                durationMin: config.durationMin ?? 15,
+                pricePerMinute: config.pricePerMinute,
+            };
+        case ServiceType.Session:
+            return {
+                type: ServiceType.Session,
+                name: config.name,
+                description: config.description,
+                pricePerSession: config.pricePerSession ?? 5,
+            };
+        case ServiceType.Bundle:
+            return {
+                type: ServiceType.Bundle,
+                name: config.name,
+                description: config.description,
+                pricePerItem: config.pricePerItem,
+                itemsPerBundle: config.itemsPerBundle,
+                bundlePrice: config.bundlePrice,
+            };
+        default:
+            throw new Error(`Unknown service type: ${type}`);
+    }
+}
+
+// Canonical base-service definitions — no variants baked in.
+// Creators pick from these base IDs and define their own durations / bundle sizes.
+export const serviceTemplates = {
+    gamingDuo: {
         type: ServiceType.Session,
-        recommendedPrice: [5, 10],
-        durationMin: null,
-        bundleSize: null,
-        price: recommendedPrice[0]
+        name: 'Gaming Duo',
+        description: '1-on-1 gaming session',
     },
-    messageChat: {
-        name: 'Message Chat',
+    privateChat: {
+        type: ServiceType.Minute,
+        name: 'Private Chat',
         description: 'Texting service',
+    },
+    faceCall: {
         type: ServiceType.Minute,
-        recommendedPrice: [2, 5],
-        durationMin: 15,
-        bundleSize: null,
-        price: recommendedPrice[0],
+        name: '1-on-1 Face Call',
+        description: 'Casual video conversation',
     },
-    videoConversation: {
-        name: 'Video Conversation',
-        description: 'Casual video call',
-        type: ServiceType.Minute,
-        recommendedPrice: [5, 10],
-        durationMin: 15,
-        bundleSize: null,
-        price: recommendedPrice[0],
-    },
-    photoRequest: {
-        name: 'Photo Request',
-        description: 'Request exclusive photos',
+    exclusivePhotos: {
         type: ServiceType.Bundle,
-        recommendedPrice: [2, 5],
-        durationMin: null,
-        bundleSize: 10,
-        price: recommendedPrice[0],
+        name: 'Exclusive Photos',
+        description: 'Photo request service with bundle pricing',
     },
-    voiceMessageRequest: {
-        name: 'Voice Message Request',
-        description: 'Request ASMR/Voice messages',
+    asmrVoiceMessage: {
         type: ServiceType.Bundle,
-        recommendedPrice: [5, 15],
-        durationMin: null,
-        bundleSize: 4,
-        price: recommendedPrice[0],
+        name: 'ASMR/Voice Message',
+        description: 'Voice message request service with bundle pricing',
     },
     customSession: {
-        name: 'Custom Session',
-        description: 'Custom service session',
         type: ServiceType.Session,
-        recommendedPrice: [null, null],
-        durationMin: null,
-        bundleSize: null,
-        price: recommendedPrice[0],
+        name: 'Custom Session',
+        description: 'Flexible session designed around the fan\'s request',
     },
+};
+
+/**
+ * defineCreatorServices — the main creator-facing API.
+ *
+ * A creator passes an array of service definitions. Each entry picks a base
+ * template and then supplies either:
+ *   - durations: number[]  + pricePerMinute (Minute services)
+ *   - durations: number[]  + prices: number[]  (one price per duration, Session services)
+ *   - bundles: { size, price }[]              (Bundle services)
+ *
+ * Every duration / bundle size becomes a separate, individually capped entry
+ * toward the 10-service limit.
+ *
+ * Returns a flat object keyed as  "<templateId>-<duration>min"  or
+ * "<templateId>-<size>x"  suitable for direct use in booking/profile UIs.
+ *
+ * @example
+ * defineCreatorServices([
+ *   {
+ *     templateId: 'gamingDuo',
+ *     durations: [15, 20, 30, 45],
+ *     prices: [5, 7, 10, 14],           // one price per duration
+ *   },
+ *   {
+ *     templateId: 'privateChat',
+ *     durations: [15, 30],
+ *     pricePerMinute: 0.33,
+ *   },
+ *   {
+ *     templateId: 'exclusivePhotos',
+ *     bundles: [
+ *       { size: 1,  price: 3  },
+ *       { size: 5,  price: 12 },
+ *       { size: 10, price: 20 },
+ *     ],
+ *   },
+ * ])
+ */
+export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } = {}) {
+    const result = {};
+    const sessionServiceDurationHash = new Set(); // To track unique durations for Session services
+
+    for (const def of serviceDefinitions) {
+        const template = serviceTemplates[def.templateId];
+        if (!template) {
+            throw new Error(`Unknown service template: "${def.templateId}". Available: ${Object.keys(serviceTemplates).join(', ')}`);
+        }
+
+        const baseKey = def.templateId;
+
+        // --- Minute-type services (pricePerMinute × duration) ---
+        if (template.type === ServiceType.Minute) {
+            if (!def.durations || def.durations.length === 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Minute-type service but no durations were provided — skipping.`);
+            } else {
+                if (def.pricePerMinute == null && !def.prices) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" has no pricePerMinute and no prices array — costs will default to 0.`);
+                }
+                if (def.prices && def.prices.length !== def.durations.length) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" has ${def.prices.length} price(s) but ${def.durations.length} duration(s) — mismatched entries will use null cost.`);
+                }
+                def.durations.forEach((duration, index) => {
+                    if (Object.keys(result).length >= maxServices) {
+                        console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                        return;
+                    }
+                    if (typeof duration !== 'number' || duration <= 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
+                        return;
+                    }
+                    const pricePerMinute = def.pricePerMinute ?? 0;
+                    const cost = def.prices
+                        ? def.prices[index] ?? null
+                        : Math.round(duration * pricePerMinute * 100) / 100;
+                    if (cost === null) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no cost (prices[${index}] is missing) — displayCost will be null.`);
+                    }
+                    if (typeof cost === 'number' && cost < 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative cost (${cost}). Skipping this entry.`);
+                        return;
+                    }
+                    const key = `${baseKey}-${duration}min`;
+                    result[key] = createService(ServiceType.Minute, {
+                        ...template,
+                        durationMin: duration,
+                        pricePerMinute: cost !== null ? cost / duration : pricePerMinute,
+                        _cost: cost, // flat cost label for display
+                    });
+                    result[key]._displayCost = cost;
+                });
+            }
+        }
+
+        // --- Session-type services (fixed price per session, optional durations) ---
+        else if (template.type === ServiceType.Session) {
+            if (!def.durations || !def.prices) {
+                console.error(`[defineCreatorServices] "${baseKey}" is a Session-type service but missing durations or prices — both are required for Session services.`);
+                continue;
+            }
+            if (!Array.isArray(def.durations) || !Array.isArray(def.prices)) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices must be arrays for Session-type services.`);
+                continue;
+            }
+            if (!(def.durations.length > 0) || !(def.prices.length > 0)) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices arrays must have at least one entry for Session-type services.`);
+                continue;
+            }
+            if (def.durations.length !== def.prices.length) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices arrays must be of the same length for Session-type services.`);
+                continue;
+            }
+            if (Object.keys(def).filter(k => k !== 'templateId' && k !== 'durations' && k !== 'prices').length > 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" has unexpected properties — they will be ignored.`);
+            }
+            def.durations.forEach((duration, index) => {
+                if (Object.keys(result).length >= maxServices) {
+                    console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                    return;
+                }
+                if (typeof duration !== 'number' || duration <= 0) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
+                    return;
+                }
+                if (sessionServiceDurationHash.has(duration)) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration ${duration}min at index ${index} is a duplicate for Session-type services — skipping this entry.`);
+                    return;
+                }
+                sessionServiceDurationHash.add(duration);
+                const price = def.prices[index] ?? null;
+                if (price === null) {
+                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no price (prices[${index}] is missing) — pricePerSession will be null.`);
+                }
+                if (typeof price === 'number' && price < 0) {
+                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative price (${price}). Skipping this entry.`);
+                    return;
+                }
+                const key = `${baseKey}-${duration}min`;
+                result[key] = createService(ServiceType.Session, {
+                    ...template,
+                    pricePerSession: price,
+                    _durationMin: duration,
+                });
+                result[key]._durationMin = duration;
+            });
+        }
+
+        // --- Bundle-type services ---
+        else if (template.type === ServiceType.Bundle) {
+            if (!def.bundles || def.bundles.length === 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Bundle-type service but no bundles were provided — skipping.`);
+            } else {
+                def.bundles.forEach(({ size, price }, index) => {
+                    if (typeof size !== 'number' || size <= 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid size (${size}) — skipping this entry.`);
+                        return;
+                    }
+                    if (typeof price !== 'number' || price < 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid price (${price}) — skipping this entry.`);
+                        return;
+                    }
+                    if (price === 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${size}x" has a price of 0.`);
+                    }
+                    const key = `${baseKey}-${size}x`;
+                    result[key] = createService(ServiceType.Bundle, {
+                        ...template,
+                        itemsPerBundle: size,
+                        bundlePrice: price,
+                        pricePerItem: Math.round((price / size) * 100) / 100,
+                    });
+                });
+            }
+        }
+        if (Object.keys(result).length >= maxServices) {   
+            console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+            break;
+        };
+    }
+    return result;
 }
-export default services
+
+// Kept for backward compat — pre-built flat catalog using the new API.
+export const defaultServices = defineCreatorServices([
+    {
+        templateId: 'gamingDuo',
+        durations: [30, 60],
+        prices: [5, 10],
+    },
+    {
+        templateId: 'privateChat',
+        durations: [15, 30],
+        pricePerMinute: 0.33,
+    },
+    {
+        templateId: 'faceCall',
+        durations: [15, 30, 60],
+        pricePerMinute: 0.66,
+    },
+    {
+        templateId: 'exclusivePhotos',
+        bundles: [
+            { size: 1,  price: 3  },
+            { size: 10, price: 20 },
+        ],
+    },
+    {
+        templateId: 'asmrVoiceMessage',
+        bundles: [
+            { size: 1, price: 5  },
+            { size: 4, price: 15 },
+        ],
+    },
+]);
+
+// --- OLD API (superseded by defineCreatorServices) ---
+// function mergeServiceConfig(service, override = {}) {
+//     return {
+//         ...service,
+//         ...override,
+//     }
+// }
+//
+// export function getCustomizableDefaultServices(options = {}) {
+//     const {
+//         overrides = {},
+//         enabledServiceKeys = null,
+//         maxServices = 10,
+//     } = options
+//
+//     const merged = Object.entries(defaultServices).reduce((acc, [serviceKey, serviceConfig]) => {
+//         acc[serviceKey] = mergeServiceConfig(serviceConfig, overrides[serviceKey])
+//         return acc
+//     }, {})
+//
+//     const filteredEntries = enabledServiceKeys
+//         ? Object.entries(merged).filter(([serviceKey]) => enabledServiceKeys.includes(serviceKey))
+//         : Object.entries(merged)
+//
+//     return Object.fromEntries(filteredEntries.slice(0, maxServices))
+// }
+//
+// export function getCustomizableDefaultServicesList(options = {}) {
+//     return Object.entries(getCustomizableDefaultServices(options)).map(([serviceKey, service]) => ({
+//         key: serviceKey,
+//         ...service,
+//     }))
+// }
+//
+// export default getCustomizableDefaultServices

@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import defaultProfilePhoto from '../assets/default_profile_photo.jpg';
-
+import { defineCreatorServices } from '../mocks/defaultServices.js'; // old API, superseded by defineCreatorServices
 type CreatorService = {
     service_id: string;
     base_service_id: string;
@@ -37,6 +37,12 @@ export default function BookingPage() {
         }
         return `${minutes} min`;
     };
+    useEffect(() => {
+        console.log("use effect triggered");
+        console.log(defineCreatorServices([
+            {
+            }],{maxServices: 10}));
+            }, []);
 
     return (
         <div className="booking-page">
