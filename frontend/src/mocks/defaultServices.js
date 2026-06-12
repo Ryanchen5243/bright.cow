@@ -119,6 +119,7 @@ export const serviceTemplates = {
  */
 export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } = {}) {
     const result = {};
+    const sessionServiceDurationHash = new Set(); // To track unique durations for Session services
 
     for (const def of serviceDefinitions) {
         const template = serviceTemplates[def.templateId];
@@ -129,66 +130,133 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
         const baseKey = def.templateId;
 
         // --- Minute-type services (pricePerMinute × duration) ---
-        if (template.type === ServiceType.Minute && def.durations) {
-            def.durations.forEach((duration, index) => {
-                const pricePerMinute = def.pricePerMinute ?? 0;
-                const cost = def.prices
-                    ? def.prices[index] ?? null
-                    : Math.round(duration * pricePerMinute * 100) / 100;
-                const key = `${baseKey}-${duration}min`;
-                result[key] = createService(ServiceType.Minute, {
-                    ...template,
-                    durationMin: duration,
-                    pricePerMinute: cost !== null ? cost / duration : pricePerMinute,
-                    _cost: cost, // flat cost label for display
+        if (template.type === ServiceType.Minute) {
+            if (!def.durations || def.durations.length === 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Minute-type service but no durations were provided — skipping.`);
+            } else {
+                if (def.pricePerMinute == null && !def.prices) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" has no pricePerMinute and no prices array — costs will default to 0.`);
+                }
+                if (def.prices && def.prices.length !== def.durations.length) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" has ${def.prices.length} price(s) but ${def.durations.length} duration(s) — mismatched entries will use null cost.`);
+                }
+                def.durations.forEach((duration, index) => {
+                    if (Object.keys(result).length >= maxServices) {
+                        console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                        return;
+                    }
+                    if (typeof duration !== 'number' || duration <= 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
+                        return;
+                    }
+                    const pricePerMinute = def.pricePerMinute ?? 0;
+                    const cost = def.prices
+                        ? def.prices[index] ?? null
+                        : Math.round(duration * pricePerMinute * 100) / 100;
+                    if (cost === null) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no cost (prices[${index}] is missing) — displayCost will be null.`);
+                    }
+                    if (typeof cost === 'number' && cost < 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative cost (${cost}). Skipping this entry.`);
+                        return;
+                    }
+                    const key = `${baseKey}-${duration}min`;
+                    result[key] = createService(ServiceType.Minute, {
+                        ...template,
+                        durationMin: duration,
+                        pricePerMinute: cost !== null ? cost / duration : pricePerMinute,
+                        _cost: cost, // flat cost label for display
+                    });
+                    result[key]._displayCost = cost;
                 });
-                result[key]._displayCost = cost;
-            });
+            }
         }
 
         // --- Session-type services (fixed price per session, optional durations) ---
         else if (template.type === ServiceType.Session) {
-            if (def.durations && def.prices) {
-                def.durations.forEach((duration, index) => {
-                    const price = def.prices[index] ?? null;
-                    const key = `${baseKey}-${duration}min`;
-                    result[key] = createService(ServiceType.Session, {
-                        ...template,
-                        pricePerSession: price,
-                        _durationMin: duration,
-                    });
-                    result[key]._durationMin = duration;
-                });
-            } else if (def.prices) {
-                def.prices.forEach((price) => {
-                    const key = `${baseKey}-$${price}`;
-                    result[key] = createService(ServiceType.Session, {
-                        ...template,
-                        pricePerSession: price,
-                    });
-                });
-            } else {
-                // Single default entry with no variants
-                result[baseKey] = createService(ServiceType.Session, { ...template });
+            if (!def.durations || !def.prices) {
+                console.error(`[defineCreatorServices] "${baseKey}" is a Session-type service but missing durations or prices — both are required for Session services.`);
+                continue;
             }
-        }
-
-        // --- Bundle-type services ---
-        else if (template.type === ServiceType.Bundle && def.bundles) {
-            def.bundles.forEach(({ size, price }) => {
-                const key = `${baseKey}-${size}x`;
-                result[key] = createService(ServiceType.Bundle, {
+            if (!Array.isArray(def.durations) || !Array.isArray(def.prices)) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices must be arrays for Session-type services.`);
+                continue;
+            }
+            if (!(def.durations.length > 0) || !(def.prices.length > 0)) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices arrays must have at least one entry for Session-type services.`);
+                continue;
+            }
+            if (def.durations.length !== def.prices.length) {
+                console.error(`[defineCreatorServices] "${baseKey}" durations and prices arrays must be of the same length for Session-type services.`);
+                continue;
+            }
+            if (Object.keys(def).filter(k => k !== 'templateId' && k !== 'durations' && k !== 'prices').length > 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" has unexpected properties — they will be ignored.`);
+            }
+            def.durations.forEach((duration, index) => {
+                if (Object.keys(result).length >= maxServices) {
+                    console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                    return;
+                }
+                if (typeof duration !== 'number' || duration <= 0) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
+                    return;
+                }
+                if (sessionServiceDurationHash.has(duration)) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration ${duration}min at index ${index} is a duplicate for Session-type services — skipping this entry.`);
+                    return;
+                }
+                sessionServiceDurationHash.add(duration);
+                const price = def.prices[index] ?? null;
+                if (price === null) {
+                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no price (prices[${index}] is missing) — pricePerSession will be null.`);
+                }
+                if (typeof price === 'number' && price < 0) {
+                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative price (${price}). Skipping this entry.`);
+                    return;
+                }
+                const key = `${baseKey}-${duration}min`;
+                result[key] = createService(ServiceType.Session, {
                     ...template,
-                    itemsPerBundle: size,
-                    bundlePrice: price,
-                    pricePerItem: Math.round((price / size) * 100) / 100,
+                    pricePerSession: price,
+                    _durationMin: duration,
                 });
+                result[key]._durationMin = duration;
             });
         }
 
-        if (Object.keys(result).length >= maxServices) break;
+        // --- Bundle-type services ---
+        else if (template.type === ServiceType.Bundle) {
+            if (!def.bundles || def.bundles.length === 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Bundle-type service but no bundles were provided — skipping.`);
+            } else {
+                def.bundles.forEach(({ size, price }, index) => {
+                    if (typeof size !== 'number' || size <= 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid size (${size}) — skipping this entry.`);
+                        return;
+                    }
+                    if (typeof price !== 'number' || price < 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid price (${price}) — skipping this entry.`);
+                        return;
+                    }
+                    if (price === 0) {
+                        console.warn(`[defineCreatorServices] "${baseKey}-${size}x" has a price of 0.`);
+                    }
+                    const key = `${baseKey}-${size}x`;
+                    result[key] = createService(ServiceType.Bundle, {
+                        ...template,
+                        itemsPerBundle: size,
+                        bundlePrice: price,
+                        pricePerItem: Math.round((price / size) * 100) / 100,
+                    });
+                });
+            }
+        }
+        if (Object.keys(result).length >= maxServices) {   
+            console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+            break;
+        };
     }
-
     return result;
 }
 

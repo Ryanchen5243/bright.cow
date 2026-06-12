@@ -38,38 +38,11 @@ export default function BookingPage() {
         return `${minutes} min`;
     };
     useEffect(() => {
+        console.log("use effect triggered");
         console.log(defineCreatorServices([
             {
-        templateId: 'gamingDuo',
-        durations: [30, 60],
-        prices: [5, 10],
-    },
-    {
-        templateId: 'privateChat',
-        durations: [15, 30],
-        pricePerMinute: 0.33,
-    },
-    {
-        templateId: 'faceCall',
-        durations: [15, 30, 60],
-        pricePerMinute: 0.66,
-    },
-    {
-        templateId: 'exclusivePhotos',
-        bundles: [
-            { size: 1,  price: 3  },
-            { size: 10, price: 20 },
-        ],
-    },
-    {
-        templateId: 'asmrVoiceMessage',
-        bundles: [
-            { size: 1, price: 5  },
-            { size: 4, price: 15 },
-        ],
-    },
-        ]));
-    }, []);
+            }],{maxServices: 10}));
+            }, []);
 
     return (
         <div className="booking-page">
