@@ -41,7 +41,23 @@ export default function BookingPage() {
         console.log("use effect triggered");
         console.log(defineCreatorServices([
             {
-            }],{maxServices: 10}));
+                templateId: 'gamingDuo',
+                durations: [30, 60],
+                prices: [5, 10],
+            },
+            {
+                templateId: 'faceCall',
+                durations: [15, 30],
+                pricePerMinute: 0.66,
+            },
+            {
+                templateId: 'exclusivePhotos',
+                bundles: [
+                    {size: 5, price: 12},
+                    {size: 10, price: 20},
+                    {size: 20, price: 35}
+                ]
+            }],{maxServices: 7}));
             }, []);
 
     return (

@@ -22,23 +22,24 @@ function createService(type, config) {
                 name: config.name,
                 description: config.description,
                 durationMin: config.durationMin ?? 15,
-                pricePerMinute: config.pricePerMinute,
+                price: config.price,
             };
         case ServiceType.Session:
             return {
                 type: ServiceType.Session,
                 name: config.name,
                 description: config.description,
-                pricePerSession: config.pricePerSession ?? 5,
+                durationMin: config.durationMin ?? null,
+                price: config.price,
             };
         case ServiceType.Bundle:
             return {
                 type: ServiceType.Bundle,
                 name: config.name,
                 description: config.description,
-                pricePerItem: config.pricePerItem,
                 itemsPerBundle: config.itemsPerBundle,
-                bundlePrice: config.bundlePrice,
+                pricePerItem: config.pricePerItem,
+                price: config.price,
             };
         default:
             throw new Error(`Unknown service type: ${type}`);
@@ -85,15 +86,21 @@ export const serviceTemplates = {
  *
  * A creator passes an array of service definitions. Each entry picks a base
  * template and then supplies either:
- *   - durations: number[]  + pricePerMinute (Minute services)
- *   - durations: number[]  + prices: number[]  (one price per duration, Session services)
- *   - bundles: { size, price }[]              (Bundle services)
+ *   - durations: number[]  + pricePerMinute: number  (Minute services)
+ *   - durations: number[]  + prices: number[]         (one price per duration, Session services)
+ *   - bundles: { size, price }[]                      (Bundle services)
  *
- * Every duration / bundle size becomes a separate, individually capped entry
- * toward the 10-service limit.
+ * Every duration / bundle size becomes a separate, individually keyed entry
+ * in the returned object. Entries are capped at `maxServices` (default 10);
+ * once the limit is reached, any remaining definitions are skipped with a warning.
+ * Invalid or duplicate entries are also skipped with a warning rather than throwing.
  *
  * Returns a flat object keyed as  "<templateId>-<duration>min"  or
  * "<templateId>-<size>x"  suitable for direct use in booking/profile UIs.
+ *
+ * @param {object[]} serviceDefinitions - Array of service definition objects.
+ * @param {object}   [options]
+ * @param {number}   [options.maxServices=10] - Maximum number of service entries in the result.
  *
  * @example
  * defineCreatorServices([
@@ -115,13 +122,18 @@ export const serviceTemplates = {
  *       { size: 10, price: 20 },
  *     ],
  *   },
- * ])
+ * ], { maxServices: 5 })
  */
 export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } = {}) {
     const result = {};
     const sessionServiceDurationHash = new Set(); // To track unique durations for Session services
+    const minuteServiceDurationHash = new Set();  // To track unique durations for Minute services
 
     for (const def of serviceDefinitions) {
+        if (Object.keys(result).length >= maxServices) {
+            console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+            break;
+        }
         const template = serviceTemplates[def.templateId];
         if (!template) {
             throw new Error(`Unknown service template: "${def.templateId}". Available: ${Object.keys(serviceTemplates).join(', ')}`);
@@ -131,50 +143,45 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
 
         // --- Minute-type services (pricePerMinute × duration) ---
         if (template.type === ServiceType.Minute) {
-            if (!def.durations || def.durations.length === 0) {
-                console.warn(`[defineCreatorServices] "${baseKey}" is a Minute-type service but no durations were provided — skipping.`);
-            } else {
-                if (def.pricePerMinute == null && !def.prices) {
-                    console.warn(`[defineCreatorServices] "${baseKey}" has no pricePerMinute and no prices array — costs will default to 0.`);
+            if (def.durations == null || def.pricePerMinute == null) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Minute-type service but missing durations or pricePerMinute — both are required for Minute services.`);
+                continue;
+            }
+            if (!Array.isArray(def.durations) || !(def.durations.length > 0)) {
+                console.warn(`[defineCreatorServices] "${baseKey}" is a Minute-type service but no valid durations were provided — skipping.`);
+                continue;
+            }
+            if (typeof def.pricePerMinute !== 'number' || def.pricePerMinute <= 0) {
+                console.warn(`[defineCreatorServices] "${baseKey}" has an invalid pricePerMinute (${def.pricePerMinute}) for a Minute-type service — skipping.`);
+                continue;
+            }
+            for (let index = 0; index < def.durations.length; index++) {
+                if (Object.keys(result).length >= maxServices) {
+                    console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                    break;
                 }
-                if (def.prices && def.prices.length !== def.durations.length) {
-                    console.warn(`[defineCreatorServices] "${baseKey}" has ${def.prices.length} price(s) but ${def.durations.length} duration(s) — mismatched entries will use null cost.`);
+                const duration = def.durations[index];
+                if (typeof duration !== 'number' || duration <= 0) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
+                    continue;
                 }
-                def.durations.forEach((duration, index) => {
-                    if (Object.keys(result).length >= maxServices) {
-                        console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
-                        return;
-                    }
-                    if (typeof duration !== 'number' || duration <= 0) {
-                        console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
-                        return;
-                    }
-                    const pricePerMinute = def.pricePerMinute ?? 0;
-                    const cost = def.prices
-                        ? def.prices[index] ?? null
-                        : Math.round(duration * pricePerMinute * 100) / 100;
-                    if (cost === null) {
-                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no cost (prices[${index}] is missing) — displayCost will be null.`);
-                    }
-                    if (typeof cost === 'number' && cost < 0) {
-                        console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative cost (${cost}). Skipping this entry.`);
-                        return;
-                    }
-                    const key = `${baseKey}-${duration}min`;
-                    result[key] = createService(ServiceType.Minute, {
-                        ...template,
-                        durationMin: duration,
-                        pricePerMinute: cost !== null ? cost / duration : pricePerMinute,
-                        _cost: cost, // flat cost label for display
-                    });
-                    result[key]._displayCost = cost;
+                if (minuteServiceDurationHash.has(duration)) {
+                    console.warn(`[defineCreatorServices] "${baseKey}" duration ${duration}min at index ${index} is a duplicate — skipping this entry.`);
+                    continue;
+                }
+                minuteServiceDurationHash.add(duration);
+                const key = `${baseKey}-${duration}min`;
+                result[key] = createService(ServiceType.Minute, {
+                    ...template,
+                    durationMin: duration,
+                    price: Math.round(def.pricePerMinute * duration * 100) / 100,
                 });
             }
         }
 
         // --- Session-type services (fixed price per session, optional durations) ---
         else if (template.type === ServiceType.Session) {
-            if (!def.durations || !def.prices) {
+            if (def.durations == null || def.prices == null) {
                 console.error(`[defineCreatorServices] "${baseKey}" is a Session-type service but missing durations or prices — both are required for Session services.`);
                 continue;
             }
@@ -193,36 +200,36 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
             if (Object.keys(def).filter(k => k !== 'templateId' && k !== 'durations' && k !== 'prices').length > 0) {
                 console.warn(`[defineCreatorServices] "${baseKey}" has unexpected properties — they will be ignored.`);
             }
-            def.durations.forEach((duration, index) => {
+            for (let index = 0; index < def.durations.length; index++) {
                 if (Object.keys(result).length >= maxServices) {
                     console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
-                    return;
+                    break;
                 }
+                const duration = def.durations[index];
                 if (typeof duration !== 'number' || duration <= 0) {
                     console.warn(`[defineCreatorServices] "${baseKey}" duration at index ${index} is invalid (${duration}) — skipping this entry.`);
-                    return;
+                    continue;
                 }
                 if (sessionServiceDurationHash.has(duration)) {
                     console.warn(`[defineCreatorServices] "${baseKey}" duration ${duration}min at index ${index} is a duplicate for Session-type services — skipping this entry.`);
-                    return;
+                    continue;
                 }
                 sessionServiceDurationHash.add(duration);
                 const price = def.prices[index] ?? null;
                 if (price === null) {
-                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no price (prices[${index}] is missing) — pricePerSession will be null.`);
+                    console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has no price (prices[${index}] is missing) — price will be null.`);
                 }
                 if (typeof price === 'number' && price < 0) {
                     console.warn(`[defineCreatorServices] "${baseKey}-${duration}min" has a negative price (${price}). Skipping this entry.`);
-                    return;
+                    continue;
                 }
                 const key = `${baseKey}-${duration}min`;
                 result[key] = createService(ServiceType.Session, {
                     ...template,
-                    pricePerSession: price,
-                    _durationMin: duration,
+                    durationMin: duration,
+                    price,
                 });
-                result[key]._durationMin = duration;
-            });
+            }
         }
 
         // --- Bundle-type services ---
@@ -230,14 +237,19 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
             if (!def.bundles || def.bundles.length === 0) {
                 console.warn(`[defineCreatorServices] "${baseKey}" is a Bundle-type service but no bundles were provided — skipping.`);
             } else {
-                def.bundles.forEach(({ size, price }, index) => {
+                for (let index = 0; index < def.bundles.length; index++) {
+                    if (Object.keys(result).length >= maxServices) {
+                        console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
+                        break;
+                    }
+                    const { size, price } = def.bundles[index];
                     if (typeof size !== 'number' || size <= 0) {
                         console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid size (${size}) — skipping this entry.`);
-                        return;
+                        continue;
                     }
                     if (typeof price !== 'number' || price < 0) {
                         console.warn(`[defineCreatorServices] "${baseKey}" bundle at index ${index} has an invalid price (${price}) — skipping this entry.`);
-                        return;
+                        continue;
                     }
                     if (price === 0) {
                         console.warn(`[defineCreatorServices] "${baseKey}-${size}x" has a price of 0.`);
@@ -246,16 +258,12 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                     result[key] = createService(ServiceType.Bundle, {
                         ...template,
                         itemsPerBundle: size,
-                        bundlePrice: price,
                         pricePerItem: Math.round((price / size) * 100) / 100,
+                        price,
                     });
-                });
+                }
             }
         }
-        if (Object.keys(result).length >= maxServices) {   
-            console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
-            break;
-        };
     }
     return result;
 }
@@ -293,38 +301,3 @@ export const defaultServices = defineCreatorServices([
     },
 ]);
 
-// --- OLD API (superseded by defineCreatorServices) ---
-// function mergeServiceConfig(service, override = {}) {
-//     return {
-//         ...service,
-//         ...override,
-//     }
-// }
-//
-// export function getCustomizableDefaultServices(options = {}) {
-//     const {
-//         overrides = {},
-//         enabledServiceKeys = null,
-//         maxServices = 10,
-//     } = options
-//
-//     const merged = Object.entries(defaultServices).reduce((acc, [serviceKey, serviceConfig]) => {
-//         acc[serviceKey] = mergeServiceConfig(serviceConfig, overrides[serviceKey])
-//         return acc
-//     }, {})
-//
-//     const filteredEntries = enabledServiceKeys
-//         ? Object.entries(merged).filter(([serviceKey]) => enabledServiceKeys.includes(serviceKey))
-//         : Object.entries(merged)
-//
-//     return Object.fromEntries(filteredEntries.slice(0, maxServices))
-// }
-//
-// export function getCustomizableDefaultServicesList(options = {}) {
-//     return Object.entries(getCustomizableDefaultServices(options)).map(([serviceKey, service]) => ({
-//         key: serviceKey,
-//         ...service,
-//     }))
-// }
-//
-// export default getCustomizableDefaultServices
