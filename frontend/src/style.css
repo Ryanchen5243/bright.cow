@@ -2468,28 +2468,219 @@ nav > div {
 /* end booking page styles */
 
 /* begin terms page styles */
+/* =========================
+   PAGE
+========================= */
+/* ============================================
+   GLOBAL ANIMATIONS
+============================================ */
+* {
+  transition: background 0.25s ease,
+              color 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes contentSwap {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   NAVBAR
+============================================ */
+.simple-navbar {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.simple-navbar-logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  text-decoration: none;
+}
+
+.simple-navbar-logo:hover {
+  opacity: 0.7;
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   PAGE LAYOUT
+============================================ */
 .terms-page {
   display: flex;
   flex-direction: row;
-  gap: 18px;
-  padding: 22px;
-}
-
-.terms-page-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 0 0 200px;
-}
-.terms-page-tab:hover {
-  cursor: pointer;
-  color: var(--vibrant-purple);
+  gap: 24px;
+  padding: 30px 40px;
+  min-height: 100vh;
+  background: #ffffff;
 }
 
 .terms-page-content {
   flex: 1;
+  max-width: 1000px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 0.45s ease forwards;
 }
-/* end terms page styles */
+
+/* ============================================
+   SIDEBAR
+============================================ */
+.terms-page-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 0 0 240px;
+  padding-right: 24px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.terms-page-tab {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.terms-page-tab:hover {
+  background: #f5f3ff;
+  color: #7c3aed;
+  transform: translateX(4px);
+}
+
+.terms-page-tab.active {
+  background: #f3e8ff;
+  color: #7c3aed;
+  font-weight: 600;
+  transform: translateX(6px);
+}
+
+/* ============================================
+   CONTENT
+============================================ */
+.terms-container {
+  width: 100%;
+  animation: contentSwap 0.25s ease;
+}
+
+.terms-container h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.terms-container h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 18px;
+  margin-bottom: 6px;
+}
+
+.terms-container h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 14px;
+  margin-bottom: 4px;
+}
+
+.terms-container p {
+  color: #4b5563;
+  font-size: 16px;
+  line-height: 1.65;
+  margin-bottom: 8px;
+}
+
+.updated {
+  color: #6b7280;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.terms-container ul {
+  padding-left: 22px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.terms-container li {
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 4px;
+}
+
+.terms-container hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 16px 0;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+============================================ */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-left: 1px solid #e5e7eb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d8b4fe;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c084fc;
+}
+
+/* ============================================
+   MOBILE
+============================================ */
+@media (max-width: 900px) {
+  .terms-page {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .terms-page-tabs {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding-right: 0;
+    padding-bottom: 16px;
+    flex: unset;
+  }
+
+  .terms-container h1 {
+    font-size: 28px;
+  }
+
+  .simple-navbar {
+    padding: 0 16px;
+  }
+}
