@@ -21,16 +21,17 @@ export default function ApplicationPage() {
 
         const validateCreatorId = async () => {
             try {
-                const response = await fetch(new URL('../creator_profiles_fake.json', import.meta.url).href);
+                const response = await fetch(new URL('../mocks/lunaProfile.json', import.meta.url).href);
                 if (!response.ok) {
                     if (!isCancelled) {
                         setCreatorExists(false);
                     }
                     return;
                 }
-
-                const data = await response.json() as { creators?: Array<{ id: string }> };
-                const exists = (data.creators ?? []).some((creator) => creator.id === creatorId);
+                const data = await response.json();
+                const exists = (Array.isArray(data) ? data : []).some(
+                    (creator: { id: string }) => creator.id === "816deaf4-ea3f-435e-8a21-a66796c93da4"
+                );
 
                 if (!isCancelled) {
                     setCreatorExists(exists);
@@ -63,7 +64,7 @@ export default function ApplicationPage() {
 
     const handleSetAppView = (nextView: AppView) => {
         if (nextView === "profile") {
-            navigate(`/app/profile/${creatorExists === false ? "luna" : creatorId ?? "luna"}`);
+            navigate(`/app/profile/luna`);
             return;
         }
 
