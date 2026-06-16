@@ -2,31 +2,11 @@ import pfp from '../assets/default_profile_photo.jpg';
 import { Favorite, FavoriteBorder, MessageOutlined, SendOutlined } from '@mui/icons-material';
 import { useMemo, useState } from 'react';
 
-type UserPostProps = {
-    title?: string;
-    body?: string;
-    timestamp?: string;
-    likes?: number;
-    comments?: number;
-    displayName?: string;
-    username?: string;
-    mediaUrls?: string[];
-};
-
-export default function UserPost({
-    title,
-    body = 'content for the post',
-    timestamp,
-    likes = 234,
-    comments = 12,
-    displayName = 'Luna Wang',
-    username = '@lunawang',
-    mediaUrls = []
-}: UserPostProps) {
+export default function UserPost() {
     const [isLiked, setIsLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(likes);
+    const [likeCount, setLikeCount] = useState(0);
     const [showComments, setShowComments] = useState(false);
-    const [commentCount, setCommentCount] = useState(comments);
+    const [commentCount, setCommentCount] = useState(0);
     const [shareCount, setShareCount] = useState(0);
     const [commentInput, setCommentInput] = useState('');
     const [commentItems, setCommentItems] = useState<string[]>([]);
