@@ -1,0 +1,171 @@
+[
+  {
+    "id": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
+    "userName": "@luna_gamer",
+    "userDisplayName": "Luna Wang",
+    "profilePhoto": "https://example.com/avatar1.png",
+    "backgroundPhoto": "https://example.com/background1.jpg",
+    "userBio": "Passionate gamer and content creator. I love sharing my gaming experiences and connecting with fellow gamers!",
+    "gamesPlayed": 150,
+    "favoriteGame": "The Legend of Zelda: Breath of the Wild",
+    "quickFacts": [
+      {
+        "label": "Languages",
+        "value": "English, Korean",
+        "icon": "Translate"
+      },
+      {
+        "label": "Location",
+        "value": "New York, USA",
+        "icon": "Public"
+      },
+      {
+        "label": "Avg Response",
+        "value": "1 hour",
+        "icon": "WatchLater"
+      }
+    ],
+    "recentPosts": [
+      {
+        "id": "1264648e-cf98-48ee-9dc6-fa994fbb7194",
+        "title": "Epic Boss Battle in Elden Ring!",
+        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
+        "content": "Just defeated the Fire Giant in Elden Ring after hours of trying! Here's how I did it...",
+        "timestamp": "2026-06-16T18:04:57.920Z",
+        "attachments": [
+          {
+            "type": "image",
+            "url": "https://example.com/eldenring_boss.jpg"
+          }
+        ],
+        "comments": [
+          {
+            "id": "cab9d2b1-2ee9-45a4-9c90-7c7952e9898f",
+            "author": "user123",
+            "content": "Congrats! That boss is tough!"
+          },
+          {
+            "id": "6d49da41-7799-4d33-a284-b96a1b193cac",
+            "author": "gamer_girl",
+            "content": "Ive been stuck on that part for days, any tips?"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 2
+      },
+      {
+        "id": "ef6757e0-d2c2-4f95-81f2-a8a23517bc4d",
+        "title": "Top 5 Tips for New Players in Elden Ring",
+        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
+        "content": "If you're new to Elden Ring, here are my top 5 tips to get you started on your adventure!",
+        "timestamp": "2026-06-16T18:04:57.922Z",
+        "attachments": [
+          {
+            "type": "video",
+            "url": "https://example.com/eldenring_tips.mp4"
+          }
+        ],
+        "comments": [
+          {
+            "id": "a21822e8-a26f-4fdf-b078-8eefd105c09c",
+            "author": "newbie_gamer",
+            "content": "Thanks for the tips! Just started playing and this is super helpful."
+          },
+          {
+            "id": "d222fd72-8475-4667-b9e3-2c90733caacf",
+            "author": "veteran_player",
+            "content": "Great advice! I wish I had this when I first started."
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 2
+      },
+      {
+        "id": "5b706c8a-22df-4caa-a15e-b1d86032a90b",
+        "title": "Open Slots for Weekend Sessions",
+        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
+        "content": "I have some open slots for gaming sessions this weekend. DM me if you want to join!",
+        "timestamp": "2026-06-16T18:04:57.922Z",
+        "attachments": [],
+        "comments": [
+          {
+            "id": "9001328c-6209-48d9-8bb1-ae5869909811",
+            "author": "gamer_buddy",
+            "content": "I'd love to join! I've been looking for someone to play with."
+          },
+          {
+            "id": "d5996a8c-2222-4da3-8050-7fd287375849",
+            "author": "casual_gamer",
+            "content": "I'm interested too! What games are you planning to play?"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 2
+      }
+    ],
+    "services": [
+      {
+        "id": "gamingDuo-30min",
+        "type": "session",
+        "name": "Gaming Duo",
+        "description": "1-on-1 gaming session",
+        "durationMin": 30,
+        "price": 5
+      },
+      {
+        "id": "gamingDuo-60min",
+        "type": "session",
+        "name": "Gaming Duo",
+        "description": "1-on-1 gaming session",
+        "durationMin": 60,
+        "price": 10
+      },
+      {
+        "id": "faceCall-15min",
+        "type": "minute",
+        "name": "1-on-1 Face Call",
+        "description": "Casual video conversation",
+        "durationMin": 15,
+        "price": 9.9
+      },
+      {
+        "id": "faceCall-30min",
+        "type": "minute",
+        "name": "1-on-1 Face Call",
+        "description": "Casual video conversation",
+        "durationMin": 30,
+        "price": 19.8
+      },
+      {
+        "id": "exclusivePhotos-5x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 5,
+        "pricePerItem": 2.4,
+        "price": 12
+      },
+      {
+        "id": "exclusivePhotos-10x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 10,
+        "pricePerItem": 2,
+        "price": 20
+      },
+      {
+        "id": "exclusivePhotos-20x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 20,
+        "pricePerItem": 1.75,
+        "price": 35
+      }
+    ]
+  }
+]
