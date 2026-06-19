@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AppMain, { type AppView } from "./AppMain";
 import NavBar from "./NavBar";
+import { currUser } from "../mocks/currUser";
 
 export default function ApplicationPage() {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function ApplicationPage() {
 
         const validateCreatorId = async () => {
             try {
-                const response = await fetch(new URL('../mocks/lunaProfile.json', import.meta.url).href);
+                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
                 if (!response.ok) {
                     if (!isCancelled) {
                         setCreatorExists(false);
@@ -30,7 +31,7 @@ export default function ApplicationPage() {
                 }
                 const data = await response.json();
                 const exists = (Array.isArray(data) ? data : []).some(
-                    (creator: { id: string }) => creator.id === "816deaf4-ea3f-435e-8a21-a66796c93da4"
+                    (creator: { id: string }) => creator.id === currUser.id
                 );
 
                 if (!isCancelled) {

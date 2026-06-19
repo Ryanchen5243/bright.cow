@@ -1,27 +1,33 @@
 import pfp from '../assets/default_profile_photo.jpg';
 import { Favorite, FavoriteBorder, MessageOutlined, SendOutlined } from '@mui/icons-material';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-export default function UserPost() {
+export default function UserPost(props: {
+    postId: string;
+    postTitle?: string;
+    postAuthor?: string;
+    postContent?: string;
+    postCreationTimeStamp: string;
+    postAttachments?: { type: string, url: string }[];
+    postComments?: { id: string, author: string, content: string }[];
+    postInitialLikeCount?: number;
+    postInitialCommentCount?: number;
+    postInitialShareCount?: number;
+    }) {
+
     const [isLiked, setIsLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(0);
+    const [likeCount, setLikeCount] = useState(props.postInitialLikeCount || 0);
     const [showComments, setShowComments] = useState(false);
-    const [commentCount, setCommentCount] = useState(0);
-    const [shareCount, setShareCount] = useState(0);
+    const [shareCount, setShareCount] = useState(props.postInitialShareCount || 0);
     const [commentInput, setCommentInput] = useState('');
-    const [commentItems, setCommentItems] = useState<string[]>([]);
-
-    const formattedTimestamp = useMemo(() => {
-        if (timestamp) {
-            return timestamp;
-        }
-        return new Date().toLocaleString();
-    }, [timestamp]);
+    const [commentItems, setCommentItems] = useState<{ id: string, author: string, content: string }[]>(props.postComments?.map(({ id, author, content, }) => ({id,author,content,})) ?? []);
+    const commentCount = commentItems.length;
 
     const toggleLike = () => {
         setIsLiked((prev) => {
             const next = !prev;
             setLikeCount((count) => count + (next ? 1 : -1));
+            // insert logic for persisting like state change here
             return next;
         });
     };
@@ -31,40 +37,42 @@ export default function UserPost() {
         if (!nextComment) {
             return;
         }
-        setCommentItems((prev) => [nextComment, ...prev]);
+        setCommentItems((prev) => [{ id: Date.now().toString(), author: 'Current User', content: nextComment }, ...prev]);
         setCommentInput('');
-        setCommentCount((count) => count + 1);
+        // insert logic for persisting new comment here
     };
 
     const sharePost = async () => {
         try {
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(`${displayName} (${username}): ${body}`);
+                await navigator.clipboard.writeText(`${props.postAuthor ?? 'Unknown'}: ${props.postContent ?? ''}`);
             }
-        } finally {
             setShareCount((count) => count + 1);
+            // insert additional logic for persisting share action here
+        } catch {
+            // clipboard write failed; do not increment share count
         }
     };
 
     return (
         <article className="user-post">
             <div className="user-post-avatar">
-                <img src={pfp} alt="Luna avatar" />
+                <img src={pfp} alt={`${props.postAuthor} avatar`} />
             </div>
             <div className="user-post-content">
                 <div className="user-post-header">
                     <div className="user-post-identity">
-                        <h3>{displayName}</h3>
-                        <p>{username}</p>
+                        <h3>{props.postAuthor}</h3>
+                        <p>@{props.postAuthor}</p>
                     </div>
-                    <span className="user-post-timestamp">{formattedTimestamp}</span>
+                    <span className="user-post-timestamp">{props.postCreationTimeStamp}</span>
                 </div>
-                {title && <p className="user-post-title">{title}</p>}
-                <p className="user-post-body">{body}</p>
-                {mediaUrls.length > 0 && (
+                {props.postTitle && <p className="user-post-title">{props.postTitle}</p>}
+                {props.postContent && <p className="user-post-body">{props.postContent}</p>}
+                {props.postAttachments && props.postAttachments.length > 0 && (
                     <div className="user-post-media-grid" aria-label="Post media attachments">
-                        {mediaUrls.map((url, index) => (
-                            <img key={`${url}-${index}`} src={url} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />
+                        {props.postAttachments.map((attachment, index) => (
+                            <img key={`${attachment.url}-${index}`} src={attachment.url} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />
                         ))}
                     </div>
                 )}
@@ -113,7 +121,7 @@ export default function UserPost() {
                         {commentItems.length > 0 && (
                             <div className="user-post-comments-list">
                                 {commentItems.map((comment, index) => (
-                                    <p key={`${comment}-${index}`}>{comment}</p>
+                                    <p key={`${comment.id}-${index}`}><strong>{comment.author}:</strong> {comment.content}</p>
                                 ))}
                             </div>
                         )}

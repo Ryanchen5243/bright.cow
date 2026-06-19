@@ -3,6 +3,7 @@ import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, type SvgIconComponent } from '@mui/icons-material';
+import { currUser } from '../mocks/currUser';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
 import CreatorSchedule from './CreatorSchedule';
@@ -115,14 +116,14 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         let isCancelled = false;
         const loadCreatorProfile = async () => {
             try {
-                const response = await fetch(new URL('../mocks/lunaProfile.json', import.meta.url).href);
+                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
                 if (!response.ok) {
                     return;
                 }
 
                 const data = await response.json() as any[];
                 const creators = Array.isArray(data) ? data : [];
-                const resolvedCreator = creators.find((creator) => creator.id === "816deaf4-ea3f-435e-8a21-a66796c93da4");
+                const resolvedCreator = creators.find((creator) => creator.id === currUser.id) ?? null;
 
                 if (!isCancelled) {
                     setCreatorProfile(resolvedCreator);
@@ -295,9 +296,9 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
                                     </div>
                                 </div>
                                 <div className="profile-user-recent-posts-list">
-                                    {creatorProfile?.recentPosts?.map((post, index) => (
+                                    {/* {creatorProfile?.recentPosts?.map((post, index) => (
                                         <UserPost key={index} />
-                                    ))}
+                                    ))} */}
                                 </div>
                             </div>
                         </div>

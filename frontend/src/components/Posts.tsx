@@ -1,52 +1,10 @@
-import { useMemo, useState, type ChangeEvent } from 'react';
+import { useMemo, useState, useEffect, type ChangeEvent } from 'react';
 import { Button, Dialog, DialogActions, DialogContent,DialogTitle,Stack,TextField,Typography } from '@mui/material';
 import UserPost from './UserPost';
 import { useAuth } from '../contexts/authContext';
-
-type FeedPost = {
-    id: string;
-    title: string;
-    body: string;
-    timestamp: string;
-    likes: number;
-    comments: number;
-    displayName: string;
-    username: string;
-    mediaUrls?: string[];
-};
-
-const seedPosts: FeedPost[] = [
-    {
-        id: 'seed-1',
-        title: 'Shipping a cleaner booking flow this week',
-        body: 'Tightening up my late-night Valorant sessions so it is easier to book ranked, VOD review, or a low-key duo queue without the back-and-forth.',
-        timestamp: '2h ago',
-        likes: 84,
-        comments: 12,
-        displayName: 'Luna Wang',
-        username: '@lunawang'
-    },
-    {
-        id: 'seed-2',
-        title: 'Current focus: confidence + comms',
-        body: 'Most players do not need more raw mechanics first. They need sharper comms, cleaner pacing, and someone to make the next game feel winnable again.',
-        timestamp: 'Yesterday',
-        likes: 61,
-        comments: 8,
-        displayName: 'Luna Wang',
-        username: '@lunawang'
-    },
-    {
-        id: 'seed-3',
-        title: 'Open slots for weekend sessions',
-        body: 'Added extra availability for Friday and Saturday. If you want structured help without the rigid coaching vibe, this is the best window to grab.',
-        timestamp: '3d ago',
-        likes: 49,
-        comments: 5,
-        displayName: 'Luna Wang',
-        username: '@lunawang'
-    }
-];
+import { type FeedPost } from '../mocks/postTemplate.ts';
+import { v4 as uuid } from 'uuid';
+import { currUser } from '../mocks/currUser';
 
 function formatUsername(rawValue?: string | null): string {
     if (!rawValue) {
@@ -57,7 +15,7 @@ function formatUsername(rawValue?: string | null): string {
 
 export default function Posts() {
     const { currentUser } = useAuth();
-    const [allPosts, setAllPosts] = useState<FeedPost[]>(seedPosts);
+    const [allPosts, setAllPosts] = useState<FeedPost[] | null>(null);
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [draftBody, setDraftBody] = useState('');
     const [draftMediaUrls, setDraftMediaUrls] = useState<string[]>([]);
@@ -118,22 +76,35 @@ export default function Posts() {
         }
 
         const nextPost: FeedPost = {
-            id: `post-${Date.now()}`,
-            title: trimmedBody.slice(0, 5) || 'New post',
-            body: trimmedBody,
-            timestamp: 'Just now',
-            likes: 0,
-            comments: 0,
-            displayName: resolvedDisplayName,
-            username: resolvedUsername,
-            mediaUrls: [...draftMediaUrls]
+            id: uuid(),
+            title: '',
+            author: resolvedDisplayName,
+            content: trimmedBody,
+            timestamp: new Date().toISOString(),
+            attachments: draftMediaUrls.map((url) => ({ type: 'image', url })),
+            comments: [],
+            likesCount: 0,
+            sharesCount: 0,
+            commentsCount: 0,
         };
 
-        setAllPosts((prev) => [nextPost, ...prev]);
+        setAllPosts((prev) => [nextPost, ...(prev || [])]);
         setIsCreateDialogOpen(false);
         setDraftMediaUrls([]);
         setDraftBody('');
     };
+
+    useEffect(() => {
+        // Simulate fetching posts from an API
+        const fetchPosts = async () => {
+            const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
+            const data = await response.json();
+            const creator = Array.isArray(data) ? data.find((creator: { id: string }) => creator.id === currUser.id) : null;
+            const posts = creator?.recentPosts ?? [];
+            setAllPosts(posts);
+        }
+        fetchPosts();
+    }, []);
 
     return (
         <>
@@ -169,19 +140,24 @@ export default function Posts() {
                     </header>
 
                     <div className="posts">
-                        {allPosts.map((post) => (
-                            <UserPost
-                                key={post.id}
-                                title={post.title}
-                                body={post.body}
-                                timestamp={post.timestamp}
-                                likes={post.likes}
-                                comments={post.comments}
-                                displayName={post.displayName}
-                                username={post.username}
-                                mediaUrls={post.mediaUrls}
-                            />
-                        ))}
+                        {allPosts && allPosts.length > 0 ? (
+                            allPosts.map((post) => (
+                                <UserPost
+                                    postId={post.id}
+                                    postTitle={post.title}
+                                    postAuthor={post.author}
+                                    postContent={post.content}
+                                    postCreationTimeStamp={post.timestamp}
+                                    postAttachments={post.attachments}
+                                    postComments={post.comments}
+                                    postInitialLikeCount={post.likesCount}
+                                    postInitialCommentCount={post.commentsCount}
+                                    postInitialShareCount={post.sharesCount}
+                                />
+                            ))
+                        ) : (
+                            <p>No posts available.</p>
+                        )}
                     </div>
                 </div>
 

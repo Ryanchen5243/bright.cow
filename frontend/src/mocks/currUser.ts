@@ -1,0 +1,1 @@
+export const currUser = { id: "8ee1a69f-b98e-4355-8418-b4f97a39579c" };
