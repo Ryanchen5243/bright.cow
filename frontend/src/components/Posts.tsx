@@ -4,7 +4,6 @@ import UserPost from './UserPost';
 import { useAuth } from '../contexts/authContext';
 import { type FeedPost } from '../mocks/postTemplate.ts';
 import { v4 as uuid } from 'uuid';
-import { currUser } from '../mocks/currUser';
 
 function formatUsername(rawValue?: string | null): string {
     if (!rawValue) {
@@ -13,7 +12,7 @@ function formatUsername(rawValue?: string | null): string {
     return `@${rawValue.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || 'guest'}`;
 }
 
-export default function Posts() {
+export default function Posts(props: {creatorUUID: string | null}) {
     const { currentUser } = useAuth();
     const [allPosts, setAllPosts] = useState<FeedPost[] | null>(null);
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -27,7 +26,7 @@ export default function Posts() {
         if (currentUser?.email) {
             return currentUser.email.split('@')[0];
         }
-        return 'Guest Creator';
+        return 'Guest User';
     }, [currentUser?.displayName, currentUser?.email]);
 
     const resolvedUsername = useMemo(() => {
@@ -78,7 +77,9 @@ export default function Posts() {
         const nextPost: FeedPost = {
             id: uuid(),
             title: '',
-            author: resolvedDisplayName,
+            author_id: 'xyz', // replace w curr user uuid
+            author_display_name: currentUser?.displayName || 'Guest User',
+            author_user_name: '',
             content: trimmedBody,
             timestamp: new Date().toISOString(),
             attachments: draftMediaUrls.map((url) => ({ type: 'image', url })),
@@ -99,7 +100,7 @@ export default function Posts() {
         const fetchPosts = async () => {
             const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
             const data = await response.json();
-            const creator = Array.isArray(data) ? data.find((creator: { id: string }) => creator.id === currUser.id) : null;
+            const creator = Array.isArray(data) ? data.find((creator: { id: string }) => creator.id === props.creatorUUID) : null;
             const posts = creator?.recentPosts ?? [];
             setAllPosts(posts);
         }
@@ -143,13 +144,16 @@ export default function Posts() {
                         {allPosts && allPosts.length > 0 ? (
                             allPosts.map((post) => (
                                 <UserPost
+                                    key={post.id}
                                     postId={post.id}
                                     postTitle={post.title}
-                                    postAuthor={post.author}
+                                    postAuthorId={''}
+                                    postAuthorDisplayName={''}
+                                    postAuthorUserName={''}
                                     postContent={post.content}
                                     postCreationTimeStamp={post.timestamp}
                                     postAttachments={post.attachments}
-                                    postComments={post.comments}
+                                    // postComments={post.comments}
                                     postInitialLikeCount={post.likesCount}
                                     postInitialCommentCount={post.commentsCount}
                                     postInitialShareCount={post.sharesCount}

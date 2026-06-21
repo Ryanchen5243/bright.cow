@@ -164,7 +164,7 @@ export default function App() {
           <div className="App">
             <Routes>
               <Route path="/app" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
-              <Route path="/app/profile/:creatorId" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
+              <Route path="/app/profile/:creatorUserName" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
               <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />
               <Route path='/login' element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />

@@ -5,11 +5,13 @@ import { useState } from 'react';
 export default function UserPost(props: {
     postId: string;
     postTitle?: string;
-    postAuthor?: string;
+    postAuthorId?: string;
+    postAuthorDisplayName?: string;
+    postAuthorUserName?: string;
     postContent?: string;
     postCreationTimeStamp: string;
     postAttachments?: { type: string, url: string }[];
-    postComments?: { id: string, author: string, content: string }[];
+    postComments?: { id: string, authorId: string, authorDisplayName: string, authorUserName: string, content: string }[];
     postInitialLikeCount?: number;
     postInitialCommentCount?: number;
     postInitialShareCount?: number;
@@ -20,7 +22,7 @@ export default function UserPost(props: {
     const [showComments, setShowComments] = useState(false);
     const [shareCount, setShareCount] = useState(props.postInitialShareCount || 0);
     const [commentInput, setCommentInput] = useState('');
-    const [commentItems, setCommentItems] = useState<{ id: string, author: string, content: string }[]>(props.postComments?.map(({ id, author, content, }) => ({id,author,content,})) ?? []);
+    const [commentItems, setCommentItems] = useState<{ id: string, authorId: string, authorDisplayName: string, authorUserName: string, content: string }[]>(props.postComments?.map(({ id, authorId, authorDisplayName, authorUserName, content, }) => ({id,authorId,authorDisplayName,authorUserName,content,})) ?? []);
     const commentCount = commentItems.length;
 
     const toggleLike = () => {
@@ -37,7 +39,7 @@ export default function UserPost(props: {
         if (!nextComment) {
             return;
         }
-        setCommentItems((prev) => [{ id: Date.now().toString(), author: 'Current User', content: nextComment }, ...prev]);
+        setCommentItems((prev) => [{ id: Date.now().toString(), authorId: 'currentUserId', authorDisplayName: 'Current User', authorUserName: 'currentUserName', content: nextComment }, ...prev]);
         setCommentInput('');
         // insert logic for persisting new comment here
     };
@@ -45,7 +47,7 @@ export default function UserPost(props: {
     const sharePost = async () => {
         try {
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(`${props.postAuthor ?? 'Unknown'}: ${props.postContent ?? ''}`);
+                await navigator.clipboard.writeText(`${props.postAuthorDisplayName ?? 'Unknown'}: ${props.postContent ?? ''}`);
             }
             setShareCount((count) => count + 1);
             // insert additional logic for persisting share action here
@@ -57,13 +59,13 @@ export default function UserPost(props: {
     return (
         <article className="user-post">
             <div className="user-post-avatar">
-                <img src={pfp} alt={`${props.postAuthor} avatar`} />
+                <img src={pfp} alt={`${props.postAuthorDisplayName} avatar`} />
             </div>
             <div className="user-post-content">
                 <div className="user-post-header">
                     <div className="user-post-identity">
-                        <h3>{props.postAuthor}</h3>
-                        <p>@{props.postAuthor}</p>
+                        <h3>{props.postAuthorDisplayName}</h3>
+                        <p>@{props.postAuthorUserName}</p>
                     </div>
                     <span className="user-post-timestamp">{props.postCreationTimeStamp}</span>
                 </div>
@@ -121,7 +123,7 @@ export default function UserPost(props: {
                         {commentItems.length > 0 && (
                             <div className="user-post-comments-list">
                                 {commentItems.map((comment, index) => (
-                                    <p key={`${comment.id}-${index}`}><strong>{comment.author}:</strong> {comment.content}</p>
+                                    <p key={`${comment.id}-${index}`}><strong>{comment.authorUserName}:</strong> {comment.content}</p>
                                 ))}
                             </div>
                         )}

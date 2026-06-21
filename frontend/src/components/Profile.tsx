@@ -3,7 +3,6 @@ import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, type SvgIconComponent } from '@mui/icons-material';
-import { currUser } from '../mocks/currUser';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
 import CreatorSchedule from './CreatorSchedule';
@@ -20,43 +19,6 @@ import Posts from './Posts';
 
 const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 import { Business } from '@mui/icons-material';
-// const serviceCatalog = {
-//     'duo-gaming': { title: 'Duo Gaming', description: 'Queue together, warm up fast, and keep the energy high.', defaultPriceLabel: '$30', defaultUnit: '/hour', icon: Group },
-//     'valorant-coaching': { title: 'Valorant Coaching', description: 'Tactical reviews focused on aim, utility, and confidence.', defaultPriceLabel: '$35', defaultUnit: '/hour', icon: Adjust },
-//     'vod-review': { title: 'VOD Review', description: 'Actionable notes with clips, patterns, and improvement priorities.', defaultPriceLabel: '$25', defaultUnit: '/session', icon: SmartDisplay },
-//     'chill-talk': { title: 'Chill & Talk', description: 'Low-pressure hangouts for conversation, co-working, or debriefs.', defaultPriceLabel: '$15', defaultUnit: '/hour', icon: Message },
-//     'custom-session': { title: 'Custom Session', description: 'Design a session around your game, goals, and schedule.', defaultPriceLabel: '$30+', defaultUnit: '/custom', icon: StarBorder }
-// } as const;
-
-// const quickFacts = [
-//     { label: 'Languages', value: 'English, Korean', icon: Translate },
-//     { label: 'Location', value: 'New York, USA', icon: Public },
-//     { label: 'Avg Response', value: '1 hour', icon: WatchLater }
-// ];
-
-// const recentPosts = [
-//     {
-//         title: 'Shipping a cleaner booking flow this week',
-//         body: 'Tightening up my late-night Valorant sessions so it is easier to book ranked, VOD review, or a low-key duo queue without the back-and-forth.',
-//         timestamp: '2h ago',
-//         likes: 84,
-//         comments: 12
-//     },
-//     {
-//         title: 'Current focus: confidence + comms',
-//         body: 'Most players do not need more raw mechanics first. They need sharper comms, cleaner pacing, and someone to make the next game feel winnable again.',
-//         timestamp: 'Yesterday',
-//         likes: 61,
-//         comments: 8
-//     },
-//     {
-//         title: 'Open slots for weekend sessions',
-//         body: 'Added extra availability for Friday and Saturday. If you want structured help without the rigid coaching vibe, this is the best window to grab.',
-//         timestamp: '3d ago',
-//         likes: 49,
-//         comments: 5
-//     }
-// ];
 
 const giftItems = [
     { id: 'rose', image: rose_gift, alt: 'rose gift', price: 100, name: 'Rose' },
@@ -69,36 +31,7 @@ const giftItems = [
     { id: 'ship', image: shipppp_gift, alt: 'ship gift', price: 2000, name: 'Ship' }
 ];
 
-// type CreatorProfileData = {
-//     id: string;
-//     name: string;
-//     username: string;
-//     bio: string;
-//     photoUrl?: string;
-//     services?: {
-//         service_id: string;
-//         base_service_id: string;
-//         label?: string;
-//         session_length_minutes: number | null;
-//         cost: number | null;
-//     }[];
-// };
-
-// const fallbackCreatorProfile: CreatorProfileData = {
-//     id: 'luna',
-//     name: 'Luna',
-//     username: '@itsluna',
-//     bio: 'Creator for players who want a sharp, low-pressure space to improve. I blend ranked energy, clean coaching, and chill conversation so sessions feel more like shipping momentum than grinding solo queue in circles.',
-//     photoUrl: pfp,
-//     services: [
-//         { service_id: 'duo-gaming-60', base_service_id: 'duo-gaming', label: 'Duo Gaming 60 min', session_length_minutes: 60, cost: null },
-//         { service_id: 'valorant-coaching-60', base_service_id: 'valorant-coaching', label: 'Valorant Coaching 60 min', session_length_minutes: 60, cost: null },
-//         { service_id: 'vod-review', base_service_id: 'vod-review', label: 'VOD Review', session_length_minutes: 60, cost: null },
-//         { service_id: 'custom-session', base_service_id: 'custom-session', label: 'Custom Session', session_length_minutes: null, cost: null },
-//     ],
-// };
-
-export default function Profile({ creatorId }: { creatorId?: string }) {
+export default function Profile({ creatorUserName }: { creatorUserName?: string }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
     const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
@@ -106,7 +39,8 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         setSearchParams((prev) => { prev.set('tab', tab); return prev; }, { replace: true });
     };
 
-    const [creatorProfile, setCreatorProfile] = useState<any>(null);
+    const [creatorProfile, setCreatorProfile] = useState<any>(null); // avoid using -> tbd destructure profile data
+    const [creatorUUID, setCreatorUUID] = useState<string | null>(null); // to pass down via props for fetching posts, schedule, etc.
     const [userBio, setUserBio] = useState("");
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
@@ -123,12 +57,13 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
 
                 const data = await response.json() as any[];
                 const creators = Array.isArray(data) ? data : [];
-                const resolvedCreator = creators.find((creator) => creator.id === currUser.id) ?? null;
+                const resolvedCreator = creators.find((creator) => creator.userName === creatorUserName) ?? null;
 
                 if (!isCancelled) {
                     setCreatorProfile(resolvedCreator);
-                    setUserBio(resolvedCreator.userBio);
-                    setDraftBio(resolvedCreator.userBio);
+                    setCreatorUUID(resolvedCreator?.id ?? null);
+                    setUserBio(resolvedCreator?.bio ?? "");
+                    setDraftBio(resolvedCreator?.bio ?? "");
                     setIsEditingBio(false);
                 }
             } catch {
@@ -142,11 +77,10 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         };
 
         loadCreatorProfile();
-
         return () => {
             isCancelled = true;
         };
-    }, [creatorId]);
+    }, [creatorUserName]);
 
     const startEditBio = () => {
         setDraftBio(userBio);
@@ -162,24 +96,6 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         setDraftBio(userBio);
         setIsEditingBio(false);
     };
-
-    // const renderedServices = (creatorProfile.services ?? [])
-    //     .map((service) => {
-    //         const catalogEntry = serviceCatalog[service.base_service_id as keyof typeof serviceCatalog];
-    //         if (!catalogEntry) {
-    //             return null;
-    //         }
-
-    //         return {
-    //             key: service.service_id,
-    //             title: service.label || catalogEntry.title,
-    //             description: catalogEntry.description,
-    //             price: service.cost === null ? catalogEntry.defaultPriceLabel : `$${service.cost}`,
-    //             unit: service.session_length_minutes ? `/${service.session_length_minutes} min` : catalogEntry.defaultUnit,
-    //             icon: catalogEntry.icon,
-    //         };
-    //     })
-    //     .filter((service): service is NonNullable<typeof service> => service !== null);
 
     return (
         <div className="profile-view">
@@ -328,9 +244,9 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
                     </div>
                     </>
                 }
-                {profileTab === "posts" && <Posts />}
+                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} />}
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <CreatorSchedule creatorId={creatorId} />}
+                {profileTab === "schedule" && <CreatorSchedule />}
                 {profileTab === "media" && <h1>media</h1>}
                 {profileTab === "reviews" && <h1>reviews</h1>}
             </div>
