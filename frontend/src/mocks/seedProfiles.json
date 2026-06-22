@@ -1,6 +1,6 @@
 [
   {
-    "id": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
+    "id": "7792f329-8482-4e99-8a3f-0f511c11637c",
     "userName": "@luna_gamer",
     "userDisplayName": "Luna Wang",
     "profilePhoto": "https://example.com/avatar1.png",
@@ -27,83 +27,109 @@
     ],
     "recentPosts": [
       {
-        "id": "1264648e-cf98-48ee-9dc6-fa994fbb7194",
-        "title": "Epic Boss Battle in Elden Ring!",
-        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
-        "content": "Just defeated the Fire Giant in Elden Ring after hours of trying! Here's how I did it...",
-        "timestamp": "2026-06-16T18:04:57.920Z",
+        "id": "1de28db3-d9d4-4b0d-9c07-38f73fc5915b",
+        "title": "Hello World",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "This is a sample post content.",
+        "timestamp": "2026-06-22T04:15:24.404Z",
         "attachments": [
           {
             "type": "image",
-            "url": "https://example.com/eldenring_boss.jpg"
+            "url": "https://via.placeholder.com/150"
           }
         ],
         "comments": [
           {
-            "id": "cab9d2b1-2ee9-45a4-9c90-7c7952e9898f",
-            "author": "user123",
-            "content": "Congrats! That boss is tough!"
-          },
-          {
-            "id": "6d49da41-7799-4d33-a284-b96a1b193cac",
-            "author": "gamer_girl",
-            "content": "Ive been stuck on that part for days, any tips?"
+            "id": "3e373960-f804-4089-91c7-f9526431fff5",
+            "author_id": "529f4a5d-2350-4073-9442-5c5145f03321",
+            "content": "Nice post!"
           }
         ],
         "likesCount": 0,
         "sharesCount": 0,
-        "commentsCount": 2
+        "commentsCount": 0
       },
       {
-        "id": "ef6757e0-d2c2-4f95-81f2-a8a23517bc4d",
-        "title": "Top 5 Tips for New Players in Elden Ring",
-        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
-        "content": "If you're new to Elden Ring, here are my top 5 tips to get you started on your adventure!",
-        "timestamp": "2026-06-16T18:04:57.922Z",
-        "attachments": [
-          {
-            "type": "video",
-            "url": "https://example.com/eldenring_tips.mp4"
-          }
-        ],
-        "comments": [
-          {
-            "id": "a21822e8-a26f-4fdf-b078-8eefd105c09c",
-            "author": "newbie_gamer",
-            "content": "Thanks for the tips! Just started playing and this is super helpful."
-          },
-          {
-            "id": "d222fd72-8475-4667-b9e3-2c90733caacf",
-            "author": "veteran_player",
-            "content": "Great advice! I wish I had this when I first started."
-          }
-        ],
-        "likesCount": 0,
-        "sharesCount": 0,
-        "commentsCount": 2
-      },
-      {
-        "id": "5b706c8a-22df-4caa-a15e-b1d86032a90b",
-        "title": "Open Slots for Weekend Sessions",
-        "author": "8ee1a69f-b98e-4355-8418-b4f97a39579c",
-        "content": "I have some open slots for gaming sessions this weekend. DM me if you want to join!",
-        "timestamp": "2026-06-16T18:04:57.922Z",
+        "id": "df001c07-74f3-495a-9da6-3bb7ef216df2",
+        "title": "Another Post",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "This is another sample post content.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
         "attachments": [],
         "comments": [
           {
-            "id": "9001328c-6209-48d9-8bb1-ae5869909811",
-            "author": "gamer_buddy",
-            "content": "I'd love to join! I've been looking for someone to play with."
-          },
-          {
-            "id": "d5996a8c-2222-4da3-8050-7fd287375849",
-            "author": "casual_gamer",
-            "content": "I'm interested too! What games are you planning to play?"
+            "id": "cbc2a975-f652-4037-bc8f-13118c1ed4f2",
+            "author_id": "1cf9528b-6f89-49c2-ae2f-b32c20a9cd6d",
+            "content": "Great insights!"
           }
         ],
         "likesCount": 0,
         "sharesCount": 0,
-        "commentsCount": 2
+        "commentsCount": 0
+      },
+      {
+        "id": "dfde9564-593e-4935-a56f-eefb434a897a",
+        "title": "Gaming Tips",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Here are some gaming tips for beginners.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [
+          {
+            "type": "video",
+            "url": "https://example.com/video.mp4"
+          }
+        ],
+        "comments": [
+          {
+            "id": "006e4fc7-047a-41ba-abbc-d3277797eca3",
+            "author_id": "65383d2c-8bf9-4cbc-b46d-2416ef358867",
+            "content": "Thanks for the tips!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "b96f24a9-93e6-42f1-897b-3163f9cefa3a",
+        "title": "Live Stream Announcement",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Join me for a live stream this weekend!",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [],
+        "comments": [
+          {
+            "id": "a6be6325-adcb-43c0-9a9a-4f1b8d06ffe8",
+            "author_id": "d4816961-0126-4982-975f-dca824a4ea04",
+            "content": "Looking forward to it!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "855e097e-1596-41e4-88ac-3e41e891de40",
+        "title": "Game Review",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Just finished playing XYZ game. Here’s my review.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [
+          {
+            "type": "image",
+            "url": "https://via.placeholder.com/150"
+          }
+        ],
+        "comments": [
+          {
+            "id": "959e0d9e-5dc9-4a2c-9ced-6bb49fe4ec16",
+            "author_id": "12b5dcd1-27ce-48c9-b884-fe4733035b47",
+            "content": "Great review!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
       }
     ],
     "services": [
