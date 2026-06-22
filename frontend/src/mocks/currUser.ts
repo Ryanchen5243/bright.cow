@@ -1,1 +1,1 @@
-export const currUser = { id: "8ee1a69f-b98e-4355-8418-b4f97a39579c" };
+export const currUser = { id: "7792f329-8482-4e99-8a3f-0f511c11637c" };
