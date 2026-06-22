@@ -1,39 +1,22 @@
+// for purpose of json data generation
 import { v4 as uuid } from 'uuid';
-
-type PostAttachment = { 
-    type: string; 
-    url: string 
-};
-type PostComment = { 
-    id: string; 
-    author_id: string; 
-    author_display_name: string; 
-    content: string 
-};
-
-export type FeedPost = ReturnType<typeof createPost>;
-
-export function createPost({
-    title = '',
-    author_id = '',
-    author_display_name = '',
-    author_user_name = '',
-    content = '',
-    attachments = [] as PostAttachment[],
-    comments = [] as PostComment[],
-} = {}) {
+export default function createPostJSONObject(
+    title: string,
+    author_id: string,
+    content: string,
+    attachments: { type: string; url: string }[],
+    comments: { id: string; author_id: string; content: string }[],
+    ) {
     return {
-        id: uuid(),
+        id : uuid(),
         title,
         author_id,
-        author_display_name,
-        author_user_name,
         content,
         timestamp: new Date().toISOString(),
         attachments,
         comments,
         likesCount: 0,
         sharesCount: 0,
-        commentsCount: comments.length,
+        commentsCount: 0,
     };
 }
