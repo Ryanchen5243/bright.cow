@@ -6,32 +6,32 @@ import NavBar from "./NavBar";
 export default function ApplicationPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { creatorId } = useParams();
+    const { creatorUserName } = useParams();
     const [creatorExists, setCreatorExists] = useState<boolean | null>(null);
 
     useEffect(() => {
         let isCancelled = false;
 
-        if (!creatorId) {
+        if (!creatorUserName) {
             setCreatorExists(null);
             return () => {
                 isCancelled = true;
             };
         }
 
-        const validateCreatorId = async () => {
+        const validateCreatorUserName = async () => {
             try {
-                const response = await fetch(new URL('../creator_profiles_fake.json', import.meta.url).href);
+                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
                 if (!response.ok) {
                     if (!isCancelled) {
                         setCreatorExists(false);
                     }
                     return;
                 }
-
-                const data = await response.json() as { creators?: Array<{ id: string }> };
-                const exists = (data.creators ?? []).some((creator) => creator.id === creatorId);
-
+                const data = await response.json();
+                const exists = (Array.isArray(data) ? data : []).some(
+                    (creator: { userName: string }) => creator.userName === creatorUserName
+                );
                 if (!isCancelled) {
                     setCreatorExists(exists);
                 }
@@ -42,16 +42,16 @@ export default function ApplicationPage() {
             }
         };
 
-        validateCreatorId();
+        validateCreatorUserName();
 
         return () => {
             isCancelled = true;
         };
-    }, [creatorId]);
+    }, [creatorUserName]);
 
     const params = new URLSearchParams(location.search);
     const viewParam = params.get("view");
-    const appView: AppView = creatorId
+    const appView: AppView = creatorUserName
         ? creatorExists === null
             ? "creator-loading"
             : creatorExists
@@ -63,7 +63,7 @@ export default function ApplicationPage() {
 
     const handleSetAppView = (nextView: AppView) => {
         if (nextView === "profile") {
-            navigate(`/app/profile/${creatorExists === false ? "luna" : creatorId ?? "luna"}`);
+            navigate(`/app/profile/@luna_gamer`);
             return;
         }
 
@@ -84,7 +84,7 @@ export default function ApplicationPage() {
         <>
             <NavBar setAppView={handleSetAppView} />
             <div className="app-body">
-                <AppMain appView={appView} creatorId={creatorId} />
+                <AppMain appView={appView} creatorUserName={creatorUserName} />
             </div>
         </>
     );

@@ -125,12 +125,12 @@ export const serviceTemplates = {
  * ], { maxServices: 5 })
  */
 export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } = {}) {
-    const result = {};
+    const result = [];
     const sessionServiceDurationHash = new Set(); // To track unique durations for Session services
     const minuteServiceDurationHash = new Set();  // To track unique durations for Minute services
 
     for (const def of serviceDefinitions) {
-        if (Object.keys(result).length >= maxServices) {
+        if (result.length >= maxServices) {
             console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
             break;
         }
@@ -156,7 +156,7 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                 continue;
             }
             for (let index = 0; index < def.durations.length; index++) {
-                if (Object.keys(result).length >= maxServices) {
+                if (result.length >= maxServices) {
                     console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
                     break;
                 }
@@ -171,11 +171,11 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                 }
                 minuteServiceDurationHash.add(duration);
                 const key = `${baseKey}-${duration}min`;
-                result[key] = createService(ServiceType.Minute, {
+                result.push({ id: key, ...createService(ServiceType.Minute, {
                     ...template,
                     durationMin: duration,
                     price: Math.round(def.pricePerMinute * duration * 100) / 100,
-                });
+                }) });
             }
         }
 
@@ -201,7 +201,7 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                 console.warn(`[defineCreatorServices] "${baseKey}" has unexpected properties — they will be ignored.`);
             }
             for (let index = 0; index < def.durations.length; index++) {
-                if (Object.keys(result).length >= maxServices) {
+                if (result.length >= maxServices) {
                     console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
                     break;
                 }
@@ -224,11 +224,11 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                     continue;
                 }
                 const key = `${baseKey}-${duration}min`;
-                result[key] = createService(ServiceType.Session, {
+                result.push({ id: key, ...createService(ServiceType.Session, {
                     ...template,
                     durationMin: duration,
                     price,
-                });
+                }) });
             }
         }
 
@@ -238,7 +238,7 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                 console.warn(`[defineCreatorServices] "${baseKey}" is a Bundle-type service but no bundles were provided — skipping.`);
             } else {
                 for (let index = 0; index < def.bundles.length; index++) {
-                    if (Object.keys(result).length >= maxServices) {
+                    if (result.length >= maxServices) {
                         console.warn(`[defineCreatorServices] Reached maxServices limit of ${maxServices}. Additional services will be ignored.`);
                         break;
                     }
@@ -255,12 +255,12 @@ export function defineCreatorServices(serviceDefinitions, { maxServices = 10 } =
                         console.warn(`[defineCreatorServices] "${baseKey}-${size}x" has a price of 0.`);
                     }
                     const key = `${baseKey}-${size}x`;
-                    result[key] = createService(ServiceType.Bundle, {
+                    result.push({ id: key, ...createService(ServiceType.Bundle, {
                         ...template,
                         itemsPerBundle: size,
                         pricePerItem: Math.round((price / size) * 100) / 100,
                         price,
-                    });
+                    }) });
                 }
             }
         }

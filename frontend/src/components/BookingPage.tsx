@@ -1,19 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import defaultProfilePhoto from '../assets/default_profile_photo.jpg';
-import { defineCreatorServices } from '../mocks/defaultServices.js'; // old API, superseded by defineCreatorServices
-type CreatorService = {
-    service_id: string;
-    base_service_id: string;
-    label?: string;
-    session_length_minutes: number | null;
-    cost: number | null;
-};
 
 export default function BookingPage() {
     const location = useLocation();
     const state = (location.state as {
-        creator?: { name?: string; username?: string; photoUrl?: string; services?: CreatorService[] };
+        creator?: { name?: string; username?: string; photoUrl?: string; services?: any[] };
         creatorId?: string;
     } | null);
     const creator = state?.creator;
@@ -23,6 +15,17 @@ export default function BookingPage() {
     const creatorServices = creator?.services ?? [];
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
     const backToProfilePath = creatorId ? `/app/profile/${creatorId}?tab=schedule` : '/app?view=profile&tab=schedule';
+
+
+
+
+    
+
+
+
+
+
+
 
     const formatServiceCost = (cost: number | null) => {
         if (cost === null) {
@@ -37,28 +40,6 @@ export default function BookingPage() {
         }
         return `${minutes} min`;
     };
-    useEffect(() => {
-        console.log("use effect triggered");
-        console.log(defineCreatorServices([
-            {
-                templateId: 'gamingDuo',
-                durations: [30, 60],
-                prices: [5, 10],
-            },
-            {
-                templateId: 'faceCall',
-                durations: [15, 30],
-                pricePerMinute: 0.66,
-            },
-            {
-                templateId: 'exclusivePhotos',
-                bundles: [
-                    {size: 5, price: 12},
-                    {size: 10, price: 20},
-                    {size: 20, price: 35}
-                ]
-            }],{maxServices: 7}));
-            }, []);
 
     return (
         <div className="booking-page">

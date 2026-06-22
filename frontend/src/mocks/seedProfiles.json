@@ -1,0 +1,197 @@
+[
+  {
+    "id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+    "userName": "@luna_gamer",
+    "userDisplayName": "Luna Wang",
+    "profilePhoto": "https://example.com/avatar1.png",
+    "backgroundPhoto": "https://example.com/background1.jpg",
+    "userBio": "Passionate gamer and content creator. I love sharing my gaming experiences and connecting with fellow gamers!",
+    "gamesPlayed": 150,
+    "favoriteGame": "The Legend of Zelda: Breath of the Wild",
+    "quickFacts": [
+      {
+        "label": "Languages",
+        "value": "English, Korean",
+        "icon": "Translate"
+      },
+      {
+        "label": "Location",
+        "value": "New York, USA",
+        "icon": "Public"
+      },
+      {
+        "label": "Avg Response",
+        "value": "1 hour",
+        "icon": "WatchLater"
+      }
+    ],
+    "recentPosts": [
+      {
+        "id": "1de28db3-d9d4-4b0d-9c07-38f73fc5915b",
+        "title": "Hello World",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "This is a sample post content.",
+        "timestamp": "2026-06-22T04:15:24.404Z",
+        "attachments": [
+          {
+            "type": "image",
+            "url": "https://via.placeholder.com/150"
+          }
+        ],
+        "comments": [
+          {
+            "id": "3e373960-f804-4089-91c7-f9526431fff5",
+            "author_id": "529f4a5d-2350-4073-9442-5c5145f03321",
+            "content": "Nice post!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "df001c07-74f3-495a-9da6-3bb7ef216df2",
+        "title": "Another Post",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "This is another sample post content.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [],
+        "comments": [
+          {
+            "id": "cbc2a975-f652-4037-bc8f-13118c1ed4f2",
+            "author_id": "1cf9528b-6f89-49c2-ae2f-b32c20a9cd6d",
+            "content": "Great insights!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "dfde9564-593e-4935-a56f-eefb434a897a",
+        "title": "Gaming Tips",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Here are some gaming tips for beginners.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [
+          {
+            "type": "video",
+            "url": "https://example.com/video.mp4"
+          }
+        ],
+        "comments": [
+          {
+            "id": "006e4fc7-047a-41ba-abbc-d3277797eca3",
+            "author_id": "65383d2c-8bf9-4cbc-b46d-2416ef358867",
+            "content": "Thanks for the tips!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "b96f24a9-93e6-42f1-897b-3163f9cefa3a",
+        "title": "Live Stream Announcement",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Join me for a live stream this weekend!",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [],
+        "comments": [
+          {
+            "id": "a6be6325-adcb-43c0-9a9a-4f1b8d06ffe8",
+            "author_id": "d4816961-0126-4982-975f-dca824a4ea04",
+            "content": "Looking forward to it!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      },
+      {
+        "id": "855e097e-1596-41e4-88ac-3e41e891de40",
+        "title": "Game Review",
+        "author_id": "7792f329-8482-4e99-8a3f-0f511c11637c",
+        "content": "Just finished playing XYZ game. Here’s my review.",
+        "timestamp": "2026-06-22T04:15:24.405Z",
+        "attachments": [
+          {
+            "type": "image",
+            "url": "https://via.placeholder.com/150"
+          }
+        ],
+        "comments": [
+          {
+            "id": "959e0d9e-5dc9-4a2c-9ced-6bb49fe4ec16",
+            "author_id": "12b5dcd1-27ce-48c9-b884-fe4733035b47",
+            "content": "Great review!"
+          }
+        ],
+        "likesCount": 0,
+        "sharesCount": 0,
+        "commentsCount": 0
+      }
+    ],
+    "services": [
+      {
+        "id": "gamingDuo-30min",
+        "type": "session",
+        "name": "Gaming Duo",
+        "description": "1-on-1 gaming session",
+        "durationMin": 30,
+        "price": 5
+      },
+      {
+        "id": "gamingDuo-60min",
+        "type": "session",
+        "name": "Gaming Duo",
+        "description": "1-on-1 gaming session",
+        "durationMin": 60,
+        "price": 10
+      },
+      {
+        "id": "faceCall-15min",
+        "type": "minute",
+        "name": "1-on-1 Face Call",
+        "description": "Casual video conversation",
+        "durationMin": 15,
+        "price": 9.9
+      },
+      {
+        "id": "faceCall-30min",
+        "type": "minute",
+        "name": "1-on-1 Face Call",
+        "description": "Casual video conversation",
+        "durationMin": 30,
+        "price": 19.8
+      },
+      {
+        "id": "exclusivePhotos-5x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 5,
+        "pricePerItem": 2.4,
+        "price": 12
+      },
+      {
+        "id": "exclusivePhotos-10x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 10,
+        "pricePerItem": 2,
+        "price": 20
+      },
+      {
+        "id": "exclusivePhotos-20x",
+        "type": "bundle",
+        "name": "Exclusive Photos",
+        "description": "Photo request service with bundle pricing",
+        "itemsPerBundle": 20,
+        "pricePerItem": 1.75,
+        "price": 35
+      }
+    ]
+  }
+]
