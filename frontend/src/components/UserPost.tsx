@@ -1,34 +1,23 @@
 import pfp from '../assets/default_profile_photo.jpg';
 import { Favorite, FavoriteBorder, MessageOutlined, SendOutlined } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuth } from '../contexts/authContext';
 
-export default function UserPost(props: {
-    postId: string;
-    postTitle?: string;
-    postAuthorId?: string;
-    postAuthorDisplayName?: string;
-    postAuthorUserName?: string;
-    postContent?: string;
-    postCreationTimeStamp: string;
-    postAttachments?: { type: string, url: string }[];
-    postComments?: { id: string, authorId: string, authorDisplayName: string, authorUserName: string, content: string }[];
-    postInitialLikeCount?: number;
-    postInitialCommentCount?: number;
-    postInitialShareCount?: number;
-    }) {
-
+export default function UserPost(props: {post: any, userName: string, displayName: string}) {
+    const [post, _] = useState(props.post);
+    const { currentUser } = useAuth();
     const [isLiked, setIsLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(props.postInitialLikeCount || 0);
+    const [likeCount, setLikeCount] = useState(post.likesCount || 0);
     const [showComments, setShowComments] = useState(false);
-    const [shareCount, setShareCount] = useState(props.postInitialShareCount || 0);
+    const [shareCount, setShareCount] = useState(post.sharesCount || 0);
     const [commentInput, setCommentInput] = useState('');
-    const [commentItems, setCommentItems] = useState<{ id: string, authorId: string, authorDisplayName: string, authorUserName: string, content: string }[]>(props.postComments?.map(({ id, authorId, authorDisplayName, authorUserName, content, }) => ({id,authorId,authorDisplayName,authorUserName,content,})) ?? []);
+    const [commentItems, setCommentItems] = useState(post.comments || []);
     const commentCount = commentItems.length;
 
     const toggleLike = () => {
         setIsLiked((prev) => {
             const next = !prev;
-            setLikeCount((count) => count + (next ? 1 : -1));
+            setLikeCount((count: number) => Math.max(0, count + (next ? 1 : -1)));
             // insert logic for persisting like state change here
             return next;
         });
@@ -39,7 +28,7 @@ export default function UserPost(props: {
         if (!nextComment) {
             return;
         }
-        setCommentItems((prev) => [{ id: Date.now().toString(), authorId: 'currentUserId', authorDisplayName: 'Current User', authorUserName: 'currentUserName', content: nextComment }, ...prev]);
+        setCommentItems((prev : any) => [{ id: crypto.randomUUID(), author_id: currentUser?.displayName, content: nextComment }, ...prev]);
         setCommentInput('');
         // insert logic for persisting new comment here
     };
@@ -47,33 +36,37 @@ export default function UserPost(props: {
     const sharePost = async () => {
         try {
             if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(`${props.postAuthorDisplayName ?? 'Unknown'}: ${props.postContent ?? ''}`);
+                await navigator.clipboard.writeText(`${post.postAuthorDisplayName ?? 'Unknown'}: ${post.postContent ?? ''}`);
             }
-            setShareCount((count) => count + 1);
+            setShareCount((count: number) => count + 1);
             // insert additional logic for persisting share action here
         } catch {
             // clipboard write failed; do not increment share count
         }
     };
 
+    // useEffect(() => {
+    //     console.log(currentUser);
+    //     // insert logic for fetching and setting initial like state here
+    // }, [currentUser]);
     return (
         <article className="user-post">
             <div className="user-post-avatar">
-                <img src={pfp} alt={`${props.postAuthorDisplayName} avatar`} />
+                <img src={pfp} alt={`${props?.userName} avatar`} />
             </div>
             <div className="user-post-content">
                 <div className="user-post-header">
                     <div className="user-post-identity">
-                        <h3>{props.postAuthorDisplayName}</h3>
-                        <p>@{props.postAuthorUserName}</p>
+                        <h3>{props?.displayName}</h3>
+                        <p>{props?.userName}</p>
                     </div>
-                    <span className="user-post-timestamp">{props.postCreationTimeStamp}</span>
+                    <span className="user-post-timestamp">{post?.timestamp}</span>
                 </div>
-                {props.postTitle && <p className="user-post-title">{props.postTitle}</p>}
-                {props.postContent && <p className="user-post-body">{props.postContent}</p>}
-                {props.postAttachments && props.postAttachments.length > 0 && (
+                {/* {post.title && <p className="user-post-title">{post.title}</p>} */}
+                {post.content && <p className="user-post-body">{post.content}</p>}
+                {post.attachments && post.attachments.length > 0 && (
                     <div className="user-post-media-grid" aria-label="Post media attachments">
-                        {props.postAttachments.map((attachment, index) => (
+                        {post.attachments.map((attachment: { "type": string, "url": string }, index: number) => (
                             <img key={`${attachment.url}-${index}`} src={attachment.url} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />
                         ))}
                     </div>
@@ -122,8 +115,8 @@ export default function UserPost(props: {
                         </div>
                         {commentItems.length > 0 && (
                             <div className="user-post-comments-list">
-                                {commentItems.map((comment, index) => (
-                                    <p key={`${comment.id}-${index}`}><strong>{comment.authorUserName}:</strong> {comment.content}</p>
+                                {commentItems.map((comment : {id: string, author_id: string, content: string}, index) => (
+                                    <p key={`${comment.id}-${index}`}><strong>{comment.author_id}:</strong> {comment.content}</p>
                                 ))}
                             </div>
                         )}

@@ -62,8 +62,8 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                 if (!isCancelled) {
                     setCreatorProfile(resolvedCreator);
                     setCreatorUUID(resolvedCreator?.id ?? null);
-                    setUserBio(resolvedCreator?.bio ?? "");
-                    setDraftBio(resolvedCreator?.bio ?? "");
+                    setUserBio(resolvedCreator?.userBio ?? "");
+                    setDraftBio(resolvedCreator?.userBio ?? "");
                     setIsEditingBio(false);
                 }
             } catch {
@@ -160,7 +160,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                                         <p>{service.description}</p>
                                     </div>
                                     <div className="profile-service-card-price">
-                                        <h3>price here</h3>
+                                        <h3>{service.price}</h3>
                                         <p>unit here</p>
                                     </div>
                                 </div>
@@ -212,9 +212,9 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                                     </div>
                                 </div>
                                 <div className="profile-user-recent-posts-list">
-                                    {/* {creatorProfile?.recentPosts?.map((post, index) => (
-                                        <UserPost key={index} />
-                                    ))} */}
+                                    {creatorProfile?.recentPosts?.map((post : any) => (
+                                        <UserPost key={post.id} post={post} userName={creatorProfile?.userName ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />
+                                    ))}
                                 </div>
                             </div>
                         </div>
@@ -244,7 +244,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                     </div>
                     </>
                 }
-                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} />}
+                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.userName ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />}
                 {profileTab === "games" && <h1>games</h1>}
                 {profileTab === "schedule" && <CreatorSchedule />}
                 {profileTab === "media" && <h1>media</h1>}
