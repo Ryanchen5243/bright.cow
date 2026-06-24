@@ -70,10 +70,49 @@ const defaultCreator: CreatorData = {
     ],
 };
 
+/* 
+mock availabilties --. weedkly scheudle to be modifiable by creator
+> tbd add timezone field @ creator profile level
+> UTC to be stored in db, and converted to local time for display
+
+const creatorTimeZone = 'America/New_York';
+const creatorAvailabilities = [{ // omit unavailable days
+    weekday: 'Monday',
+    startMin: 540, // 9:00 AM
+    endMin: 1020, // 5:00 PM
+}, {
+    weekday: 'Tuesday',
+    startMin: 540, // 9:00 AM
+    endMin: 1020, // 5:00 PM
+}, {
+    weekday: 'Thursday',
+    startMin: 540, // 9:00 AM
+    endMin: 1020, // 5:00 PM
+}, {
+    weekday: 'Friday',
+    startMin: 540, // 9:00 AM
+    endMin: 1020, // 5:00 PM
+}]
+
+const creatorSessions = [
+    session *
+]
+const session = {
+    session_id: uuid(),
+    session_provider: uuid(), // creator
+    session_consumer: uuid(), // user
+    session_type: 'Duo Gaming',
+    session_startUTC: '2023-08-01T14:00:00Z',
+    session_endUTC: '2023-08-01T15:00:00Z',
+    session_duration_min: 60, // in minutes
+    session_cost: 50.00, // in USD
+    session_status: 'booked' | 'pending' | 'completed' | 'cancelled', // tbd state machine for session lifecycle
+}
+*/
 export default function CreatorSchedule({ creatorId: propCreatorId }: { creatorId?: string }) {
     const navigate = useNavigate();
     const { creatorId: routeCreatorId } = useParams();
-    const creatorId = routeCreatorId ?? propCreatorId ?? 'luna';
+    const creatorId = routeCreatorId ?? propCreatorId;
     const [selectedDate, setSelectedDate] = useState<string | number>(getLocalDateString());
     const [creatorDetails, setCreatorDetails] = useState<CreatorData>(defaultCreator);
 
