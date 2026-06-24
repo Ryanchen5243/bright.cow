@@ -50,7 +50,12 @@ nav {
   min-height: 72px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
   padding: 0 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: radial-gradient(
+      circle at top right,
+      rgba(149, 87, 237, 0.18),
+      transparent 28%
+    ),
+    linear-gradient(180deg, #090b14 0%, #111827 100%);
   backdrop-filter: blur(18px);
   position: relative; 
   z-index: 20;
@@ -89,6 +94,7 @@ nav > div {
 
 .nav-company-name-text {
   font-size: 1rem;
+  Color: #ffffff;
 }
 
 .nav-brand-mark {
@@ -348,6 +354,7 @@ nav > div {
   display: flex;
   flex: 1;
   min-height: 0;
+  background: #111827;
 }
 
 .app-main {
@@ -358,6 +365,7 @@ nav > div {
   min-height: 0;
   border-radius: 8px;
   scrollbar-width: none;
+  Background: #111827;
 }
 
 .app-main::-webkit-scrollbar {
@@ -372,12 +380,14 @@ nav > div {
 
 .app-main-view {
   flex: 1 0 auto;
+  color: #E7E9EA;
 }
 
 .app-footer {
   margin-top: auto;
   padding: 16px 24px;
   padding-top: 0;
+  background: #111827;
 }
 
 .app-footer-shell {
@@ -803,7 +813,7 @@ nav > div {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #cbd5e1;
+  color: #E7E9EA;
   font-size: 0.84rem;
 }
 
@@ -833,8 +843,8 @@ nav > div {
 }
 
 .profile-header-cta-book {
-  background: linear-gradient(135deg, #8df7d2 0%, #62d0c2 100%);
-  color: #11211c;
+  background: linear-gradient(135deg, #9557ed 0%, #6f4ed8 100%);
+  color: #FFFFF3;
   box-shadow: 0 18px 34px rgba(98, 208, 194, 0.25);
 }
 
@@ -922,7 +932,7 @@ nav > div {
   margin: 0;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.06);
-  color: #cbd5e1;
+  color: #FFFFF3;
   text-transform: capitalize;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
   transition: all 0.25s ease;
@@ -1018,7 +1028,7 @@ nav > div {
 .profile-services-offered p {
   margin: 0;
   font-weight: 400;
-  color: #cbd5e1;
+  color: #FFFFF3;
   line-height: 1.6;
 }
 
@@ -1080,7 +1090,7 @@ nav > div {
   gap: 4px;
   margin-left: auto;
   text-align: center;
-  color: #cbd5e1;
+  color: #E7E9EA;
 }
 
 .profile-user-bio-and-recent-posts {
@@ -1115,7 +1125,7 @@ nav > div {
 .profile-gifts-donation p {
   margin: 0;
   font-weight: 400;
-  color: #cbd5e1;
+  color: #FFFFF3;
   font-size: 0.86rem;
 }
 
@@ -1166,7 +1176,7 @@ nav > div {
 .profile-gifts-donation-item p {
   margin: 0;
   font-weight: 500;
-  color: #cbd5e1;
+  color: #FFFFF3;
   font-size: 0.76rem;
 }
 
@@ -1213,7 +1223,7 @@ nav > div {
   font-weight: 400;
   margin: 0;
   line-height: 1.8;
-  color: #cbd5e1;
+  color: #E7E9EA;
 }
 
 .profile-user-bio-edit {
@@ -1253,7 +1263,7 @@ nav > div {
   border-radius: 16px;
   font-size: 0.9rem;
   resize: vertical;
-  color: #e2e8f0;
+  color: #FFFFF3;
   background: rgba(15, 23, 42, 0.78);
 }
 
@@ -1295,7 +1305,7 @@ nav > div {
   margin: 0;
   font-size: 0.75rem;
   font-weight: 400;
-  color: #cbd5e1;
+  color: #FFFFF3;
 }
 
 .profile-user-recent-posts {
@@ -1356,7 +1366,7 @@ nav > div {
 
 .user-post-header p,
 .user-post-header span {
-  color: #cbd5e1;
+  color: #FFFFF3;
   font-size: 0.82rem;
 }
 
@@ -1377,7 +1387,8 @@ nav > div {
 
 .user-post-content > p {
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #E7E9EA;
+;
 }
 
 .user-post-actions {
@@ -1612,7 +1623,7 @@ nav > div {
   margin: 0;
   font-size: 0.75rem;
   font-weight: 400;
-  color: #cbd5e1;
+  color: #E7E9EA;
 }
 
 .profile-user-recent-posts {
@@ -1666,7 +1677,7 @@ nav > div {
 }
 .user-post-header p,
 .user-post-header span {
-  color: #cbd5e1;
+  color: #E7E9EA;
   font-size: 0.82rem;
 }
 .user-post-tag {
@@ -1684,7 +1695,7 @@ nav > div {
 }
 .user-post-content > p {
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #E7E9EA;
 }
 .user-post-actions {
   display: flex;
@@ -1840,7 +1851,7 @@ nav > div {
   padding: 16px;
   border-radius: 14px;
   border: 1px solid rgba(124, 93, 191, 0.2);
-  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  background: rgba(15, 23, 42, 0.86);
   box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
 .schedule-overview > .upcoming-schedule,
@@ -1864,7 +1875,7 @@ nav > div {
   padding: 16px;
   border-radius: 14px;
   border: 1px solid rgba(124, 93, 191, 0.2);
-  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  background: rgba(15, 23, 42, 0.86);
   box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
 .availability,
@@ -1873,7 +1884,7 @@ nav > div {
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid rgba(124, 93, 191, 0.14);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(15, 23, 42, 0.86);
 }
 .availability h3 {
   margin: 0 0 6px;
@@ -1884,7 +1895,7 @@ nav > div {
 .availability p,
 .availability-container > p {
   margin: 0;
-  color: #63567f;
+  color: #64748b;
   font-size: 0.84rem;
   font-weight: 600;
 }
@@ -1895,12 +1906,12 @@ nav > div {
   padding: 16px;
   border-radius: 14px;
   border: 1px solid rgba(124, 93, 191, 0.2);
-  background: linear-gradient(180deg, rgba(244, 239, 255, 0.88), rgba(255, 255, 255, 0.96));
+  background: rgba(15, 23, 42, 0.86);
   box-shadow: 0 8px 24px rgba(28, 20, 48, 0.06);
 }
 .upcoming-schedule p {
   margin: 0;
-  color: #63567f;
+  color: #e2e8f0;
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1908,13 +1919,13 @@ nav > div {
 }
 .upcoming-schedule h3 {
   margin: 2px 0 0;
-  color: #1c1430;
+  color: #FFFFF3;
   font-size: 1.08rem;
   line-height: 1.35;
 }
 .upcoming-schedule-header h2 {
   margin: 2px 0 0;
-  color: #1c1430;
+  color: #FFFFF3;
   font-size: 1.08rem;
   line-height: 1.35;
 }
@@ -1938,7 +1949,7 @@ nav > div {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(15, 23, 42, 0.86);
   border: 1px solid rgba(124, 93, 191, 0.14);
 }
 .schedule-times {
@@ -1999,7 +2010,7 @@ nav > div {
 }
 .activity-schedule-header p {
   margin: 0;
-  color: #63567f;
+  color: #FFFFF3;
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -2007,7 +2018,7 @@ nav > div {
 }
 .activity-schedule-header h2 {
   margin: 2px 0 0;
-  color: #1c1430;
+  color: #FFFFF3;
   font-size: 1.08rem;
   line-height: 1.35;
 }
@@ -2023,7 +2034,7 @@ nav > div {
   align-items: flex-start;
   padding: 10px 12px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(15, 23, 42, 0.86);
   border: 1px solid rgba(124, 93, 191, 0.14);
 }
 .recent-activity-item > div {
@@ -2032,10 +2043,10 @@ nav > div {
   gap: 8px;
 }
 .recent-activity-item > div p {
-  margin: 0;
+  margin: 0;  
 }
 .recent-activity-item > div p:first-child {
-  color: #2f244b;
+  color: #FFFFF3;
   font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.35;
@@ -2043,7 +2054,7 @@ nav > div {
   letter-spacing: normal;
 }
 .recent-activity-item > div p:last-child {
-  color: #63567f;
+  color: #64748b;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -2054,7 +2065,7 @@ nav > div {
 }
 .activity-schedule-footer p {
   margin: 0;
-  color: #63567f;
+  color: #64748b;
   font-size: 0.84rem;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -2079,9 +2090,9 @@ nav > div {
 }
 
 .posts-main-header {
-  border: 1px solid rgba(148, 163, 184, 0.22);
+  border: 1px solid rgb(41, 42, 44);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(15, 23, 42, 0.86);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   padding: 14px 16px;
   display: flex;
@@ -2092,18 +2103,18 @@ nav > div {
 
 .posts-main-header h2 {
   margin: 0;
-  color: #0f172a;
+  color: #E7E9EA;
   font-size: 1.04rem;
 }
 
 .posts-main-header p {
   margin: 4px 0 0;
-  color: #64748b;
+  color: #E7E9EA;
   font-size: 0.84rem;
 }
 
 .posts-main-header button {
-  background: #003153;
+  background: linear-gradient(135deg, #9557ed 0%, #6f4ed8 100%);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -2124,7 +2135,7 @@ nav > div {
 .posts-side-card {
   border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.74);
+  background: rgba(15, 23, 42, 0.88);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   padding: 12px;
   display: flex;
@@ -2144,11 +2155,11 @@ nav > div {
 .posts-side-card h3 {
   margin: 0;
   font-size: 0.9rem;
-  color: #0f172a;
+  color: #FFFFF3;
 }
 
 .posts-side-card span {
-  color: #334155;
+  color: #E7E9EA;
   font-size: 0.8rem;
   line-height: 1.5;
 }
@@ -2218,7 +2229,7 @@ nav > div {
 
 :is(.profile-user-recent-posts-list, .posts) .user-post-identity h3 {
   font-size: 0.95rem;
-  color: #0f172a;
+  color: #FFFFF3;
   font-weight: 700;
 }
 
@@ -2231,7 +2242,7 @@ nav > div {
 
 :is(.profile-user-recent-posts-list, .posts) .user-post-body {
   margin: 0;
-  color: #cbd5e1;
+  color: #E7E9EA;
   line-height: 1.6;
   font-size: 0.93rem;
   white-space: pre-wrap;
@@ -2239,7 +2250,7 @@ nav > div {
 
 :is(.profile-user-recent-posts-list, .posts) .user-post-title {
   margin: 0;
-  color: #cbd5e1;
+  color: #E7E9EA;
   font-size: 0.92rem;
   font-weight: 700;
 }
@@ -2277,7 +2288,7 @@ nav > div {
 :is(.profile-user-recent-posts-list, .posts) .user-post-action-button {
   border: 1px solid #e2e8f0;
   background: rgba(15, 23, 42, 0.88);
-  color: #cbd5e1;
+  color: #fffff3;
   border-radius: 8px;
   padding: 8px 10px;
   font-size: 0.82rem;
