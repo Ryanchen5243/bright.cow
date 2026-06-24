@@ -2,8 +2,7 @@ import { useMemo, useState, useEffect, type ChangeEvent } from 'react';
 import { Button, Dialog, DialogActions, DialogContent,DialogTitle,Stack,TextField,Typography } from '@mui/material';
 import UserPost from './UserPost';
 import { useAuth } from '../contexts/authContext';
-import { type FeedPost } from '../mocks/postTemplate.ts';
-import { v4 as uuid } from 'uuid';
+import createPostJSONObject from '../mocks/postTemplate.ts';
 
 function formatUsername(rawValue?: string | null): string {
     if (!rawValue) {
@@ -12,9 +11,9 @@ function formatUsername(rawValue?: string | null): string {
     return `@${rawValue.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase() || 'guest'}`;
 }
 
-export default function Posts(props: {creatorUUID: string | null}) {
+export default function Posts(props: {creatorUUID: string | null, userName: string, displayName: string}) {
     const { currentUser } = useAuth();
-    const [allPosts, setAllPosts] = useState<FeedPost[] | null>(null);
+    const [allPosts, setAllPosts] = useState<Array<any> | null>(null);
     const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
     const [draftBody, setDraftBody] = useState('');
     const [draftMediaUrls, setDraftMediaUrls] = useState<string[]>([]);
@@ -74,20 +73,13 @@ export default function Posts(props: {creatorUUID: string | null}) {
             return;
         }
 
-        const nextPost: FeedPost = {
-            id: uuid(),
-            title: '',
-            author_id: 'xyz', // replace w curr user uuid
-            author_display_name: currentUser?.displayName || 'Guest User',
-            author_user_name: '',
-            content: trimmedBody,
-            timestamp: new Date().toISOString(),
-            attachments: draftMediaUrls.map((url) => ({ type: 'image', url })),
-            comments: [],
-            likesCount: 0,
-            sharesCount: 0,
-            commentsCount: 0,
-        };
+        const nextPost = createPostJSONObject(
+            trimmedBody,
+            currentUser?.uid ?? 'unknown',
+            trimmedBody,
+            draftMediaUrls.map((url) => ({ type: 'image', url })),
+            [],
+        );
 
         setAllPosts((prev) => [nextPost, ...(prev || [])]);
         setIsCreateDialogOpen(false);
@@ -143,21 +135,7 @@ export default function Posts(props: {creatorUUID: string | null}) {
                     <div className="posts">
                         {allPosts && allPosts.length > 0 ? (
                             allPosts.map((post) => (
-                                <UserPost
-                                    key={post.id}
-                                    postId={post.id}
-                                    postTitle={post.title}
-                                    postAuthorId={''}
-                                    postAuthorDisplayName={''}
-                                    postAuthorUserName={''}
-                                    postContent={post.content}
-                                    postCreationTimeStamp={post.timestamp}
-                                    postAttachments={post.attachments}
-                                    // postComments={post.comments}
-                                    postInitialLikeCount={post.likesCount}
-                                    postInitialCommentCount={post.commentsCount}
-                                    postInitialShareCount={post.sharesCount}
-                                />
+                                <UserPost key={post.id} post={post} userName={props.userName} displayName={props.displayName} />
                             ))
                         ) : (
                             <p>No posts available.</p>
