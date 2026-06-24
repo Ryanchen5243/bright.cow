@@ -40,6 +40,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     };
 
     const [creatorProfile, setCreatorProfile] = useState<any>(null); // avoid using -> tbd destructure profile data
+    const [creatorUserDisplayName, setCreatorUserDisplayName] = useState<string | undefined>(undefined);
     const [creatorUUID, setCreatorUUID] = useState<string | null>(null); // to pass down via props for fetching posts, schedule, etc.
     const [userBio, setUserBio] = useState("");
     const [isEditingBio, setIsEditingBio] = useState(false);
@@ -62,6 +63,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                 if (!isCancelled) {
                     setCreatorProfile(resolvedCreator);
                     setCreatorUUID(resolvedCreator?.id ?? null);
+                    setCreatorUserDisplayName(resolvedCreator?.userDisplayName ?? undefined);
                     setUserBio(resolvedCreator?.userBio ?? "");
                     setDraftBio(resolvedCreator?.userBio ?? "");
                     setIsEditingBio(false);
@@ -107,7 +109,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                 </div>
                 <div className="profile-header-user-details-container">
                     <div className="profile-header-user-details">
-                        <div className="profile-header-user-headline"><h1>{creatorProfile?.userDisplayName}</h1></div>
+                        <div className="profile-header-user-headline"><h1>{creatorUserDisplayName}</h1></div>
                         <div className="profile-header-user-headline-supporting">
                             <span>{creatorProfile?.userName}</span>
                             <span>online</span>
@@ -244,7 +246,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                     </div>
                     </>
                 }
-                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.userName ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />}
+                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.userName ?? ''} displayName={creatorUserDisplayName ?? ''} />}
                 {profileTab === "games" && <h1>games</h1>}
                 {profileTab === "schedule" && <CreatorSchedule />}
                 {profileTab === "media" && <h1>media</h1>}

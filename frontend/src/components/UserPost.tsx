@@ -15,12 +15,9 @@ export default function UserPost(props: {post: any, userName: string, displayNam
     const commentCount = commentItems.length;
 
     const toggleLike = () => {
-        setIsLiked((prev) => {
-            const next = !prev;
-            setLikeCount((count: number) => Math.max(0, count + (next ? 1 : -1)));
-            // insert logic for persisting like state change here
-            return next;
-        });
+        setIsLiked((prev) => !prev);
+        setLikeCount((count: number) => Math.max(0, count + (isLiked ? -1 : 1)));
+        // insert logic for persisting like state change here
     };
 
     const addComment = () => {
@@ -115,7 +112,7 @@ export default function UserPost(props: {post: any, userName: string, displayNam
                         </div>
                         {commentItems.length > 0 && (
                             <div className="user-post-comments-list">
-                                {commentItems.map((comment : {id: string, author_id: string, content: string}, index) => (
+                                {commentItems.map((comment : {id: string, author_id: string, content: string}, index : number) => (
                                     <p key={`${comment.id}-${index}`}><strong>{comment.author_id}:</strong> {comment.content}</p>
                                 ))}
                             </div>
