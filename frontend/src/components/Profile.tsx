@@ -16,8 +16,9 @@ import champagne_gift from '../assets/profile_gifts/champagne_gift.png';
 import shipppp_gift from '../assets/profile_gifts/shipppp_gift.png';
 import UserPost from './UserPost';
 import Posts from './Posts';
+import ScheduleCustomize from './ScheduleCustomize';
 
-const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
+const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews', 'ScheduleCustomize'] as const;
 import { Business } from '@mui/icons-material';
 
 const giftItems = [
@@ -248,9 +249,10 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                 }
                 {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.userName ?? ''} displayName={creatorUserDisplayName ?? ''} />}
                 {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <CreatorSchedule />}
+                {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID} />}
                 {profileTab === "media" && <h1>media</h1>}
                 {profileTab === "reviews" && <h1>reviews</h1>}
+                {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID} />}
             </div>
         </div>
     );

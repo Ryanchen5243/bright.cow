@@ -2951,3 +2951,90 @@ nav > div {
     padding: 0 16px;
   }
 }
+
+
+/* FullCalendar base reset */
+.calendar-wrapper {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  display: flex;
+  flex-direction: row;
+}
+.calendar-wrapper .fc {
+  flex: 1;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+.fc {
+  background: transparent;
+  border: none;
+}
+
+/* subtle grid */
+.fc td,
+.fc th {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* header */
+.fc-toolbar-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #e5e7eb;
+}
+
+/* event blocks */
+.fc-event {
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 10px;
+}
+
+/* hover interaction */
+.fc-event:hover {
+  background: rgba(99, 102, 241, 0.35);
+  transform: scale(1.02);
+  transition: 0.15s ease;
+}
+
+/* selection highlight */
+.fc-highlight {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* begin settings page styles */
+.settings-container {
+  display: flex;
+  flex-direction: row;
+}
+.settings-aside {
+  flex: 0 0 240px;
+  border-right: 1px solid rgba(124, 93, 191, 0.18);
+}
+.settings-main {
+  flex: 1;
+  padding: 20px;
+}
+.settings-aside-section > h4 {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #64748b;
+}
+.settings-aside-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+}
+.settings-aside-item:hover {
+  background: rgba(124, 93, 191, 0.08);
+  cursor: pointer;
+}
+/* end settings page styles */
