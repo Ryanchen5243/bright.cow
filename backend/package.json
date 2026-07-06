@@ -1,6 +1,7 @@
 {
   "name": "vincent_li_proj",
   "version": "1.0.0",
+  "type": "module",
   "description": "\"# bright.cow\"",
   "main": "index.js",
   "scripts": {
@@ -20,5 +21,11 @@
   "homepage": "https://github.com/Ryanchen5243/bright.cow#readme",
   "devDependencies": {
     "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1693.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
   }
 }
