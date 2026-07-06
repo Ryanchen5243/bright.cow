@@ -1,5 +1,6 @@
 import Footer from "./Footer";
 import Profile from "./Profile";
+import Settings from "./Settings";
 
 export type AppView = "home" | "profile" | "settings" | "creator-loading" | "creator-not-found";
 
@@ -10,7 +11,7 @@ export default function AppMain({appView, creatorUserName}: {appView: AppView, c
         <div className="app-main-view">
           {appView === "home" && <div>Home Feed - Coming Soon!</div>}
           {appView === "profile" && <Profile creatorUserName={creatorUserName} />}
-          {appView === "settings" && <div>Settings Page - Coming Soon!</div>}
+          {appView === "settings" && <Settings creatorUserName={creatorUserName} />}
           {appView === "creator-loading" && <div>Loading creator profile...</div>}
           {appView === "creator-not-found" && (
             <div>

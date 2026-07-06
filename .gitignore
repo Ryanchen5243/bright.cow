@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# SSL certificates
+*.pem
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

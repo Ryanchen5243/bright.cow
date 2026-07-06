@@ -1,6 +1,6 @@
 [
   {
-    "id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+    "id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
     "userName": "@luna_gamer",
     "userDisplayName": "Luna Wang",
     "profilePhoto": "https://example.com/avatar1.png",
@@ -8,6 +8,7 @@
     "userBio": "Passionate gamer and content creator. I love sharing my gaming experiences and connecting with fellow gamers!",
     "gamesPlayed": 150,
     "favoriteGame": "The Legend of Zelda: Breath of the Wild",
+    "availability_time_zone": "America/New_York",
     "quickFacts": [
       {
         "label": "Languages",
@@ -27,11 +28,11 @@
     ],
     "recentPosts": [
       {
-        "id": "e610064e-7d0c-4df4-a7da-a7df1c671515",
+        "id": "aec126b4-0b5e-4304-8b15-3354e6227ee1",
         "title": "Hello World",
-        "author_id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+        "author_id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
         "content": "This is a sample post content.",
-        "timestamp": "2026-06-24T00:32:01.292Z",
+        "timestamp": "2026-06-28T03:52:30.545Z",
         "attachments": [
           {
             "type": "image",
@@ -40,8 +41,8 @@
         ],
         "comments": [
           {
-            "id": "21dc83d4-4e28-4e39-ab97-7926fc4f9d05",
-            "author_id": "339b13c8-45e3-46cf-9e1f-2987f7436599",
+            "id": "b3a6dcde-6859-4dac-8d39-d84f7c0b2361",
+            "author_id": "4513eaab-8c34-45eb-abcd-0e6a7b2fc7fc",
             "content": "Nice post!"
           }
         ],
@@ -50,16 +51,16 @@
         "commentsCount": 0
       },
       {
-        "id": "af85ff62-bc80-4baa-80b3-c8e29b1457a7",
+        "id": "6f209974-b6f2-47c0-b329-a4ed7d621fb5",
         "title": "Another Post",
-        "author_id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+        "author_id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
         "content": "This is another sample post content.",
-        "timestamp": "2026-06-24T00:32:01.293Z",
+        "timestamp": "2026-06-28T03:52:30.545Z",
         "attachments": [],
         "comments": [
           {
-            "id": "cf52a57f-42a2-4e8c-82a1-2dcdf4f316b3",
-            "author_id": "039b2d82-19fd-4266-9232-52ba38159420",
+            "id": "029ae1d2-2a98-463d-9bb8-e7da23542bd9",
+            "author_id": "1a2ddb52-c7a0-4469-b8e2-bac3246248ce",
             "content": "Great insights!"
           }
         ],
@@ -68,11 +69,11 @@
         "commentsCount": 0
       },
       {
-        "id": "fbe340de-8bd9-4745-9b84-aae69fa9b6f4",
+        "id": "ae8faaa5-4f2c-4b6c-8319-fe07f8d0ed38",
         "title": "Gaming Tips",
-        "author_id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+        "author_id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
         "content": "Here are some gaming tips for beginners.",
-        "timestamp": "2026-06-24T00:32:01.293Z",
+        "timestamp": "2026-06-28T03:52:30.545Z",
         "attachments": [
           {
             "type": "video",
@@ -81,8 +82,8 @@
         ],
         "comments": [
           {
-            "id": "7a3965b9-ee40-47ca-965d-bda954ec6afc",
-            "author_id": "11595602-099f-4f7f-9d05-20555bdcc8e8",
+            "id": "a8b2aa23-559c-47a1-aca8-8d461aa14871",
+            "author_id": "ea6e8d15-2bc5-4ac2-bc25-1c1ad569cb39",
             "content": "Thanks for the tips!"
           }
         ],
@@ -91,16 +92,16 @@
         "commentsCount": 0
       },
       {
-        "id": "7bf4a549-f73a-4d50-bcaf-23187fff4f51",
+        "id": "9e30bd95-4c3c-4819-8615-c040bded2ab5",
         "title": "Live Stream Announcement",
-        "author_id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+        "author_id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
         "content": "Join me for a live stream this weekend!",
-        "timestamp": "2026-06-24T00:32:01.293Z",
+        "timestamp": "2026-06-28T03:52:30.545Z",
         "attachments": [],
         "comments": [
           {
-            "id": "d3486747-f8b6-4903-84ac-c2cb0bdc0135",
-            "author_id": "1dfbbd10-1e38-4819-91ac-8aa9e59045f6",
+            "id": "1cfb4eb1-afa7-4831-bcfe-6928776ddb91",
+            "author_id": "e120f42c-cf9e-466a-b026-d50ba61f2e0b",
             "content": "Looking forward to it!"
           }
         ],
@@ -109,11 +110,11 @@
         "commentsCount": 0
       },
       {
-        "id": "06f531e4-0c49-448e-a692-674ec14de8d2",
+        "id": "a2782734-70f2-41c8-8895-d45653b03da8",
         "title": "Game Review",
-        "author_id": "a42db509-c945-4686-9d28-8ec7d8e01060",
+        "author_id": "823f3643-d9dd-4360-bee4-bd738ae665f2",
         "content": "Just finished playing XYZ game. Here’s my review.",
-        "timestamp": "2026-06-24T00:32:01.293Z",
+        "timestamp": "2026-06-28T03:52:30.545Z",
         "attachments": [
           {
             "type": "image",
@@ -122,8 +123,8 @@
         ],
         "comments": [
           {
-            "id": "660cc2ac-b4d6-4e93-8115-27fde5c44883",
-            "author_id": "95ef9c30-1f98-4fe5-949e-0e86efbdb826",
+            "id": "397bdf6b-f131-45f4-8d7e-c61c3fa49954",
+            "author_id": "33175ed2-b414-4551-b9ce-68925180d3f5",
             "content": "Great review!"
           }
         ],
@@ -191,6 +192,41 @@
         "itemsPerBundle": 20,
         "pricePerItem": 1.75,
         "price": 35
+      }
+    ],
+    "availabilities": [
+      {
+        "weekday": 1,
+        "startMin": 540,
+        "endMin": 1020
+      },
+      {
+        "weekday": 2,
+        "startMin": 540,
+        "endMin": 1020
+      },
+      {
+        "weekday": 4,
+        "startMin": 540,
+        "endMin": 1020
+      },
+      {
+        "weekday": 5,
+        "startMin": 540,
+        "endMin": 1020
+      }
+    ],
+    "sessions": [
+      {
+        "session_id": "017e8b33-2b84-4684-8e1b-b3dfadcfd85e",
+        "session_provider": "823f3643-d9dd-4360-bee4-bd738ae665f2",
+        "session_consumer": "9991e951-1504-4c0b-b732-011627b27962",
+        "session_type": "Duo Gaming",
+        "session_start_UTC": "2023-08-01T14:00:00Z",
+        "session_end_UTC": "2023-08-01T15:00:00Z",
+        "session_duration_min": 60,
+        "session_cost": 50,
+        "session_status": "booked"
       }
     ]
   }
