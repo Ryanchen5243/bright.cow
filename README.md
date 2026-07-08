@@ -1,5 +1,3 @@
 "# bright.cow" 
 
-editing the main branch direclty. 
-
-attempting another commit direclty
+testing new edit directly in console
