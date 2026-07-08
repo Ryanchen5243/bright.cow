@@ -5,6 +5,5 @@ Hello this is Konevo, my very first code yayyyyyyyyyyyyyyyyyyyy
 holy fuck man 
 
 a test from the local ryan branch
-editing the main branch direclty. 
 
-attempting another commit direclty
+anotehr test fromryan branch
