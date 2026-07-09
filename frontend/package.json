@@ -41,6 +41,7 @@
     "@fullcalendar/timegrid": "^6.1.21",
     "@mui/icons-material": "^5.18.0",
     "@mui/material": "^5.18.0",
+    "axios": "^1.18.1",
     "date-fns": "^4.4.0",
     "firebase": "^12.13.0",
     "lucide": "^1.14.0",
