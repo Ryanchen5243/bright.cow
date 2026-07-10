@@ -20,6 +20,9 @@ backend/.env.*
 # SSL certificates
 *.pem
 
+# DB connection info (contains plaintext credentials after secret rotation)
+backend/db-connection-info.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

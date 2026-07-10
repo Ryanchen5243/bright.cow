@@ -15,7 +15,7 @@ async function getPool() {
   const sec = await sm.getSecretValue({ SecretId: process.env.DB_SECRET_ARN }).promise();
   const { password } = JSON.parse(sec.SecretString);
 
-  pool = new Pool({
+  const poolConfig = {
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT, 10),
     database: process.env.DB_NAME,
@@ -25,8 +25,19 @@ async function getPool() {
       rejectUnauthorized: false,
       ca: fs.readFileSync(path.join(__dirname, 'global-bundle.pem')).toString(),
     },
-  });
-
+  };
+  pool = new Pool(poolConfig);
+  console.log("pool connected successfully");
+  const connInfo = [
+    `host:     ${poolConfig.host}`,
+    `port:     ${poolConfig.port}`,
+    `database: ${poolConfig.database}`,
+    `user:     ${poolConfig.user}`,
+    `password: ${poolConfig.password}`,
+    `updated:  ${new Date().toISOString()}`,
+  ].join('\n');
+  fs.writeFileSync(path.join(__dirname, 'db-connection-info.txt'), connInfo, 'utf8');
+  console.log("connection info written to db-connection-info.txt");
   return pool;
 }
 
