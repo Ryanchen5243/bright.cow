@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Schedule, Check } from "@mui/icons-material";
 import { useNavigate, useParams } from 'react-router-dom';
 import profilePhoto from '../assets/default_profile_photo.jpg';
+const [showBookingModal, setShowBookingModal] = useState(false);
 
 const getLocalDateString = () => {
     const now = new Date();
@@ -111,10 +112,17 @@ export default function CreatorSchedule({ creatorId: propCreatorId }: { creatorI
         };
     }, [creatorId]);
 
-    const goToBooking = () => {
-        navigate('/booking', { state: { creator: creatorDetails, creatorId } });
-    };
+    //const goToBooking = () => {
+     //   navigate('/booking', { state: { creator: creatorDetails, creatorId } });
+    //};
 
+    const openBookingModal = () => {
+        setShowBookingModal(true);
+    };
+    
+    const closeBookingModal = () => {
+        setShowBookingModal(false);
+    };
     const availability = creatorDetails.availability;
     const upcomingToday = creatorDetails.upcoming.today;
     const upcomingTomorrow = creatorDetails.upcoming.tomorrow;
@@ -139,8 +147,7 @@ export default function CreatorSchedule({ creatorId: propCreatorId }: { creatorI
                                     <div key={`today-${slot.time}`}>
                                         <p>{slot.time}</p>
                                         <p>{slot.duration}</p>
-                                        <button onClick={goToBooking}>Book</button>
-                                    </div>
+                                        <button onClick={openBookingModal}>Book</button>                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -151,8 +158,7 @@ export default function CreatorSchedule({ creatorId: propCreatorId }: { creatorI
                                     <div key={`tomorrow-${slot.time}`}>
                                         <p>{slot.time}</p>
                                         <p>{slot.duration}</p>
-                                        <button onClick={goToBooking}>Book</button>
-                                    </div>
+                                        <button onClick={openBookingModal}>Book</button>                                    </div>
                                 ))}
                             </div>
                         </div>
@@ -198,6 +204,35 @@ export default function CreatorSchedule({ creatorId: propCreatorId }: { creatorI
                     ) : (
                         <p>No availability for {selectedDateKey}.</p>
                     )}
+                    {showBookingModal && (
+    <div className="booking-modal-overlay" onClick={closeBookingModal}>
+        <div
+            className="booking-modal"
+            onClick={(e) => e.stopPropagation()}
+        >
+            <button
+                className="close-modal"
+                onClick={closeBookingModal}
+            >
+                ✕
+            </button>
+
+            <h2>Book with {creatorDetails.name}</h2>
+
+            <p>Select your service and confirm your booking.</p>
+
+            {creatorDetails.services?.map((service) => (
+                <div key={service.service_id} className="booking-service">
+                    <h4>{service.label}</h4>
+                    <p>{service.session_length_minutes} min</p>
+                    <p>${service.cost}</p>
+
+                    <button>Book Now</button>
+                </div>
+            ))}
+        </div>
+    </div>
+)}
                 </div>
             </div>
         </div>
