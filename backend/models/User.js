@@ -4,7 +4,7 @@ const { query } = require('../db.cjs');
 
 const User = {
   async findAll() {
-    const { rows } = await query('SELECT * FROM users ORDER BY id ASC');
+    const { rows } = await query('SELECT * FROM "users"');
     return rows;
   },
 
@@ -17,6 +17,24 @@ const User = {
     const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);
     return rows[0] || null;
   },
+
+  async findByFirebaseUid(firebaseUid) {
+    const { rows } = await query('SELECT * FROM users WHERE firebase_uid = $1', [firebaseUid]);
+    return rows[0] || null;
+  },
+
+  // Creates a row for first-time Google sign-ins; does nothing if firebase_uid already exists
+  async upsertByFirebaseUid({ firebaseUid, username }) {
+    const { rows } = await query(
+      `INSERT INTO users (id, firebase_uid, username, join_date, bio)
+       VALUES (gen_random_uuid(), $1, $2, CURRENT_DATE, '')
+       ON CONFLICT (firebase_uid) DO NOTHING
+       RETURNING *`,
+      [firebaseUid, username]
+    );
+    return rows[0] ?? null; // null means row already existed (DO NOTHING)
+  },
+
 
   async create({ name, email, password_hash }) {
     const { rows } = await query(

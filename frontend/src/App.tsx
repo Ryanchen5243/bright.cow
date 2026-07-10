@@ -8,7 +8,9 @@ import { AuthProvider, useAuth } from "./contexts/authContext";
 import TermsPage from "./components/TermsPage";
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (!currentUser) {
     return <Navigate to="/" replace />;
@@ -18,7 +20,9 @@ function ProtectedRoute({ children }: { children: ReactElement }) {
 }
 
 function PublicOnlyRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (currentUser) {
     return <Navigate to="/app" replace />;

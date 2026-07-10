@@ -1,82 +1,46 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AppMain, { type AppView } from "./AppMain";
 import NavBar from "./NavBar";
+import { useAuth } from "../contexts/authContext";
+import axios from "axios";
+
+export type DbProfile = {
+    id: string;
+    username: string;
+    join_date: string;
+    bio: string;
+    firebase_uid: string;
+};
 
 export default function ApplicationPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { creatorUserName } = useParams();
-    const [creatorExists, setCreatorExists] = useState<boolean | null>(null);
+    const { currentUser } = useAuth();
+    const [myDbProfile, setMyDbProfile] = useState<DbProfile | null>(null);
 
     useEffect(() => {
+        if (!currentUser) {
+            setMyDbProfile(null);
+            return;
+        }
         let isCancelled = false;
 
-        if (!creatorUserName) {
-            setCreatorExists(null);
-            return () => {
-                isCancelled = true;
-            };
-        }
+        const username = currentUser.displayName ?? currentUser.email?.split('@')[0] ?? 'user';
 
-        const validateCreatorUserName = async () => {
-            try {
-                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
-                if (!response.ok) {
-                    if (!isCancelled) {
-                        setCreatorExists(false);
-                    }
-                    return;
-                }
-                const data = await response.json();
-                const exists = (Array.isArray(data) ? data : []).some(
-                    (creator: { userName: string }) => creator.userName === creatorUserName
-                );
-                if (!isCancelled) {
-                    setCreatorExists(exists);
-                }
-            } catch {
-                if (!isCancelled) {
-                    setCreatorExists(false);
-                }
-            }
-        };
+        // syncUser creates a DB row for first-time sign-ins, then returns the profile
+        axios.post('/syncUser', { firebaseUid: currentUser.uid, username })
+            .then(({ data }) => { if (!isCancelled) setMyDbProfile(data); })
+            .catch((err) => { console.error('syncUser failed:', err.response?.status, err.message); });
 
-        validateCreatorUserName();
-
-        return () => {
-            isCancelled = true;
-        };
-    }, [creatorUserName]);
+        return () => { isCancelled = true; };
+    }, [currentUser]);
 
     const params = new URLSearchParams(location.search);
-    const viewParam = params.get("view");
-    const appView: AppView = creatorUserName
-        ? creatorExists === null
-            ? "creator-loading"
-            : creatorExists
-                ? "profile"
-                : "creator-not-found"
-        : viewParam === "settings"
-            ? "settings"
-            : "home";
+    const appView: AppView = params.get("view") === "settings" ? "settings" : "home";
 
     const handleSetAppView = (nextView: AppView) => {
-        if (nextView === "profile") {
-            navigate(`/app/profile/@luna_gamer`);
-            return;
-        }
-
-        if (nextView === "settings") {
-            navigate(`/app?view=settings`);
-            return;
-        }
-
-        if (nextView === "home") {
-            navigate("/app");
-            return;
-        }
-
+        if (nextView === "settings") { navigate(`/app?view=settings`); return; }
         navigate("/app");
     };
 
@@ -84,7 +48,7 @@ export default function ApplicationPage() {
         <>
             <NavBar setAppView={handleSetAppView} />
             <div className="app-body">
-                <AppMain appView={appView} creatorUserName={creatorUserName} />
+                <AppMain appView={appView} myDbProfile={myDbProfile} />
             </div>
         </>
     );

@@ -1,24 +1,27 @@
 import Footer from "./Footer";
-import Profile from "./Profile";
 import Settings from "./Settings";
+import type { DbProfile } from "./ApplicationPage";
 
-export type AppView = "home" | "profile" | "settings" | "creator-loading" | "creator-not-found";
+export type AppView = "home" | "settings";
 
-export default function AppMain({appView, creatorUserName}: {appView: AppView, creatorUserName?: string}) {
+export default function AppMain({ appView, myDbProfile }: { appView: AppView; myDbProfile: DbProfile | null }) {
   return (
     <div className="app-main">
       <div className="app-main-shell">
         <div className="app-main-view">
-          {appView === "home" && <div>Home Feed - Coming Soon!</div>}
-          {appView === "profile" && <Profile creatorUserName={creatorUserName} />}
-          {appView === "settings" && <Settings creatorUserName={creatorUserName} />}
-          {appView === "creator-loading" && <div>Loading creator profile...</div>}
-          {appView === "creator-not-found" && (
-            <div>
-              <h2>Creator Not Found</h2>
-              <p>We could not find a profile for this creator id.</p>
-            </div>
+          {appView === "home" && (
+            myDbProfile ? (
+              <div>
+                <h2>{myDbProfile.username}</h2>
+                <p><strong>Bio:</strong> {myDbProfile.bio}</p>
+                <p><strong>Joined:</strong> {myDbProfile.join_date}</p>
+                <p><strong>ID:</strong> {myDbProfile.id}</p>
+              </div>
+            ) : (
+              <div>Loading profile...</div>
+            )
           )}
+          {appView === "settings" && <Settings />}
         </div>
         <Footer />
       </div>

@@ -2,6 +2,7 @@ import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, type SvgIconComponent } from '@mui/icons-material';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
@@ -47,6 +48,22 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
+
+    const [realdata, setRealdata] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.get('/allUsers');
+            setRealdata(response.data);
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        console.log("realdata: //");
+        console.log(realdata);
+        console.log("end real data");
+    }, [realdata]);
 
     useEffect(() => {
         let isCancelled = false;
