@@ -357,6 +357,48 @@ nav > div {
   background: #111827;
 }
 
+.checkout-confirmation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px max(20px, calc((100vw - 1100px) / 2));
+  background: #1e563f;
+  color: #f0fdf4;
+}
+
+.checkout-confirmation div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.checkout-confirmation span {
+  color: #bbf7d0;
+  font-size: 0.9rem;
+}
+
+.checkout-confirmation button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.checkout-confirmation-cancelled {
+  background: #713737;
+  color: #fff7ed;
+}
+
+.checkout-confirmation-cancelled span {
+  color: #fed7aa;
+}
+
 .app-main {
   display: flex;
   flex-direction: column;
