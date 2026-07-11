@@ -47,6 +47,10 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
+    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    const [selectedBookingServiceId, setSelectedBookingServiceId] = useState<string | null>(null);
+    const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
     useEffect(() => {
         let isCancelled = false;
@@ -65,6 +69,9 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                     setCreatorProfile(resolvedCreator);
                     setCreatorUUID(resolvedCreator?.id ?? null);
                     setCreatorUserDisplayName(resolvedCreator?.userDisplayName ?? undefined);
+                    setSelectedBookingServiceId(
+                        resolvedCreator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
+                    );
                     setUserBio(resolvedCreator?.userBio ?? "");
                     setDraftBio(resolvedCreator?.userBio ?? "");
                     setIsEditingBio(false);
@@ -85,6 +92,21 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         };
     }, [creatorUserName]);
 
+    useEffect(() => {
+        if (!isBookingModalOpen) {
+            return;
+        }
+
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsBookingModalOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [isBookingModalOpen]);
+
     const startEditBio = () => {
         setDraftBio(userBio);
         setIsEditingBio(true);
@@ -99,6 +121,38 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         setDraftBio(userBio);
         setIsEditingBio(false);
     };
+
+    const startCheckout = async () => {
+        if (!creatorUUID || !selectedBookingServiceId) {
+            setCheckoutError('Please select a service before continuing.');
+            return;
+        }
+
+        setIsStartingCheckout(true);
+        setCheckoutError(null);
+
+        try {
+            const response = await fetch('/api/checkout/session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ creatorId: creatorUUID, serviceId: selectedBookingServiceId }),
+            });
+            const data = await response.json() as { url?: string; error?: string };
+
+            if (!response.ok || !data.url) {
+                throw new Error(data.error || 'Unable to start checkout.');
+            }
+
+            window.location.assign(data.url);
+        } catch (error) {
+            setCheckoutError(error instanceof Error ? error.message : 'Unable to start checkout.');
+            setIsStartingCheckout(false);
+        }
+    };
+
+    const bookableServices = creatorProfile?.services?.filter((service: any) => (
+        service.type === 'session' || service.type === 'minute'
+    )) ?? [];
 
     return (
         <div className="profile-view">
@@ -129,12 +183,70 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                             </div>
                         </div>
                         <div className="profile-header-cta">
-                            <button className="profile-header-cta-book" onClick={() => setProfileTab('schedule')}><h3>Book a Session</h3></button>
+                            <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
                             <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
                         </div>
                     </div>
                 </div>
             </div>
+            {isBookingModalOpen && (
+                <div
+                    className="booking-modal-backdrop"
+                    onClick={() => setIsBookingModalOpen(false)}
+                    role="presentation"
+                >
+                    <div
+                        className="booking-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="booking-modal-title"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            className="booking-modal-close"
+                            aria-label="Close booking popup"
+                            onClick={() => setIsBookingModalOpen(false)}
+                        >
+                            ×
+                        </button>
+                        <h2 id="booking-modal-title">Book a session with {creatorUserDisplayName}</h2>
+                        <p>Select a session, then securely complete payment with Stripe.</p>
+                        {bookableServices.length ? (
+                            <label className="booking-modal-service-label">
+                                Session
+                                <select
+                                    value={selectedBookingServiceId ?? ''}
+                                    onChange={(event) => setSelectedBookingServiceId(event.target.value)}
+                                    disabled={isStartingCheckout}
+                                >
+                                    {bookableServices.map((service: any) => (
+                                        <option key={service.id} value={service.id}>
+                                            {service.name} — {service.durationMin ? `${service.durationMin} min — ` : ''}${Number(service.price).toFixed(2)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                        ) : (
+                            <p className="booking-modal-error">No sessions are currently available.</p>
+                        )}
+                        {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
+                        <div className="booking-modal-actions">
+                            <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
+                                Not now
+                            </button>
+                            <button
+                                type="button"
+                                className="booking-modal-confirm"
+                                onClick={startCheckout}
+                                disabled={!selectedBookingServiceId || isStartingCheckout}
+                            >
+                                {isStartingCheckout ? 'Opening Stripe…' : 'Continue to payment'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
             <div className="profile-main-tabs">
                 {profileTabs.map((tab) => (
                     <button key={tab} type="button" className={`${profileTab === tab ? 'active' : ''}`} onClick={() => setProfileTab(tab)}>

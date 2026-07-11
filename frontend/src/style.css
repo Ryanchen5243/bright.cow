@@ -864,6 +864,115 @@ nav > div {
   font-weight: 600;
 }
 
+.booking-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(5, 8, 18, 0.72);
+  backdrop-filter: blur(5px);
+}
+
+.booking-modal {
+  position: relative;
+  width: min(100%, 440px);
+  padding: 32px;
+  border: 1px solid rgba(149, 87, 237, 0.38);
+  border-radius: 18px;
+  background: #111827;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+  color: #fffff3;
+}
+
+.booking-modal h2 {
+  margin: 0 32px 10px 0;
+  font-size: 1.35rem;
+}
+
+.booking-modal p {
+  margin: 0;
+  color: #cbd5e1;
+  line-height: 1.55;
+}
+
+.booking-modal-service-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  color: #fffff3;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.booking-modal-service-label select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid rgba(149, 87, 237, 0.5);
+  border-radius: 9px;
+  background: #1f2937;
+  color: #fffff3;
+  font: inherit;
+}
+
+.booking-modal-error {
+  margin-top: 16px !important;
+  color: #fca5a5 !important;
+}
+
+.booking-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fffff3;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.booking-modal-close:hover,
+.booking-modal-close:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.booking-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.booking-modal-actions button {
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.booking-modal-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.booking-modal-cancel {
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: transparent;
+  color: #fffff3;
+}
+
+.booking-modal-confirm {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, #9557ed 0%, #6f4ed8 100%);
+  color: #fffff3;
+}
+
 .profile-header-user-metrics {
   display: flex;
   flex-direction: row;
