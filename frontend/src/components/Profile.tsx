@@ -137,10 +137,19 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ creatorId: creatorUUID, serviceId: selectedBookingServiceId }),
             });
-            const data = await response.json() as { url?: string; error?: string };
+            const responseBody = await response.text();
+            let data: { url?: string; error?: string } = {};
+
+            if (responseBody) {
+                try {
+                    data = JSON.parse(responseBody) as { url?: string; error?: string };
+                } catch {
+                    throw new Error('The payment server returned an invalid response. Check that the backend is running on port 5000.');
+                }
+            }
 
             if (!response.ok || !data.url) {
-                throw new Error(data.error || 'Unable to start checkout.');
+                throw new Error(data.error || 'The payment server returned an empty response. Check that the backend is running on port 5000.');
             }
 
             window.location.assign(data.url);
