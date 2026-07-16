@@ -1,0 +1,106 @@
+-- Create enum type
+CREATE TYPE account_status AS ENUM (
+    'ACTIVE',
+    'PAUSED',
+    'DELETED'
+);
+
+-- Create users table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    firebase_uid VARCHAR(128) NOT NULL UNIQUE,
+
+    user_name VARCHAR(25) NOT NULL UNIQUE,
+    user_display_name VARCHAR(50),
+
+    profile_photo_url TEXT,
+    background_photo_url TEXT,
+
+    bio VARCHAR(250) NOT NULL DEFAULT '',
+
+    time_zone VARCHAR(50),
+
+    account_status account_status NOT NULL DEFAULT 'ACTIVE',
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_login_at TIMESTAMPTZ
+);
+
+CREATE TABLE availability (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    creator_id UUID NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+
+    day_of_week SMALLINT NOT NULL
+        CHECK (day_of_week BETWEEN 0 AND 6),
+
+    start_time INTEGER NOT NULL
+        CHECK (start_time BETWEEN 0 AND 1439),
+
+    end_time INTEGER NOT NULL
+        CHECK (end_time BETWEEN 0 AND 1439),
+
+    crosses_midnight BOOLEAN NOT NULL DEFAULT FALSE,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Create enum type
+CREATE TYPE session_status AS ENUM (
+    'REQUESTED',
+    'CONFIRMED',
+    'CANCELLED',
+    'COMPLETED'
+);
+
+-- Create sessions table
+CREATE TABLE sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    creator_id UUID NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+
+    client_id UUID NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+
+    start_timestamp_utc TIMESTAMPTZ NOT NULL,
+    end_timestamp_utc TIMESTAMPTZ NOT NULL,
+
+    status session_status NOT NULL DEFAULT 'REQUESTED',
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CHECK (start_timestamp_utc < end_timestamp_utc),
+    CHECK (creator_id <> client_id)
+);
+
+-- Create enum type
+CREATE TYPE availability_exception_type AS ENUM (
+    'BLOCKED',
+    'EXTRA_AVAILABLE'
+);
+
+-- Create availability_exceptions table
+CREATE TABLE availability_exceptions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    creator_id UUID NOT NULL
+        REFERENCES users(id) ON DELETE CASCADE,
+
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
+
+    type availability_exception_type NOT NULL,
+
+    reason VARCHAR(250),
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+
+    CHECK (start_time < end_time)
+);
