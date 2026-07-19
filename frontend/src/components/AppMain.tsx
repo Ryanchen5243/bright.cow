@@ -12,9 +12,9 @@ export default function AppMain({ appView, myDbProfile }: { appView: AppView; my
           {appView === "home" && (
             myDbProfile ? (
               <div>
-                <h2>{myDbProfile.username}</h2>
+                <h2>{myDbProfile.user_display_name ?? myDbProfile.user_name}</h2>
                 <p><strong>Bio:</strong> {myDbProfile.bio}</p>
-                <p><strong>Joined:</strong> {myDbProfile.join_date}</p>
+                <p><strong>Joined:</strong> {new Date(myDbProfile.created_at).toLocaleDateString()}</p>
                 <p><strong>ID:</strong> {myDbProfile.id}</p>
               </div>
             ) : (

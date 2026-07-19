@@ -13,8 +13,8 @@ const User = {
     return rows[0] || null;
   },
 
-  async findByEmail(email) {
-    const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);
+  async findByUserName(userName) {
+    const { rows } = await query('SELECT * FROM users WHERE user_name = $1', [userName]);
     return rows[0] || null;
   },
 
@@ -23,31 +23,43 @@ const User = {
     return rows[0] || null;
   },
 
-  // Creates a row for first-time Google sign-ins; does nothing if firebase_uid already exists
-  async upsertByFirebaseUid({ firebaseUid, username }) {
+  // Creates a row for first-time Google sign-ins; updates last_login_at on subsequent logins
+  async upsertByFirebaseUid({ firebaseUid, userName, userDisplayName, profilePhotoUrl }) {
     const { rows } = await query(
-      `INSERT INTO users (id, firebase_uid, username, join_date, bio)
-       VALUES (gen_random_uuid(), $1, $2, CURRENT_DATE, '')
-       ON CONFLICT (firebase_uid) DO NOTHING
+      `INSERT INTO users (firebase_uid, user_name, user_display_name, profile_photo_url)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (firebase_uid) DO UPDATE
+         SET last_login_at = now()
        RETURNING *`,
-      [firebaseUid, username]
-    );
-    return rows[0] ?? null; // null means row already existed (DO NOTHING)
-  },
-
-
-  async create({ name, email, password_hash }) {
-    const { rows } = await query(
-      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *',
-      [name, email, password_hash]
+      [firebaseUid, userName, userDisplayName ?? null, profilePhotoUrl ?? null]
     );
     return rows[0];
   },
 
-  async update(id, { name, email }) {
+
+  async create({ firebaseUid, userName, userDisplayName, profilePhotoUrl, backgroundPhotoUrl, bio, timeZone }) {
     const { rows } = await query(
-      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-      [name, email, id]
+      `INSERT INTO users (firebase_uid, user_name, user_display_name, profile_photo_url, background_photo_url, bio, time_zone)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING *`,
+      [firebaseUid, userName, userDisplayName ?? null, profilePhotoUrl ?? null, backgroundPhotoUrl ?? null, bio ?? '', timeZone ?? null]
+    );
+    return rows[0];
+  },
+
+  async update(id, { userName, userDisplayName, profilePhotoUrl, backgroundPhotoUrl, bio, timeZone }) {
+    const { rows } = await query(
+      `UPDATE users
+       SET user_name = COALESCE($1, user_name),
+           user_display_name = COALESCE($2, user_display_name),
+           profile_photo_url = COALESCE($3, profile_photo_url),
+           background_photo_url = COALESCE($4, background_photo_url),
+           bio = COALESCE($5, bio),
+           time_zone = COALESCE($6, time_zone),
+           updated_at = now()
+       WHERE id = $7
+       RETURNING *`,
+      [userName ?? null, userDisplayName ?? null, profilePhotoUrl ?? null, backgroundPhotoUrl ?? null, bio ?? null, timeZone ?? null, id]
     );
     return rows[0] || null;
   },

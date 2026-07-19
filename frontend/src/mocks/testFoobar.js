@@ -59,4 +59,4 @@ const consumerAvailabilities = providerAvailabilities.map((availability) => {
 // console.log('Consumer Availabilities:', consumerAvailabilities);
 */
 
-console.log(Intl.supportedValuesOf('timeZone').length);
+console.log(Intl.supportedValuesOf('timeZone'));

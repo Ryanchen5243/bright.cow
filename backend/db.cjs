@@ -27,6 +27,8 @@ async function getPool() {
     },
   };
   pool = new Pool(poolConfig);
+  const client = await pool.connect();
+  client.release();
   console.log("pool connected successfully");
   const connInfo = [
     `host:     ${poolConfig.host}`,
@@ -46,4 +48,8 @@ async function query(text, params) {
   return p.query(text, params);
 }
 
+getPool().catch((err) => {
+  console.error('Error connecting to the database:', err);
+  process.exit(1);
+});
 module.exports = { query, getPool };

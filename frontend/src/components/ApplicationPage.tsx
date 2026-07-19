@@ -7,10 +7,17 @@ import axios from "axios";
 
 export type DbProfile = {
     id: string;
-    username: string;
-    join_date: string;
-    bio: string;
     firebase_uid: string;
+    user_name: string;
+    user_display_name: string | null;
+    profile_photo_url: string | null;
+    background_photo_url: string | null;
+    bio: string;
+    time_zone: string | null;
+    account_status: string;
+    created_at: string;
+    updated_at: string;
+    last_login_at: string | null;
 };
 
 export default function ApplicationPage() {
@@ -26,10 +33,12 @@ export default function ApplicationPage() {
         }
         let isCancelled = false;
 
-        const username = currentUser.displayName ?? currentUser.email?.split('@')[0] ?? 'user';
+        const userName = currentUser.displayName ?? currentUser.email?.split('@')[0] ?? 'user';
+        const userDisplayName = currentUser.displayName ?? null;
+        const profilePhotoUrl = currentUser.photoURL ?? null;
 
         // syncUser creates a DB row for first-time sign-ins, then returns the profile
-        axios.post('/syncUser', { firebaseUid: currentUser.uid, username })
+        axios.post('/syncUser', { firebaseUid: currentUser.uid, userName, userDisplayName, profilePhotoUrl })
             .then(({ data }) => { if (!isCancelled) setMyDbProfile(data); })
             .catch((err) => { console.error('syncUser failed:', err.response?.status, err.message); });
 
