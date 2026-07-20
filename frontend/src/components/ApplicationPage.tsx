@@ -47,6 +47,17 @@ export default function ApplicationPage() {
 
     const params = new URLSearchParams(location.search);
     const appView: AppView = params.get("view") === "settings" ? "settings" : "home";
+    const viewParam = params.get("view");
+    const checkoutStatus = params.get("checkout");
+    // const appView: AppView = creatorUserName
+    //     ? creatorExists === null
+    //         ? "creator-loading"
+    //         : creatorExists
+    //             ? "profile"
+    //             : "creator-not-found"
+    //     : viewParam === "settings"
+    //         ? "settings"
+    //         : "home";
 
     const handleSetAppView = (nextView: AppView) => {
         if (nextView === "settings") { navigate(`/app?view=settings`); return; }
@@ -56,6 +67,15 @@ export default function ApplicationPage() {
     return (
         <>
             <NavBar setAppView={handleSetAppView} />
+            {checkoutStatus === "cancelled" && (
+                <div className="checkout-confirmation checkout-confirmation-cancelled" role="status">
+                    <div>
+                        <strong>Payment was not completed.</strong>
+                        <span>You can return to the creator profile and try again whenever you’re ready.</span>
+                    </div>
+                    <button type="button" onClick={() => navigate("/app", { replace: true })} aria-label="Dismiss payment message">×</button>
+                </div>
+            )}
             <div className="app-body">
                 <AppMain appView={appView} myDbProfile={myDbProfile} />
             </div>

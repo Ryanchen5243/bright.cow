@@ -2,8 +2,12 @@ import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+<<<<<<< HEAD
 import axios from 'axios';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, type SvgIconComponent } from '@mui/icons-material';
+=======
+import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, VideocamOutlined, ForumOutlined, CheckCircle, LockOutlined, ArrowForward, type SvgIconComponent } from '@mui/icons-material';
+>>>>>>> main
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
 import CreatorSchedule from './CreatorSchedule';
@@ -33,6 +37,28 @@ const giftItems = [
     { id: 'ship', image: shipppp_gift, alt: 'ship gift', price: 2000, name: 'Ship' }
 ];
 
+const getLocalDateValue = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const bookingTimes = ['11:00 AM', '1:00 PM', '3:00 PM', '5:00 PM', '7:00 PM'];
+
+const getSessionEndTime = (startTime: string, durationMinutes: number) => {
+    const match = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(startTime);
+    if (!match) return startTime;
+    const [, hourText, minuteText, period] = match;
+    let hours = Number(hourText) % 12;
+    if (period === 'PM') hours += 12;
+    const endMinutes = (hours * 60) + Number(minuteText) + durationMinutes;
+    const endHour = Math.floor(endMinutes / 60) % 24;
+    const displayHour = endHour % 12 || 12;
+    const displayPeriod = endHour >= 12 ? 'PM' : 'AM';
+    return `${displayHour}:${String(endMinutes % 60).padStart(2, '0')} ${displayPeriod}`;
+};
+
 export default function Profile({ creatorUserName }: { creatorUserName?: string }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
@@ -48,6 +74,14 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
+    const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+    const [selectedBookingServiceId, setSelectedBookingServiceId] = useState<string | null>(null);
+    const [isStartingCheckout, setIsStartingCheckout] = useState(false);
+    const [checkoutError, setCheckoutError] = useState<string | null>(null);
+    const [bookingStep, setBookingStep] = useState<1 | 2>(1);
+    const [selectedBookingDate, setSelectedBookingDate] = useState(getLocalDateValue);
+    const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
+    const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
     const [realdata, setRealdata] = useState<any>(null);
 
@@ -82,6 +116,9 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                     setCreatorProfile(resolvedCreator);
                     setCreatorUUID(resolvedCreator?.id ?? null);
                     setCreatorUserDisplayName(resolvedCreator?.userDisplayName ?? undefined);
+                    setSelectedBookingServiceId(
+                        resolvedCreator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
+                    );
                     setUserBio(resolvedCreator?.userBio ?? "");
                     setDraftBio(resolvedCreator?.userBio ?? "");
                     setIsEditingBio(false);
@@ -102,6 +139,21 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         };
     }, [creatorUserName]);
 
+    useEffect(() => {
+        if (!isBookingModalOpen) {
+            return;
+        }
+
+        const closeOnEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setIsBookingModalOpen(false);
+            }
+        };
+
+        window.addEventListener('keydown', closeOnEscape);
+        return () => window.removeEventListener('keydown', closeOnEscape);
+    }, [isBookingModalOpen]);
+
     const startEditBio = () => {
         setDraftBio(userBio);
         setIsEditingBio(true);
@@ -115,6 +167,73 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const cancelEditBio = () => {
         setDraftBio(userBio);
         setIsEditingBio(false);
+    };
+
+    const startCheckout = async () => {
+        if (!creatorUUID || !selectedBookingServiceId || !selectedBookingDate || !selectedBookingTime) {
+            setCheckoutError('Please select a service, date, and time before continuing.');
+            return;
+        }
+
+        setIsStartingCheckout(true);
+        setCheckoutError(null);
+
+        try {
+            const response = await fetch('/api/checkout/session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    creatorId: creatorUUID,
+                    serviceId: selectedBookingServiceId,
+                    bookingDate: selectedBookingDate,
+                    bookingTime: selectedBookingTime,
+                    quantity: selectedBookingQuantity,
+                }),
+            });
+            const responseBody = await response.text();
+            let data: { url?: string; error?: string } = {};
+
+            if (responseBody) {
+                try {
+                    data = JSON.parse(responseBody) as { url?: string; error?: string };
+                } catch {
+                    throw new Error('The payment server returned an invalid response. Check that the backend is running on port 5001.');
+                }
+            }
+
+            if (!response.ok || !data.url) {
+                throw new Error(data.error || 'The payment server returned an empty response. Check that the backend is running on port 5001.');
+            }
+
+            window.location.assign(data.url);
+        } catch (error) {
+            setCheckoutError(error instanceof Error ? error.message : 'Unable to start checkout.');
+            setIsStartingCheckout(false);
+        }
+    };
+
+    const bookableServices = creatorProfile?.services?.filter((service: any) => (
+        service.type === 'session' || service.type === 'minute'
+    )) ?? [];
+    const selectedBookingService = bookableServices.find((service: any) => service.id === selectedBookingServiceId);
+    const selectedBookingDuration = Number(selectedBookingService?.durationMin ?? 0) * selectedBookingQuantity;
+    const selectedBookingTotal = Number(selectedBookingService?.price ?? 0) * selectedBookingQuantity;
+    const selectedBookingEndTime = selectedBookingTime ? getSessionEndTime(selectedBookingTime, selectedBookingDuration) : null;
+    const bookingDateOptions = Array.from({ length: 7 }, (_, index) => {
+        const date = new Date();
+        date.setDate(date.getDate() + index);
+        return {
+            value: getLocalDateValue(date),
+            weekday: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date),
+            day: new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date),
+        };
+    });
+
+    const ServiceIcon = ({ service }: { service: any }) => {
+        const name = String(service.name).toLowerCase();
+        if (name.includes('call')) return <VideocamOutlined />;
+        if (name.includes('chat')) return <ForumOutlined />;
+        return <SportsEsportsOutlined />;
     };
 
     return (
@@ -146,12 +265,157 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                             </div>
                         </div>
                         <div className="profile-header-cta">
-                            <button className="profile-header-cta-book" onClick={() => setProfileTab('schedule')}><h3>Book a Session</h3></button>
+                            <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setBookingStep(1); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
                             <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
                         </div>
                     </div>
                 </div>
             </div>
+            {isBookingModalOpen && (
+                <div
+                    className="booking-modal-backdrop"
+                    onClick={() => setIsBookingModalOpen(false)}
+                    role="presentation"
+                >
+                    <div
+                        className="booking-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="booking-modal-title"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <button
+                            type="button"
+                            className="booking-modal-close"
+                            aria-label="Close booking popup"
+                            onClick={() => setIsBookingModalOpen(false)}
+                        >
+                            ×
+                        </button>
+                        <h2 id="booking-modal-title">Book a Session</h2>
+                        <div className="booking-progress" aria-label="Booking progress">
+                            <div className={`booking-progress-step${bookingStep === 1 ? ' active' : ''}`}><span>1</span><strong>Service</strong></div>
+                            <i aria-hidden="true" />
+                            <div className={`booking-progress-step${bookingStep === 2 ? ' active' : ''}`}><span>2</span><strong>Date &amp; Time</strong></div>
+                        </div>
+                        {bookingStep === 1 && <>
+                            <div className="booking-modal-heading">
+                                <h3>Select a Service</h3>
+                                <p>Choose how you’d like to spend time with {creatorUserDisplayName}.</p>
+                            </div>
+                            {bookableServices.length ? (
+                            <div className="booking-service-options" role="radiogroup" aria-label="Available sessions">
+                                {bookableServices.map((service: any) => {
+                                    const isSelected = selectedBookingServiceId === service.id;
+                                    return (
+                                        <button
+                                            key={service.id}
+                                            type="button"
+                                            className={`booking-service-option${isSelected ? ' selected' : ''}`}
+                                            role="radio"
+                                            aria-checked={isSelected}
+                                            onClick={() => { setSelectedBookingServiceId(service.id); setSelectedBookingQuantity(1); }}
+                                            disabled={isStartingCheckout}
+                                        >
+                                            <span className="booking-service-icon"><ServiceIcon service={service} /></span>
+                                            <span className="booking-service-copy">
+                                                <strong>{service.name}</strong>
+                                                <small>{service.description || 'A personalized session with your creator.'}</small>
+                                            </span>
+                                            <span className="booking-service-price">
+                                                <strong>${Number(service.price).toFixed(2)}</strong>
+                                                {service.durationMin && <small> / {service.durationMin} min</small>}
+                                            </span>
+                                            <span className="booking-service-radio" aria-hidden="true">{isSelected && <CheckCircle />}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <p className="booking-modal-error">No sessions are currently available.</p>
+                        )}
+                        </>}
+                        {bookingStep === 2 && <>
+                            <div className="booking-modal-heading">
+                                <h3>Choose a date and time</h3>
+                                <p>Select a time that works for you. All times are shown in {creatorProfile?.availability_time_zone || 'the creator’s local time'}.</p>
+                            </div>
+                            <div className="booking-date-options" role="radiogroup" aria-label="Available dates">
+                                {bookingDateOptions.map((date) => (
+                                    <button
+                                        key={date.value}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={selectedBookingDate === date.value}
+                                        className={`booking-date-option${selectedBookingDate === date.value ? ' selected' : ''}`}
+                                        onClick={() => setSelectedBookingDate(date.value)}
+                                    >
+                                        <span>{date.weekday}</span><strong>{date.day}</strong>
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="booking-time-options" role="radiogroup" aria-label="Available times">
+                                {bookingTimes.map((time) => (
+                                    <button
+                                        key={time}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={selectedBookingTime === time}
+                                        className={`booking-time-option${selectedBookingTime === time ? ' selected' : ''}`}
+                                        onClick={() => setSelectedBookingTime(time)}
+                                    >
+                                        {time}
+                                    </button>
+                                ))}
+                            </div>
+                        </>}
+                        {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
+                        {selectedBookingService && (
+                            <>
+                                <div className="booking-quantity-picker">
+                                    <span>Number of sessions</span>
+                                    <div>
+                                        <button type="button" aria-label="Remove one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.max(1, quantity - 1))} disabled={selectedBookingQuantity === 1}>−</button>
+                                        <strong>{selectedBookingQuantity}</strong>
+                                        <button type="button" aria-label="Add one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.min(8, quantity + 1))}>+</button>
+                                    </div>
+                                </div>
+                                <div className="booking-selected-summary">
+                                    <span>Booking request</span>
+                                    <strong>{selectedBookingService.name} · {selectedBookingQuantity} {selectedBookingQuantity === 1 ? 'session' : 'sessions'} · {selectedBookingDuration} min · ${selectedBookingTotal.toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate}, ${selectedBookingTime}–${selectedBookingEndTime}` : ''}</strong>
+                                </div>
+                            </>
+                        )}
+                        <div className="booking-modal-actions">
+                            <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
+                                Cancel
+                            </button>
+                            {bookingStep === 2 && <button type="button" className="booking-modal-cancel" onClick={() => { setCheckoutError(null); setBookingStep(1); }}>
+                                Back
+                            </button>}
+                            {bookingStep === 1 ? <button
+                                type="button"
+                                className="booking-modal-confirm"
+                                onClick={() => setBookingStep(2)}
+                                disabled={!selectedBookingServiceId}
+                            >
+                                Choose date &amp; time <ArrowForward fontSize="small" />
+                            </button> : <button
+                                type="button"
+                                className="booking-modal-confirm"
+                                onClick={startCheckout}
+                                disabled={!selectedBookingServiceId || !selectedBookingTime || isStartingCheckout}
+                            >
+                                {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Send request &amp; pay <ArrowForward fontSize="small" /></>}
+                            </button>}
+                        </div>
+                        <p className="booking-payment-policy">
+                            By proceeding, you agree to Konevo&apos;s <a href="/terms" target="_blank" rel="noreferrer">Terms of Service and Payment Policy</a>. Your booking is not confirmed until the creator accepts your request. If your request is declined, your payment will be refunded to your original payment method.
+                        </p>
+                        <p className="booking-security-note"><LockOutlined fontSize="small" /> Payments are securely processed by Stripe.</p>
+                    </div>
+                </div>
+            )}
             <div className="profile-main-tabs">
                 {profileTabs.map((tab) => (
                     <button key={tab} type="button" className={`${profileTab === tab ? 'active' : ''}`} onClick={() => setProfileTab(tab)}>
