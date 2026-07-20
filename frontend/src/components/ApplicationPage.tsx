@@ -51,6 +51,7 @@ export default function ApplicationPage() {
 
     const params = new URLSearchParams(location.search);
     const viewParam = params.get("view");
+    const checkoutStatus = params.get("checkout");
     const appView: AppView = creatorUserName
         ? creatorExists === null
             ? "creator-loading"
@@ -83,6 +84,24 @@ export default function ApplicationPage() {
     return (
         <>
             <NavBar setAppView={handleSetAppView} />
+            {checkoutStatus === "success" && (
+                <div className="checkout-confirmation" role="status">
+                    <div>
+                        <strong>Payment received — your booking is processing.</strong>
+                        <span>We’ll confirm the session details shortly.</span>
+                    </div>
+                    <button type="button" onClick={() => navigate("/app", { replace: true })} aria-label="Dismiss payment confirmation">×</button>
+                </div>
+            )}
+            {checkoutStatus === "cancelled" && (
+                <div className="checkout-confirmation checkout-confirmation-cancelled" role="status">
+                    <div>
+                        <strong>Payment was not completed.</strong>
+                        <span>You can return to the creator profile and try again whenever you’re ready.</span>
+                    </div>
+                    <button type="button" onClick={() => navigate("/app", { replace: true })} aria-label="Dismiss payment message">×</button>
+                </div>
+            )}
             <div className="app-body">
                 <AppMain appView={appView} creatorUserName={creatorUserName} />
             </div>
