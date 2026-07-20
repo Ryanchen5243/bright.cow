@@ -3037,4 +3037,125 @@ nav > div {
   background: rgba(124, 93, 191, 0.08);
   cursor: pointer;
 }
+
+.settings-detail-bio, .settings-detail-gender, .settings-detail-birthday, 
+.settings-detail-join, .settings-detail-location,
+.settings-detail-one-box, .settings-detail-two-box-left, .settings-detail-two-box-right
+{
+  border: 1px solid rgba(124, 93, 191, 0.18);
+  background: rgba(124, 93, 191, 0.08);
+  padding: 10px;
+  border-radius: 12px;
+  height: 40px;
+  margin: 6px;
+  margin-bottom: 48px;
+}
+.settings-detail-one-box, .settings-detail-bio{
+  margin-right: 48px;
+  margin-left: 48px;
+  color: white;
+}
+.settings-detail-bio{
+  height: 80px;
+}
+.settings-detail-two-box-left{
+  margin-left: 48px;
+}
+.settings-detail-two-box-right{
+  margin-right: 48px;
+}
+.settings-detail-container{
+  display: flex;
+  flex-direction: row;
+}
+.settings-profile-picture{
+  width: 14%;
+  display:flex;
+  justify-content: center;
+  margin-left: 24px
+}
+.settings-profile-information{
+  width: 85%;
+}
+.settings-profile-photo{
+  width: 180px;
+  height: 180px;
+  border-radius: 200px;
+}
+.settings-profile-svg{
+  width: 24px;
+  height: 24px;
+  margin: 6px;
+  margin-bottom: 0px;
+  color: #6f4ed8;
+}
+.settings-profile-alignment{
+  display: flex;
+  align-items:end;
+  margin-top: 12px;
+  margin-left: 10px;
+}
+.settings-profile-detail-title{
+  margin: 0px
+}
+.settings-profile-subtitle{
+  margin-top: 2px;
+  margin-left: 20px;
+  font-size: small;
+  font-weight: 100;
+}
+.settings-button-container{
+  margin-left: auto;
+}
+.settings-container-test{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+.settings-edit-button{
+  margin-right: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(124, 93, 191, 0.18);
+  background: rgba(124, 93, 191, 0.08);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px);
+  width: 70px;
+  height: 40px;
+  color: #C53FEB;
+  cursor: pointer;
+}
+.settings-language-badges{
+  margin: 6px;
+  margin-left: 20px;
+  margin-bottom: 16px;
+}
+.settings-add-language{
+  background: rgba(124, 93, 191, 0.08);
+  border: 1px dashed #6f4ed8;
+  padding: 3px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 6px;
+  color: #6f4ed8;
+  cursor: pointer;
+}
+#language-panel{
+  margin-top: 12px;
+}
+.settings-input-group{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.settings-input-label{
+  padding: 0px;
+  margin-left: 48px;
+}
+.settings-input-label-right{
+  margin-left: 6px;
+}
+.settings-language-alignment{
+  margin-bottom: 24px;
+}
 /* end settings page styles */
