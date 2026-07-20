@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import UserController from "./controllers/UserController.js"
 import Stripe from "stripe";
 import { readFile } from "node:fs/promises";
 
@@ -114,9 +115,9 @@ app.get("/api/checkout/session/:sessionId", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-app.get("/user", (req, res) => {
-  res.send("User route");
-});
+app.get("/allUsers", UserController.getAllUsers);
+app.get("/myProfile/:firebaseUid", UserController.getMyProfile);
+app.post("/syncUser", UserController.syncUser);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {

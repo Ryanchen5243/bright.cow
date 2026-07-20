@@ -9,11 +9,9 @@ import { AuthProvider, useAuth } from "./contexts/authContext";
 import TermsPage from "./components/TermsPage";
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
-  const { currentUser, isAuthLoading } = useAuth();
+  const { currentUser, loading } = useAuth();
 
-  if (isAuthLoading) {
-    return <div className="auth-route-loading" role="status">Loading your booking…</div>;
-  }
+  if (loading) return null;
 
   if (!currentUser) {
     return <Navigate to="/" replace />;
@@ -23,7 +21,9 @@ function ProtectedRoute({ children }: { children: ReactElement }) {
 }
 
 function PublicOnlyRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (currentUser) {
     return <Navigate to="/app" replace />;

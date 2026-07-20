@@ -2,7 +2,12 @@ import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+<<<<<<< HEAD
+import axios from 'axios';
+import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, type SvgIconComponent } from '@mui/icons-material';
+=======
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, VideocamOutlined, ForumOutlined, CheckCircle, LockOutlined, ArrowForward, type SvgIconComponent } from '@mui/icons-material';
+>>>>>>> main
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
 import CreatorSchedule from './CreatorSchedule';
@@ -77,6 +82,22 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [selectedBookingDate, setSelectedBookingDate] = useState(getLocalDateValue);
     const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
+
+    const [realdata, setRealdata] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await axios.get('/allUsers');
+            setRealdata(response.data);
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        console.log("realdata: //");
+        console.log(realdata);
+        console.log("end real data");
+    }, [realdata]);
 
     useEffect(() => {
         let isCancelled = false;
