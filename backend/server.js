@@ -12,13 +12,24 @@ const stripe = process.env.STRIPE_SECRET_KEY
   : null;
 const seedProfilesPath = new URL("../frontend/src/mocks/seedProfiles.json", import.meta.url);
 
+function getSessionEndTime(startTime, durationMinutes) {
+  const match = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(startTime);
+  if (!match) return startTime;
+  const [, hourText, minuteText, period] = match;
+  let hours = Number(hourText) % 12;
+  if (period === "PM") hours += 12;
+  const endMinutes = (hours * 60) + Number(minuteText) + durationMinutes;
+  const endHour = Math.floor(endMinutes / 60) % 24;
+  return `${endHour % 12 || 12}:${String(endMinutes % 60).padStart(2, "0")} ${endHour >= 12 ? "PM" : "AM"}`;
+}
+
 app.post("/api/checkout/session", async (req, res) => {
   if (!stripe) {
     return res.status(500).json({ error: "Stripe is not configured on the server." });
   }
 
-  const { creatorId, serviceId, bookingDate, bookingTime } = req.body ?? {};
-  if (typeof creatorId !== "string" || typeof serviceId !== "string" || typeof bookingDate !== "string" || typeof bookingTime !== "string") {
+  const { creatorId, serviceId, bookingDate, bookingTime, quantity } = req.body ?? {};
+  if (typeof creatorId !== "string" || typeof serviceId !== "string" || typeof bookingDate !== "string" || typeof bookingTime !== "string" || !Number.isInteger(quantity) || quantity < 1 || quantity > 8) {
     return res.status(400).json({ error: "A creator, service, date, and time are required." });
   }
 
@@ -46,13 +57,13 @@ app.post("/api/checkout/session", async (req, res) => {
           currency: "usd",
           product_data: {
             name: `${creator.userDisplayName}: ${service.name}`,
-            description: `${service.description} · ${bookingDate} at ${bookingTime}`,
+            description: `${quantity} ${quantity === 1 ? "session" : "sessions"} · ${Number(service.durationMin ?? 0) * quantity} min · ${bookingDate}, ${bookingTime}–${getSessionEndTime(bookingTime, Number(service.durationMin ?? 0) * quantity)}`,
           },
           unit_amount: unitAmount,
         },
-        quantity: 1,
+        quantity,
       }],
-      metadata: { creatorId, serviceId, bookingDate, bookingTime },
+      metadata: { creatorId, serviceId, bookingDate, bookingTime, quantity: String(quantity) },
       success_url: `${clientUrl}/booking/confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${clientUrl}/app?checkout=cancelled`,
     });
@@ -89,6 +100,9 @@ app.get("/api/checkout/session/:sessionId", async (req, res) => {
         sessionId: session.id,
         bookingDate: session.metadata?.bookingDate ?? "",
         bookingTime: session.metadata?.bookingTime ?? "",
+        quantity: Number(session.metadata?.quantity ?? 1),
+        totalDuration: Number(service?.durationMin ?? 0) * Number(session.metadata?.quantity ?? 1),
+        endTime: getSessionEndTime(session.metadata?.bookingTime ?? "", Number(service?.durationMin ?? 0) * Number(session.metadata?.quantity ?? 1)),
       },
     });
   } catch (error) {

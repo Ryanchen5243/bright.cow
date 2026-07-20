@@ -1250,6 +1250,35 @@ nav > div {
   background: rgba(7, 12, 26, 0.34);
 }
 
+.booking-quantity-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 10px;
+  background: rgba(7, 12, 26, 0.26);
+  color: #aeb8cd;
+  font-size: 0.82rem;
+}
+
+.booking-quantity-picker > div { display: inline-flex; align-items: center; gap: 10px; color: #ffffff; }
+.booking-quantity-picker button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(186, 151, 255, 0.42);
+  border-radius: 50%;
+  background: rgba(130, 76, 222, 0.2);
+  color: #e8dfff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.booking-quantity-picker button:disabled { cursor: not-allowed; opacity: 0.4; }
+
 .booking-selected-summary span {
   color: #9da8c0;
   font-size: 0.78rem;
@@ -1282,6 +1311,19 @@ nav > div {
   margin-top: 18px !important;
   color: #7f8aa6 !important;
   font-size: 0.75rem;
+}
+
+.booking-payment-policy {
+  margin: 16px 8px 0 !important;
+  color: #8f9ab4 !important;
+  font-size: 0.73rem;
+  line-height: 1.55 !important;
+  text-align: center;
+}
+
+.booking-payment-policy a {
+  color: #c8a8ff;
+  font-weight: 700;
 }
 
 @media (max-width: 560px) {

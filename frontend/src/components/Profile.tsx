@@ -41,6 +41,19 @@ const getLocalDateValue = (date = new Date()) => {
 
 const bookingTimes = ['11:00 AM', '1:00 PM', '3:00 PM', '5:00 PM', '7:00 PM'];
 
+const getSessionEndTime = (startTime: string, durationMinutes: number) => {
+    const match = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(startTime);
+    if (!match) return startTime;
+    const [, hourText, minuteText, period] = match;
+    let hours = Number(hourText) % 12;
+    if (period === 'PM') hours += 12;
+    const endMinutes = (hours * 60) + Number(minuteText) + durationMinutes;
+    const endHour = Math.floor(endMinutes / 60) % 24;
+    const displayHour = endHour % 12 || 12;
+    const displayPeriod = endHour >= 12 ? 'PM' : 'AM';
+    return `${displayHour}:${String(endMinutes % 60).padStart(2, '0')} ${displayPeriod}`;
+};
+
 export default function Profile({ creatorUserName }: { creatorUserName?: string }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
@@ -63,6 +76,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [bookingStep, setBookingStep] = useState<1 | 2>(1);
     const [selectedBookingDate, setSelectedBookingDate] = useState(getLocalDateValue);
     const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
+    const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
     useEffect(() => {
         let isCancelled = false;
@@ -152,6 +166,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                     serviceId: selectedBookingServiceId,
                     bookingDate: selectedBookingDate,
                     bookingTime: selectedBookingTime,
+                    quantity: selectedBookingQuantity,
                 }),
             });
             const responseBody = await response.text();
@@ -180,6 +195,9 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         service.type === 'session' || service.type === 'minute'
     )) ?? [];
     const selectedBookingService = bookableServices.find((service: any) => service.id === selectedBookingServiceId);
+    const selectedBookingDuration = Number(selectedBookingService?.durationMin ?? 0) * selectedBookingQuantity;
+    const selectedBookingTotal = Number(selectedBookingService?.price ?? 0) * selectedBookingQuantity;
+    const selectedBookingEndTime = selectedBookingTime ? getSessionEndTime(selectedBookingTime, selectedBookingDuration) : null;
     const bookingDateOptions = Array.from({ length: 7 }, (_, index) => {
         const date = new Date();
         date.setDate(date.getDate() + index);
@@ -275,7 +293,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                                             className={`booking-service-option${isSelected ? ' selected' : ''}`}
                                             role="radio"
                                             aria-checked={isSelected}
-                                            onClick={() => setSelectedBookingServiceId(service.id)}
+                                            onClick={() => { setSelectedBookingServiceId(service.id); setSelectedBookingQuantity(1); }}
                                             disabled={isStartingCheckout}
                                         >
                                             <span className="booking-service-icon"><ServiceIcon service={service} /></span>
@@ -332,10 +350,20 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                         </>}
                         {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
                         {selectedBookingService && (
-                            <div className="booking-selected-summary">
-                                <span>Selected session</span>
-                                <strong>{selectedBookingService.name} · ${Number(selectedBookingService.price).toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate} at ${selectedBookingTime}` : ''}</strong>
-                            </div>
+                            <>
+                                <div className="booking-quantity-picker">
+                                    <span>Number of sessions</span>
+                                    <div>
+                                        <button type="button" aria-label="Remove one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.max(1, quantity - 1))} disabled={selectedBookingQuantity === 1}>−</button>
+                                        <strong>{selectedBookingQuantity}</strong>
+                                        <button type="button" aria-label="Add one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.min(8, quantity + 1))}>+</button>
+                                    </div>
+                                </div>
+                                <div className="booking-selected-summary">
+                                    <span>Booking request</span>
+                                    <strong>{selectedBookingService.name} · {selectedBookingQuantity} {selectedBookingQuantity === 1 ? 'session' : 'sessions'} · {selectedBookingDuration} min · ${selectedBookingTotal.toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate}, ${selectedBookingTime}–${selectedBookingEndTime}` : ''}</strong>
+                                </div>
+                            </>
                         )}
                         <div className="booking-modal-actions">
                             <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
@@ -357,9 +385,12 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                                 onClick={startCheckout}
                                 disabled={!selectedBookingServiceId || !selectedBookingTime || isStartingCheckout}
                             >
-                                {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Continue to payment <ArrowForward fontSize="small" /></>}
+                                {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Send request &amp; pay <ArrowForward fontSize="small" /></>}
                             </button>}
                         </div>
+                        <p className="booking-payment-policy">
+                            By proceeding, you agree to Konevo&apos;s <a href="/terms" target="_blank" rel="noreferrer">Terms of Service and Payment Policy</a>. Your booking is not confirmed until the creator accepts your request. If your request is declined, your payment will be refunded to your original payment method.
+                        </p>
                         <p className="booking-security-note"><LockOutlined fontSize="small" /> Payments are securely processed by Stripe.</p>
                     </div>
                 </div>

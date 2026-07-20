@@ -12,6 +12,9 @@ type PaymentConfirmation = {
         sessionId: string;
         bookingDate: string;
         bookingTime: string;
+        quantity: number;
+        totalDuration: number;
+        endTime: string;
     };
 };
 
@@ -68,14 +71,15 @@ export default function PaymentConfirmationPage() {
                 </>}
                 {confirmation && <>
                     <CheckCircle className="payment-confirmation-icon" aria-hidden="true" />
-                    <p className="payment-confirmation-eyebrow">Payment successful</p>
-                    <h1>Your booking is confirmed</h1>
-                    <p className="payment-confirmation-copy">Thanks for your payment. We’ll send the session details as soon as they’re finalized.</p>
+                    <p className="payment-confirmation-eyebrow">Payment received</p>
+                    <h1>Your booking request was sent</h1>
+                    <p className="payment-confirmation-copy">Your creator will review the request. We’ll let you know when they accept it; if they decline, your payment will be refunded to your original payment method.</p>
                     <div className="payment-confirmation-receipt">
                         <div className="payment-confirmation-receipt-heading"><ReceiptLong fontSize="small" /> <span>Booking receipt</span></div>
                         <div><span>Creator</span><strong>{confirmation.booking.creatorName}</strong></div>
-                        <div><span>Session</span><strong>{confirmation.booking.serviceName}</strong></div>
-                        <div><span>Date &amp; time</span><strong>{confirmation.booking.bookingDate} at {confirmation.booking.bookingTime}</strong></div>
+                        <div><span>Session</span><strong>{confirmation.booking.serviceName} · {confirmation.booking.quantity} {confirmation.booking.quantity === 1 ? 'session' : 'sessions'} · {confirmation.booking.totalDuration} min</strong></div>
+                        <div><span>Requested time</span><strong>{confirmation.booking.bookingDate}, {confirmation.booking.bookingTime}–{confirmation.booking.endTime}</strong></div>
+                        <div><span>Status</span><strong>Awaiting creator acceptance</strong></div>
                         <div className="payment-confirmation-total"><span>Paid</span><strong>{formatCurrency(confirmation.booking.amountTotal, confirmation.booking.currency)}</strong></div>
                         <small>Receipt #{confirmation.booking.sessionId.slice(-12)}</small>
                     </div>
