@@ -17,9 +17,13 @@ app.post("/api/checkout/session", async (req, res) => {
     return res.status(500).json({ error: "Stripe is not configured on the server." });
   }
 
-  const { creatorId, serviceId } = req.body ?? {};
-  if (typeof creatorId !== "string" || typeof serviceId !== "string") {
-    return res.status(400).json({ error: "A creator and service are required." });
+  const { creatorId, serviceId, bookingDate, bookingTime } = req.body ?? {};
+  if (typeof creatorId !== "string" || typeof serviceId !== "string" || typeof bookingDate !== "string" || typeof bookingTime !== "string") {
+    return res.status(400).json({ error: "A creator, service, date, and time are required." });
+  }
+
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(bookingDate) || !/^(11:00 AM|1:00 PM|3:00 PM|5:00 PM|7:00 PM)$/.test(bookingTime)) {
+    return res.status(400).json({ error: "Please choose an available booking date and time." });
   }
 
   try {
@@ -42,14 +46,14 @@ app.post("/api/checkout/session", async (req, res) => {
           currency: "usd",
           product_data: {
             name: `${creator.userDisplayName}: ${service.name}`,
-            description: service.description,
+            description: `${service.description} · ${bookingDate} at ${bookingTime}`,
           },
           unit_amount: unitAmount,
         },
         quantity: 1,
       }],
-      metadata: { creatorId, serviceId },
-      success_url: `${clientUrl}/app?checkout=success`,
+      metadata: { creatorId, serviceId, bookingDate, bookingTime },
+      success_url: `${clientUrl}/booking/confirmation?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${clientUrl}/app?checkout=cancelled`,
     });
 
@@ -57,6 +61,39 @@ app.post("/api/checkout/session", async (req, res) => {
   } catch (error) {
     console.error("Unable to create Stripe Checkout session", error);
     return res.status(500).json({ error: "Unable to start checkout. Please try again." });
+  }
+});
+
+app.get("/api/checkout/session/:sessionId", async (req, res) => {
+  if (!stripe) {
+    return res.status(500).json({ error: "Stripe is not configured on the server." });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.retrieve(req.params.sessionId);
+    if (session.payment_status !== "paid") {
+      return res.status(409).json({ error: "Your payment is still being processed." });
+    }
+
+    const creators = JSON.parse(await readFile(seedProfilesPath, "utf8"));
+    const creator = creators.find((profile) => profile.id === session.metadata?.creatorId);
+    const service = creator?.services?.find((item) => item.id === session.metadata?.serviceId);
+
+    return res.json({
+      paid: true,
+      booking: {
+        creatorName: creator?.userDisplayName ?? "Your creator",
+        serviceName: service?.name ?? "Session",
+        amountTotal: session.amount_total ?? 0,
+        currency: session.currency ?? "usd",
+        sessionId: session.id,
+        bookingDate: session.metadata?.bookingDate ?? "",
+        bookingTime: session.metadata?.bookingTime ?? "",
+      },
+    });
+  } catch (error) {
+    console.error("Unable to retrieve Stripe Checkout session", error);
+    return res.status(404).json({ error: "We couldn't find that payment confirmation." });
   }
 });
 

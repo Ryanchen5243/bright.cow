@@ -32,6 +32,15 @@ const giftItems = [
     { id: 'ship', image: shipppp_gift, alt: 'ship gift', price: 2000, name: 'Ship' }
 ];
 
+const getLocalDateValue = (date = new Date()) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const bookingTimes = ['11:00 AM', '1:00 PM', '3:00 PM', '5:00 PM', '7:00 PM'];
+
 export default function Profile({ creatorUserName }: { creatorUserName?: string }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
@@ -51,6 +60,9 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [selectedBookingServiceId, setSelectedBookingServiceId] = useState<string | null>(null);
     const [isStartingCheckout, setIsStartingCheckout] = useState(false);
     const [checkoutError, setCheckoutError] = useState<string | null>(null);
+    const [bookingStep, setBookingStep] = useState<1 | 2>(1);
+    const [selectedBookingDate, setSelectedBookingDate] = useState(getLocalDateValue);
+    const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
 
     useEffect(() => {
         let isCancelled = false;
@@ -123,8 +135,8 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     };
 
     const startCheckout = async () => {
-        if (!creatorUUID || !selectedBookingServiceId) {
-            setCheckoutError('Please select a service before continuing.');
+        if (!creatorUUID || !selectedBookingServiceId || !selectedBookingDate || !selectedBookingTime) {
+            setCheckoutError('Please select a service, date, and time before continuing.');
             return;
         }
 
@@ -135,7 +147,12 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
             const response = await fetch('/api/checkout/session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ creatorId: creatorUUID, serviceId: selectedBookingServiceId }),
+                body: JSON.stringify({
+                    creatorId: creatorUUID,
+                    serviceId: selectedBookingServiceId,
+                    bookingDate: selectedBookingDate,
+                    bookingTime: selectedBookingTime,
+                }),
             });
             const responseBody = await response.text();
             let data: { url?: string; error?: string } = {};
@@ -163,6 +180,15 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         service.type === 'session' || service.type === 'minute'
     )) ?? [];
     const selectedBookingService = bookableServices.find((service: any) => service.id === selectedBookingServiceId);
+    const bookingDateOptions = Array.from({ length: 7 }, (_, index) => {
+        const date = new Date();
+        date.setDate(date.getDate() + index);
+        return {
+            value: getLocalDateValue(date),
+            weekday: new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(date),
+            day: new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date),
+        };
+    });
 
     const ServiceIcon = ({ service }: { service: any }) => {
         const name = String(service.name).toLowerCase();
@@ -200,7 +226,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                             </div>
                         </div>
                         <div className="profile-header-cta">
-                            <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
+                            <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setBookingStep(1); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
                             <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
                         </div>
                     </div>
@@ -229,17 +255,16 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                         </button>
                         <h2 id="booking-modal-title">Book a Session</h2>
                         <div className="booking-progress" aria-label="Booking progress">
-                            <div className="booking-progress-step active"><span>1</span><strong>Service</strong></div>
+                            <div className={`booking-progress-step${bookingStep === 1 ? ' active' : ''}`}><span>1</span><strong>Service</strong></div>
                             <i aria-hidden="true" />
-                            <div className="booking-progress-step"><span>2</span><strong>Date &amp; Time</strong></div>
-                            <i aria-hidden="true" />
-                            <div className="booking-progress-step"><span>3</span><strong>Review &amp; Pay</strong></div>
+                            <div className={`booking-progress-step${bookingStep === 2 ? ' active' : ''}`}><span>2</span><strong>Date &amp; Time</strong></div>
                         </div>
-                        <div className="booking-modal-heading">
-                            <h3>Select a Service</h3>
-                            <p>Choose how you’d like to spend time with {creatorUserDisplayName}.</p>
-                        </div>
-                        {bookableServices.length ? (
+                        {bookingStep === 1 && <>
+                            <div className="booking-modal-heading">
+                                <h3>Select a Service</h3>
+                                <p>Choose how you’d like to spend time with {creatorUserDisplayName}.</p>
+                            </div>
+                            {bookableServices.length ? (
                             <div className="booking-service-options" role="radiogroup" aria-label="Available sessions">
                                 {bookableServices.map((service: any) => {
                                     const isSelected = selectedBookingServiceId === service.id;
@@ -270,25 +295,70 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
                         ) : (
                             <p className="booking-modal-error">No sessions are currently available.</p>
                         )}
+                        </>}
+                        {bookingStep === 2 && <>
+                            <div className="booking-modal-heading">
+                                <h3>Choose a date and time</h3>
+                                <p>Select a time that works for you. All times are shown in {creatorProfile?.availability_time_zone || 'the creator’s local time'}.</p>
+                            </div>
+                            <div className="booking-date-options" role="radiogroup" aria-label="Available dates">
+                                {bookingDateOptions.map((date) => (
+                                    <button
+                                        key={date.value}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={selectedBookingDate === date.value}
+                                        className={`booking-date-option${selectedBookingDate === date.value ? ' selected' : ''}`}
+                                        onClick={() => setSelectedBookingDate(date.value)}
+                                    >
+                                        <span>{date.weekday}</span><strong>{date.day}</strong>
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="booking-time-options" role="radiogroup" aria-label="Available times">
+                                {bookingTimes.map((time) => (
+                                    <button
+                                        key={time}
+                                        type="button"
+                                        role="radio"
+                                        aria-checked={selectedBookingTime === time}
+                                        className={`booking-time-option${selectedBookingTime === time ? ' selected' : ''}`}
+                                        onClick={() => setSelectedBookingTime(time)}
+                                    >
+                                        {time}
+                                    </button>
+                                ))}
+                            </div>
+                        </>}
                         {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
                         {selectedBookingService && (
                             <div className="booking-selected-summary">
                                 <span>Selected session</span>
-                                <strong>{selectedBookingService.name} · ${Number(selectedBookingService.price).toFixed(2)}</strong>
+                                <strong>{selectedBookingService.name} · ${Number(selectedBookingService.price).toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate} at ${selectedBookingTime}` : ''}</strong>
                             </div>
                         )}
                         <div className="booking-modal-actions">
                             <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
                                 Cancel
                             </button>
-                            <button
+                            {bookingStep === 2 && <button type="button" className="booking-modal-cancel" onClick={() => { setCheckoutError(null); setBookingStep(1); }}>
+                                Back
+                            </button>}
+                            {bookingStep === 1 ? <button
+                                type="button"
+                                className="booking-modal-confirm"
+                                onClick={() => setBookingStep(2)}
+                                disabled={!selectedBookingServiceId}
+                            >
+                                Choose date &amp; time <ArrowForward fontSize="small" />
+                            </button> : <button
                                 type="button"
                                 className="booking-modal-confirm"
                                 onClick={startCheckout}
-                                disabled={!selectedBookingServiceId || isStartingCheckout}
+                                disabled={!selectedBookingServiceId || !selectedBookingTime || isStartingCheckout}
                             >
                                 {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Continue to payment <ArrowForward fontSize="small" /></>}
-                            </button>
+                            </button>}
                         </div>
                         <p className="booking-security-note"><LockOutlined fontSize="small" /> Payments are securely processed by Stripe.</p>
                     </div>

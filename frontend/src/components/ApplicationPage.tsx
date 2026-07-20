@@ -84,15 +84,6 @@ export default function ApplicationPage() {
     return (
         <>
             <NavBar setAppView={handleSetAppView} />
-            {checkoutStatus === "success" && (
-                <div className="checkout-confirmation" role="status">
-                    <div>
-                        <strong>Payment received — your booking is processing.</strong>
-                        <span>We’ll confirm the session details shortly.</span>
-                    </div>
-                    <button type="button" onClick={() => navigate("/app", { replace: true })} aria-label="Dismiss payment confirmation">×</button>
-                </div>
-            )}
             {checkoutStatus === "cancelled" && (
                 <div className="checkout-confirmation checkout-confirmation-cancelled" role="status">
                     <div>
