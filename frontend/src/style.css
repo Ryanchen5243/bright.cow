@@ -1,3 +1,6 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 /* Design System */
 :root {
   /* colors */
@@ -3491,12 +3494,18 @@ border-color: rgba(255,255,255,0.08);;
 }
 .settings-detail-bio{
   height: 80px;
+  resize: none;
 }
 .settings-detail-two-box-left{
   margin-left: 48px;
+  color: white;
+}
+.settings-input-group input:disabled,.settings-input-group textarea:disabled{
+  cursor: not-allowed;
 }
 .settings-detail-two-box-right{
   margin-right: 48px;
+  color: white;
 }
 .settings-detail-container{
   display: flex;
@@ -3555,8 +3564,15 @@ border-color: rgba(255,255,255,0.08);;
   backdrop-filter: blur(16px);
   width: 70px;
   height: 40px;
-  color: #C53FEB;
+  color: #6f4ed8;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.settings-edit-button:hover{
+  color: #9557ED;
+  border-color: #9557ED;
 }
 .settings-language-badges{
   margin: 6px;
@@ -3572,6 +3588,10 @@ border-color: rgba(255,255,255,0.08);;
   border-radius: 6px;
   color: #6f4ed8;
   cursor: pointer;
+}
+.settings-add-language:hover{
+  border-color: #9557ED;
+  color:#9557ED;
 }
 #language-panel{
   margin-top: 12px;
