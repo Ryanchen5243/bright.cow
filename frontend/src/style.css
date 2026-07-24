@@ -46,6 +46,16 @@ body {
   height: 100vh;
 }
 
+.auth-route-loading {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: #0d1222;
+  color: #e8e1f7;
+  font-weight: 600;
+}
+
 /* begin nav styles */
 nav {
   display: flex;
@@ -1126,6 +1136,50 @@ border-color: rgba(255,255,255,0.08);;
   margin-top: 18px;
 }
 
+.booking-date-options {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.booking-date-option,
+.booking-time-option {
+  border: 1px solid rgba(138, 154, 196, 0.2);
+  background: rgba(21, 28, 49, 0.68);
+  color: #d9e0ef;
+  cursor: pointer;
+  font: inherit;
+}
+
+.booking-date-option {
+  display: grid;
+  gap: 4px;
+  padding: 12px 4px;
+  border-radius: 10px;
+}
+
+.booking-date-option span { color: #96a2bb; font-size: 0.72rem; }
+.booking-date-option strong { font-size: 0.78rem; }
+.booking-date-option.selected,
+.booking-time-option.selected {
+  border-color: #9760ef;
+  background: rgba(113, 66, 213, 0.34);
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(187, 140, 255, 0.14);
+}
+
+.booking-time-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.booking-time-option { min-height: 46px; border-radius: 10px; font-size: 0.84rem; font-weight: 700; }
+.booking-date-option:hover,
+.booking-time-option:hover { border-color: rgba(178, 126, 255, 0.78); }
+
 .booking-service-option {
   display: grid;
   grid-template-columns: 48px minmax(0, 1fr) auto 28px;
@@ -1224,6 +1278,35 @@ border-color: rgba(255,255,255,0.08);;
   background: rgba(7, 12, 26, 0.34);
 }
 
+.booking-quantity-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 10px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 10px;
+  background: rgba(7, 12, 26, 0.26);
+  color: #aeb8cd;
+  font-size: 0.82rem;
+}
+
+.booking-quantity-picker > div { display: inline-flex; align-items: center; gap: 10px; color: #ffffff; }
+.booking-quantity-picker button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(186, 151, 255, 0.42);
+  border-radius: 50%;
+  background: rgba(130, 76, 222, 0.2);
+  color: #e8dfff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.booking-quantity-picker button:disabled { cursor: not-allowed; opacity: 0.4; }
+
 .booking-selected-summary span {
   color: #9da8c0;
   font-size: 0.78rem;
@@ -1258,6 +1341,19 @@ border-color: rgba(255,255,255,0.08);;
   font-size: 0.75rem;
 }
 
+.booking-payment-policy {
+  margin: 16px 8px 0 !important;
+  color: #8f9ab4 !important;
+  font-size: 0.73rem;
+  line-height: 1.55 !important;
+  text-align: center;
+}
+
+.booking-payment-policy a {
+  color: #c8a8ff;
+  font-weight: 700;
+}
+
 @media (max-width: 560px) {
   .booking-modal {
     padding: 23px 18px;
@@ -1275,6 +1371,10 @@ border-color: rgba(255,255,255,0.08);;
     grid-template-columns: 42px minmax(0, 1fr) 25px;
     gap: 10px;
   }
+
+  .booking-date-options { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .booking-time-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .booking-service-icon {
     width: 42px;
@@ -3170,6 +3270,80 @@ border-color: rgba(255,255,255,0.08);;
 }
 
 /* end booking page styles */
+
+/* payment confirmation page */
+.payment-confirmation-page {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  color: #f8fafc;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(149, 87, 237, 0.3), transparent 38%),
+    linear-gradient(145deg, #0a1020, #14142d);
+}
+
+.payment-confirmation-card {
+  width: min(100%, 510px);
+  box-sizing: border-box;
+  padding: 42px;
+  border: 1px solid rgba(186, 151, 255, 0.3);
+  border-radius: 24px;
+  background: rgba(20, 25, 48, 0.88);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+  text-align: center;
+}
+
+.payment-confirmation-icon {
+  width: 58px !important;
+  height: 58px !important;
+  margin-bottom: 16px;
+  color: #8ee5b5;
+}
+
+.payment-confirmation-icon.error { color: #f9a8a8; }
+.payment-confirmation-eyebrow { margin: 0 0 8px; color: #cdb5ff; font-size: 0.84rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.payment-confirmation-card h1 { margin: 0; color: #ffffff; font-size: clamp(1.7rem, 4vw, 2.25rem); }
+.payment-confirmation-copy, .payment-confirmation-card > p { color: #b8c1d6; line-height: 1.6; }
+.payment-confirmation-loading { margin: 0; }
+
+.payment-confirmation-receipt {
+  display: grid;
+  gap: 13px;
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid rgba(176, 193, 230, 0.14);
+  border-radius: 14px;
+  background: rgba(5, 9, 22, 0.38);
+  text-align: left;
+}
+
+.payment-confirmation-receipt-heading { display: flex; align-items: center; gap: 7px; padding-bottom: 4px; color: #d9c7ff; font-size: 0.84rem; font-weight: 700; }
+.payment-confirmation-receipt > div:not(.payment-confirmation-receipt-heading) { display: flex; justify-content: space-between; gap: 16px; color: #aeb8cd; font-size: 0.9rem; }
+.payment-confirmation-receipt strong { color: #ffffff; text-align: right; }
+.payment-confirmation-receipt .payment-confirmation-total { padding-top: 13px; border-top: 1px solid rgba(176, 193, 230, 0.14); color: #e8e1f7; }
+.payment-confirmation-receipt small { color: #7f8aa6; font-size: 0.72rem; }
+
+.payment-confirmation-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #a263ff, #7542ec);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.payment-confirmation-button.secondary { background: transparent; border: 1px solid rgba(230, 221, 255, 0.3); }
+.payment-confirmation-button:hover { color: #ffffff; transform: translateY(-1px); }
+
+@media (max-width: 480px) {
+  .payment-confirmation-card { padding: 32px 22px; }
+}
 
 /* begin terms page styles */
 /* =========================

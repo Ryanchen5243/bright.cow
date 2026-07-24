@@ -2,13 +2,16 @@ import ApplicationPage from "./components/ApplicationPage";
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
 import BookingPage from "./components/BookingPage";
+import PaymentConfirmationPage from "./components/PaymentConfirmationPage";
 import { type ReactElement } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./contexts/authContext";
 import TermsPage from "./components/TermsPage";
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (!currentUser) {
     return <Navigate to="/" replace />;
@@ -18,7 +21,9 @@ function ProtectedRoute({ children }: { children: ReactElement }) {
 }
 
 function PublicOnlyRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (currentUser) {
     return <Navigate to="/app" replace />;
@@ -36,6 +41,7 @@ export default function App() {
               <Route path="/app" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
               <Route path="/app/profile/:creatorUserName" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
               <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
+              <Route path='/booking/confirmation' element={<ProtectedRoute><PaymentConfirmationPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />
               <Route path='/login' element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
               <Route path='/terms' element={<TermsPage />} />
