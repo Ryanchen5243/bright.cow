@@ -33,3 +33,6 @@ backend/db-connection-info.txt
 *.njsproj
 *.sln
 *.sw?
+
+# team db credentials
+backend/postgresql_user_accounts.txt
