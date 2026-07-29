@@ -18,6 +18,33 @@ const User = {
     return rows[0] || null;
   },
 
+  async findByIdWithAvailability(id) {
+    const { rows } = await query(
+      `SELECT
+         u.id, u.firebase_uid, u.user_name, u.user_display_name,
+         u.profile_photo_url, u.background_photo_url, u.bio, u.time_zone,
+         u.account_status,
+         COALESCE(
+           json_agg(
+             json_build_object(
+               'dayOfWeek', a.day_of_week,
+               'startTime', a.start_time,
+               'endTime',   a.end_time,
+               'crossesMidnight', a.crosses_midnight
+             ) ORDER BY a.day_of_week, a.start_time
+           ) FILTER (WHERE a.id IS NOT NULL),
+           '[]'
+         ) AS availability
+       FROM users u
+       LEFT JOIN availability a ON a.creator_id = u.id
+       WHERE u.id = $1
+         AND u.account_status = 'ACTIVE'
+       GROUP BY u.id`,
+      [id]
+    );
+    return rows[0] ?? null;
+  },
+
   async findByFirebaseUid(firebaseUid) {
     const { rows } = await query('SELECT * FROM users WHERE firebase_uid = $1', [firebaseUid]);
     return rows[0] || null;
