@@ -154,9 +154,26 @@ export default function TermsPage() {
             <li>Payments are non‑refundable unless required by law or stated in our Refund Policy.</li>
             <li>Prices are set by creators or platform pricing.</li>
             <li>Platform fees may apply.</li>
-            <li>Payments are processed through Stripe.</li>
-            <li>You are responsible for your financial decisions.</li>
+            <li>Payments are processed through Stripe. By using our services, you agreed to their terms and conditions as well. </li>
+            <li>You are responsible for your financial decisions. </li>
+            <li>Konevo do not store any credit card information.</li>
         </ul>
+
+        <p>
+    By making a purchase on UWUVIBE, you agree to our payment policies. All payments are final and non-refundable except where required by applicable law or as expressly stated in our Refund Policy. Service prices are determined by creators or by UWUVIBE where applicable, and additional platform fees, taxes, or other applicable charges may be included at checkout.
+</p>
+
+<p>
+    Payments, refunds, and creator payouts are processed through Stripe or other approved third-party payment providers. By using UWUVIBE, you agree to comply with the applicable terms and conditions of those payment providers. By submitting a payment, you authorize the selected payment provider to charge your chosen payment method for the total amount displayed at checkout. UWUVIBE does not store or have access to your full payment card information.
+</p>
+
+<p>
+    Creators authorize UWUVIBE to collect payments from users on their behalf, deduct applicable platform fees and other authorized charges, and remit payouts to the creator in accordance with these Terms and any applicable payout policies.
+</p>
+
+<p>
+    You are responsible for ensuring that your payment information is accurate and up to date before completing a transaction. UWUVIBE is not responsible for purchase decisions made by users. Before making a payment, you are responsible for reviewing the creator's service description, pricing, availability, and any applicable terms. By completing a purchase, you acknowledge that you have read and agreed to these Terms of Service.
+</p>
 
         <h3>Prohibited Conduct</h3>
         <p>You may not use UWUVIBE for unlawful or harmful activities, including:</p>
@@ -1078,20 +1095,42 @@ export default function TermsPage() {
 
     <h2>6. Payments & Fees</h2>
     <p>
-        Payments, refunds, and creator payouts are processed through Stripe or other approved 
-        payment providers. By using UWUVIBE, you agree to comply with their terms.
+    By making a purchase on UWUVIBE, you agree to our payment policies. All payments are final and non-refundable except where required by applicable law or as expressly stated in our Refund Policy. Service prices are determined by creators or by UWUVIBE where applicable, and additional platform fees, taxes, or other applicable charges may be included at checkout.
     </p>
 
-    <p>Creators authorize UWUVIBE to:</p>
     <p>
-        • Collect payments from users<br />
-        • Deduct platform fees<br />
-        • Remit payouts to creators
+    Payments, refunds, and creator payouts are processed through Stripe or other approved third-party payment providers. By using UWUVIBE, you agree to comply with the applicable terms and conditions of those payment providers. By submitting a payment, you authorize the selected payment provider to charge your chosen payment method for the total amount displayed at checkout. UWUVIBE does not store or have access to your full payment card information.
+    </p>
+
+    <p>
+    Creators authorize UWUVIBE to collect payments from users on their behalf, deduct applicable platform fees and other authorized charges, and remit payouts to the creator in accordance with these Terms and any applicable payout policies.
+    </p>
+
+    <p>
+    You are responsible for ensuring that your payment information is accurate and up to date before completing a transaction. UWUVIBE is not responsible for purchase decisions made by users. Before making a payment, you are responsible for reviewing the creator's service description, pricing, availability, and any applicable terms. By completing a purchase, you acknowledge that you have read and agreed to these Terms of Service.
     </p>
 
     <p>UWUVIBE does not store payment card information.</p>
 
-    <h2>7. Cancellations & Refunds</h2>
+    <h2>7. Booking Agreement</h2>
+
+   <p>
+    UWUVIBE is a marketplace platform and does not guarantee that any booking request will be accepted. When you submit a booking request to a creator, you are requesting a session—not securing a confirmed booking. All booking requests must be manually reviewed and accepted by the creator. Creators are required to respond to booking requests within 24 hours. They may accept, decline, or propose an alternative time. If a creator does not respond within 24 hours, the booking request will automatically expire and be canceled.
+</p>
+
+<p>
+    You will not be charged until both you and the creator have agreed to the booking. If the creator declines your request or fails to respond within 24 hours, no payment will be processed, and you will be notified accordingly.
+</p>
+
+<p>
+    Creators are solely responsible for the accuracy of their profiles, the services they offer, and ensuring that those services meet the standards and expectations of UWUVIBE. By accepting a booking request, the creator acknowledges their commitment to provide the agreed-upon service.
+</p>
+
+<p>
+    Once a booking has been successfully completed, the creator's earnings will be credited to their account. However, those funds may be subject to a temporary holding period before becoming available for withdrawal. The length of the holding period may vary based on UWUVIBE's policies, the creator's account status, and other risk or compliance considerations.
+</p>
+
+    <h2>8. Cancellations & Refunds</h2>
     <p>
         In general, all purchases are final and there will be no refunds for any services once the booking is confirmed.
         However, cancellation and refund eligibility may vary depending on the service, creator policy, 
@@ -1117,7 +1156,7 @@ export default function TermsPage() {
         supporting the user's violation, the booking will be considered invalid, and the user will be eligible for a refund. <br />
     </p>
 
-    <h2>8. Prohibited Conduct</h2>
+    <h2>9. Prohibited Conduct</h2>
     <p>Users and creators may not:</p>
     <p>
         • Engage in harassment, threats, or abusive behavior<br />
@@ -1129,7 +1168,7 @@ export default function TermsPage() {
         • Engage in off-platform transactions intended to bypass fees
     </p>
 
-    <h2>9. Content Ownership & Licensing</h2>
+    <h2>10. Content Ownership & Licensing</h2>
     <p>
         You retain ownership of content you create and upload. However, by posting content on 
         UWUVIBE, you grant us a limited, worldwide, royalty-free license to display, host, 
@@ -1144,7 +1183,7 @@ export default function TermsPage() {
         • Misleads or deceives users
     </p>
 
-    <h2>10. Safety & Enforcement</h2>
+    <h2>11. Safety & Enforcement</h2>
     <p>UWUVIBE may take enforcement actions including:</p>
     <p>
         • Content removal<br />
@@ -1159,13 +1198,13 @@ export default function TermsPage() {
 
     <p>UWUVIBE reserves the right to determine appropriate enforcement measures.</p>
 
-    <h2>11. Off-Platform Conduct</h2>
+    <h2>12. Off-Platform Conduct</h2>
     <p>
         Serious misconduct occurring outside UWUVIBE may be considered if it poses a credible 
         risk to users, creators, employees, or platform operations.
     </p>
 
-    <h2>12. Disclaimers</h2>
+    <h2>13. Disclaimers</h2>
     <p>
         UWUVIBE provides a platform for users and creators to connect. We do not control, 
         supervise, or guarantee the quality, legality, or safety of creator services.
@@ -1176,7 +1215,7 @@ export default function TermsPage() {
         assist at our discretion.
     </p>
 
-    <h2>13. Creator and User Disputes</h2>
+    <h2>14. Creator and User Disputes</h2>
 
         <p>
             UWUVIBE is a marketplace platform that connects users with independent creators. Unless expressly stated otherwise, Konevo LLC is not a party to any agreement, booking, communication, transaction, or arrangement entered into between users and creators.
@@ -1232,19 +1271,19 @@ export default function TermsPage() {
             Users acknowledge that fraudulent chargebacks, abusive behavior, harassment, false reports, attempts to circumvent the Platform, non-payment, or other violations of Platform policies may result in warnings, account restrictions, suspension, permanent account termination, legal action where appropriate, or other enforcement measures deemed necessary by Konevo LLC.
         </p>
 
-    <h2>14. Limitation of Liability</h2>
+    <h2>15. Limitation of Liability</h2>
     <p>
         To the maximum extent permitted by law, UWUVIBE is not liable for indirect, 
         incidental, consequential, or punitive damages arising from platform use.
     </p>
 
-    <h2>15. Termination</h2>
+    <h2>16. Termination</h2>
     <p>
         UWUVIBE may suspend or terminate access to the platform at any time for violations of 
         this Agreement, legal requirements, or platform policies.
     </p>
 
-    <h2>16. Changes to This Agreement</h2>
+    <h2>17. Changes to This Agreement</h2>
     <p>
         UWUVIBE may update this Agreement periodically. Updated versions become effective upon 
         publication unless otherwise stated. Continued use of the platform constitutes 
