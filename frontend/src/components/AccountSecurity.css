@@ -1,0 +1,55 @@
+html{
+    color: white;
+}
+
+.box{
+    background-color: rgb(25, 30, 52);
+    border-radius: 12px;
+    width: 40vw;
+    height: 20vh;
+    
+   
+}
+
+.big_box{
+    background-color: rgb(25, 30, 52);
+    border-radius: 12px;
+    width: 80vw;
+    height: 20vh;
+   
+}
+
+.devices_box{
+    background-color: rgb(40, 45, 67);
+    border-radius: 12px;
+    width: 70vw;
+    height: 5vh;
+}
+
+.accDel{
+    color: red;
+    border-radius: 4px;
+}
+
+.container{
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+}
+
+button{
+    background: transparent;
+    border: 2px solid;
+    color:blueviolet;
+    border-radius: 12px;
+}
+
+.sub_box{
+    background-color: rgb(40, 45, 67);
+    border-radius: 12px;
+    width: 32vw;
+    height: 5vh;
+    
+}
