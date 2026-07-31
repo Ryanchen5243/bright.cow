@@ -10,22 +10,11 @@ export default function BookingPage() {
     } | null);
     const creator = state?.creator;
     const creatorId = state?.creatorId;
-    const creatorName = creator?.name ?? 'vincent li';
-    const creatorPhotoUrl = creator?.photoUrl ?? defaultProfilePhoto;
+    const creatorName = creator?.name;
+    const creatorPhotoUrl = creator?.photoUrl;
     const creatorServices = creator?.services ?? [];
     const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
     const backToProfilePath = creatorId ? `/app/profile/${creatorId}?tab=schedule` : '/app?view=profile&tab=schedule';
-
-
-
-
-    
-
-
-
-
-
-
 
     const formatServiceCost = (cost: number | null) => {
         if (cost === null) {

@@ -12,6 +12,17 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# SSL certificates
+*.pem
+
+# DB connection info (contains plaintext credentials after secret rotation)
+backend/db-connection-info.txt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

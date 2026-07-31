@@ -2,11 +2,13 @@ import {createContext, useContext, useState, useEffect, type ReactNode} from "re
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged, type User } from "firebase/auth";
 
-const AUTH_LOADING_DELAY_MS = 5500;
-
 const AuthContext = createContext<{
     currentUser: User | null;
+<<<<<<< HEAD
     loading: boolean;
+=======
+    isAuthLoading: boolean;
+>>>>>>> main
 } | undefined>(undefined);
 
 export function useAuth() {
@@ -19,34 +21,31 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+<<<<<<< HEAD
     const [loading, setLoading] = useState(true);
+=======
+    const [isAuthLoading, setIsAuthLoading] = useState(true);
+>>>>>>> main
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, initializeUser);
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setCurrentUser(user ?? null);
+<<<<<<< HEAD
+            setLoading(false);
+=======
+            setIsAuthLoading(false);
+>>>>>>> main
+        });
         return () => unsubscribe();
     }, []);
-    async function initializeUser(user: User | null) {
-        const shouldShowAuthLoading = Boolean(user);
 
-        if (shouldShowAuthLoading) {
-            setLoading(true);
-        }
-
-        if (user) {
-            setCurrentUser(user);
-        } else {
-            setCurrentUser(null);
-        }
-
-        if (shouldShowAuthLoading) {
-            await new Promise((resolve) => setTimeout(resolve, AUTH_LOADING_DELAY_MS));
-        }
-
-        setLoading(false);
-    }
     const value = {
         currentUser,
-        loading
+<<<<<<< HEAD
+        loading,
+=======
+        isAuthLoading,
+>>>>>>> main
     };
     return (
         <AuthContext.Provider value={value}>
