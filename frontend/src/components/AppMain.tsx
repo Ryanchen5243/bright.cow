@@ -1,6 +1,7 @@
 import Footer from "./Footer";
 import Settings from "./Settings";
 import type { DbProfile } from "./ApplicationPage";
+import { useState } from "react";
 
 export type AppView = "home" | "settings";
 

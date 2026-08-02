@@ -23,11 +23,11 @@ export type DbProfile = {
 export default function ApplicationPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser } = useAuth();
+    const { currentUser, loading } = useAuth();
     const [myDbProfile, setMyDbProfile] = useState<DbProfile | null>(null);
 
     useEffect(() => {
-        if (!currentUser) {
+        if (loading || !currentUser) {
             setMyDbProfile(null);
             return;
         }
@@ -38,12 +38,12 @@ export default function ApplicationPage() {
         const profilePhotoUrl = currentUser.photoURL ?? null;
 
         // syncUser creates a DB row for first-time sign-ins, then returns the profile
-        axios.post('/syncUser', { firebaseUid: currentUser.uid, userName, userDisplayName, profilePhotoUrl })
+        axios.post('/auth/syncUser', { firebaseUid: currentUser.uid, userName, userDisplayName, profilePhotoUrl })
             .then(({ data }) => { if (!isCancelled) setMyDbProfile(data); })
             .catch((err) => { console.error('syncUser failed:', err.response?.status, err.message); });
 
         return () => { isCancelled = true; };
-    }, [currentUser]);
+    }, [currentUser, loading]);
 
     const params = new URLSearchParams(location.search);
     const appView: AppView = params.get("view") === "settings" ? "settings" : "home";
