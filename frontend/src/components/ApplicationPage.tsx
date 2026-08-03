@@ -38,7 +38,10 @@ export default function ApplicationPage() {
         const profilePhotoUrl = currentUser.photoURL ?? null;
 
         // syncUser creates a DB row for first-time sign-ins, then returns the profile
-        axios.post('/auth/syncUser', { firebaseUid: currentUser.uid, userName, userDisplayName, profilePhotoUrl })
+        currentUser.getIdToken()
+            .then((idToken) => axios.post('/auth/syncUser', { userName, userDisplayName, profilePhotoUrl }, {
+                headers: { Authorization: `Bearer ${idToken}` },
+            }))
             .then(({ data }) => { if (!isCancelled) setMyDbProfile(data); })
             .catch((err) => { console.error('syncUser failed:', err.response?.status, err.message); });
 

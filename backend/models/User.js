@@ -2,7 +2,6 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const { query } = require('../db.cjs');
 
-// e.g. "Jane Doe" → "jane_doe"
 function normalizeUserName(displayName) {
   const parts = (displayName ?? '').trim().toLowerCase().split(/\s+/).filter(Boolean);
   const base = parts.length >= 2
@@ -11,7 +10,6 @@ function normalizeUserName(displayName) {
   return base.slice(0, 25).replace(/[^a-z0-9_]/g, '_');
 }
 
-// e.g. "Jane Doe" → "jane_doe_4823", capped at 25 chars
 function generateFallbackUserName(displayName) {
   const base = normalizeUserName(displayName);
   const suffix = `_${Math.floor(1000 + Math.random() * 9000)}`;
@@ -23,7 +21,11 @@ const User = {
     const { rows } = await query('SELECT * FROM "users" limit 100');
     return rows;
   },
-  
+
+  async findByFirebaseUid(firebaseUid) {
+    const { rows } = await query('SELECT * FROM users WHERE firebase_uid = $1', [firebaseUid]);
+    return rows[0] ?? null;
+  },
 
   // Creates a row for first-time Google sign-ins; updates last_login_at on subsequent logins
   async upsertByFirebaseUid({ firebaseUid, userName, userDisplayName, profilePhotoUrl }) {
@@ -34,7 +36,6 @@ const User = {
        RETURNING *`;
     const source = userName ?? userDisplayName;
     const resolvedUserName = source ? normalizeUserName(source) : null;
-    console.log("upsert userName ->", resolvedUserName);
     const params = [firebaseUid, resolvedUserName, userDisplayName ?? null, profilePhotoUrl ?? null];
     try {
       const { rows } = await query(sql, params);
