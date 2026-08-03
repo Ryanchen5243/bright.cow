@@ -3,6 +3,8 @@ import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
+import authAxios from '../axios/authAxios';
+import { useAuth } from '../contexts/authContext';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, VideocamOutlined, ForumOutlined, CheckCircle, LockOutlined, ArrowForward, type SvgIconComponent } from '@mui/icons-material';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
@@ -55,7 +57,16 @@ const getSessionEndTime = (startTime: string, durationMinutes: number) => {
     return `${displayHour}:${String(endMinutes % 60).padStart(2, '0')} ${displayPeriod}`;
 };
 
-export default function Profile({ creatorId }: { creatorId?: string }) {
+export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
+    const { currentUser } = useAuth();
+    const [myDbId, setMyDbId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (!currentUser) return;
+        authAxios.get('/user/me').then(({ data }) => setMyDbId(data.id));
+    }, [currentUser]);
+
+    const isOwnProfile = !!myDbId && myDbId === creatorUUID;
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
     const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
@@ -65,7 +76,6 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
 
     const [creatorProfile, setCreatorProfile] = useState<any>(null); // avoid using -> tbd destructure profile data
     const [creatorUserDisplayName, setCreatorUserDisplayName] = useState<string | undefined>(undefined);
-    const [creatorUUID, setCreatorUUID] = useState<string | null>(null); // to pass down via props for fetching posts, schedule, etc.
     const [userBio, setUserBio] = useState("");
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
@@ -80,17 +90,18 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
     useEffect(() => {
-        if (!creatorId) return;
+        if (!creatorUUID) return;
+        console.log("fetching for ... ", creatorUUID)
         let isCancelled = false;
 
         const loadCreatorProfile = async () => {
             try {
-                const response = await axios.get(`/api/users/by-id/${encodeURIComponent(creatorId)}`);
+                const response = await authAxios.get(`/userByUuid/${encodeURIComponent(creatorUUID)}`);
                 const creator = response.data;
+                console.log(creator);
 
                 if (!isCancelled) {
                     setCreatorProfile(creator);
-                    setCreatorUUID(creator?.id ?? null);
                     setCreatorUserDisplayName(creator?.user_display_name ?? undefined);
                     setSelectedBookingServiceId(
                         creator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
@@ -113,7 +124,7 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         return () => {
             isCancelled = true;
         };
-    }, [creatorId]);
+    }, [creatorUUID]);
 
     useEffect(() => {
         if (!isBookingModalOpen) {
@@ -159,7 +170,7 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    creatorId: creatorUUID,
+                    creatorUUID: creatorUUID,
                     serviceId: selectedBookingServiceId,
                     bookingDate: selectedBookingDate,
                     bookingTime: selectedBookingTime,
@@ -212,7 +223,11 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
         return <SportsEsportsOutlined />;
     };
 
-    return (
+    return (<>
+            <h1> profile content</h1>
+            <h1> isOwnProfile: {isOwnProfile ? 'true' : 'false'}</h1>
+        </>
+        /*
         <div className="profile-view">
             <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                 <div className="profile-user-photo-shell">
@@ -511,6 +526,7 @@ export default function Profile({ creatorId }: { creatorId?: string }) {
                 {profileTab === "reviews" && <h1>reviews</h1>}
                 {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID} />}
             </div>
-        </div>
+        </div> */
     );
+
 }

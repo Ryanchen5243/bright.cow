@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AppMain, { type AppView } from "./AppMain";
 import NavBar from "./NavBar";
 import { useAuth } from "../contexts/authContext";
-import axios from "axios";
+import authAxios from "../axios/authAxios";
 
 export type DbProfile = {
     id: string;
@@ -24,11 +24,11 @@ export default function ApplicationPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { currentUser, loading } = useAuth();
-    const [myDbProfile, setMyDbProfile] = useState<DbProfile | null>(null);
+    const [currentUserDbProfile, setCurrentUserDbProfile] = useState<DbProfile | null>(null);
 
     useEffect(() => {
         if (loading || !currentUser) {
-            setMyDbProfile(null);
+            setCurrentUserDbProfile(null);
             return;
         }
         let isCancelled = false;
@@ -38,19 +38,18 @@ export default function ApplicationPage() {
         const profilePhotoUrl = currentUser.photoURL ?? null;
 
         // syncUser creates a DB row for first-time sign-ins, then returns the profile
-        currentUser.getIdToken()
-            .then((idToken) => axios.post('/auth/syncUser', { userName, userDisplayName, profilePhotoUrl }, {
-                headers: { Authorization: `Bearer ${idToken}` },
-            }))
-            .then(({ data }) => { if (!isCancelled) setMyDbProfile(data); })
+        authAxios.post('/auth/syncUser', { userName, userDisplayName, profilePhotoUrl })
+            .then(({ data }) => { if (!isCancelled) setCurrentUserDbProfile(data); })
             .catch((err) => { console.error('syncUser failed:', err.response?.status, err.message); });
+        
 
         return () => { isCancelled = true; };
     }, [currentUser, loading]);
 
     const params = new URLSearchParams(location.search);
-    const appView: AppView = params.get("view") === "settings" ? "settings" : "home";
     const viewParam = params.get("view");
+    const profileCreatorId = params.get("creator") ?? undefined;
+    const appView: AppView = viewParam === "settings" ? "settings" : viewParam === "profile" ? "profile" : "home";
     const checkoutStatus = params.get("checkout");
     // const appView: AppView = creatorUserName
     //     ? creatorExists === null
@@ -62,8 +61,9 @@ export default function ApplicationPage() {
     //         ? "settings"
     //         : "home";
 
-    const handleSetAppView = (nextView: AppView) => {
+    const handleSetAppView = (nextView: AppView, creatorId?: string) => {
         if (nextView === "settings") { navigate(`/app?view=settings`); return; }
+        if (nextView === "profile") { navigate(creatorId ? `/app?view=profile&creator=${creatorId}` : `/app?view=profile`); return; }
         navigate("/app");
     };
 
@@ -80,7 +80,7 @@ export default function ApplicationPage() {
                 </div>
             )}
             <div className="app-body">
-                <AppMain appView={appView} myDbProfile={myDbProfile} />
+                <AppMain appView={appView} setAppView={handleSetAppView} currentUserDbProfile={currentUserDbProfile} profileCreatorId={profileCreatorId} />
             </div>
         </>
     );

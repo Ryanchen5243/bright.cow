@@ -27,6 +27,11 @@ const User = {
     return rows[0] ?? null;
   },
 
+  async findByUUID(uuid) {
+    const { rows } = await query('SELECT * FROM users WHERE id = $1', [uuid]);
+    return rows[0] ?? null;
+  },
+
   // Creates a row for first-time Google sign-ins; updates last_login_at on subsequent logins
   async upsertByFirebaseUid({ firebaseUid, userName, userDisplayName, profilePhotoUrl }) {
     const sql = `INSERT INTO users (firebase_uid, user_name, user_display_name, profile_photo_url, last_login_at)

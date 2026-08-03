@@ -9,6 +9,8 @@ export default defineConfig({
       '/myProfile': 'http://localhost:5000',
       '/auth': 'http://localhost:5000',
       '/api': 'http://localhost:5000',
+      '/userByUuid': 'http://localhost:5000',
+      '/user': 'http://localhost:5000',
     },
   },
   test: {
