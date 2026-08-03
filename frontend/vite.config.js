@@ -5,10 +5,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/allUsers': 'http://localhost:5001',
-      '/myProfile': 'http://localhost:5001',
-      '/syncUser': 'http://localhost:5001',
-      '/api': 'http://localhost:5001',
+      '/allUsers': 'http://localhost:5000',
+      '/myProfile': 'http://localhost:5000',
+      '/auth': 'http://localhost:5000',
+      '/api': 'http://localhost:5000',
     },
   },
   test: {
