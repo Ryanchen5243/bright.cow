@@ -5,6 +5,7 @@ import AuthController from "./controllers/AuthController.js"
 import { verifyFirebaseToken } from "./middleware/verifyFirebaseToken.js"
 import Stripe from "stripe";
 import { readFile } from "node:fs/promises";
+import { idempotency } from "./middleware/idempotency.js";
 
 dotenv.config();
 const app = express();
@@ -122,6 +123,9 @@ app.get("/allUsers", verifyFirebaseToken, UserController.getAllUsers);
 app.get("/user/me", verifyFirebaseToken, UserController.getMe);
 app.post("/auth/syncUser", verifyFirebaseToken, AuthController.syncUser);
 app.get("/userByUuid/:uuid", UserController.getUserByUUID);
+app.post("/update_display_name", verifyFirebaseToken, idempotency, UserController.updateDisplayName);
+
+
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);

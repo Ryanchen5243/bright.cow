@@ -1,10 +1,11 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import authAxios from '../axios/authAxios';
 import { useAuth } from '../contexts/authContext';
+import { v4 as uuidv4 } from 'uuid';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, VideocamOutlined, ForumOutlined, CheckCircle, LockOutlined, ArrowForward, type SvgIconComponent } from '@mui/icons-material';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
@@ -67,6 +68,7 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     }, [currentUser]);
 
     const isOwnProfile = !!myDbId && myDbId === creatorUUID;
+
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
     const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
@@ -74,8 +76,7 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
         setSearchParams((prev) => { prev.set('tab', tab); return prev; }, { replace: true });
     };
 
-    const [creatorProfile, setCreatorProfile] = useState<any>(null); // avoid using -> tbd destructure profile data
-    const [creatorUserDisplayName, setCreatorUserDisplayName] = useState<string | undefined>(undefined);
+    const [creatorProfile, setCreatorProfile] = useState<any>(null); // all the data
     const [userBio, setUserBio] = useState("");
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
@@ -89,20 +90,25 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
+    const updateDisplayNameKey = useRef(uuidv4());
+
+    useEffect(() => {
+        const update = async () => {
+            await authAxios.post("/update_display_name", { userDisplayName: "New Display Name" }, { headers: { 'Idempotency-Key': updateDisplayNameKey.current } });
+        };
+        update();
+    }, []);
     useEffect(() => {
         if (!creatorUUID) return;
-        console.log("fetching for ... ", creatorUUID)
         let isCancelled = false;
 
         const loadCreatorProfile = async () => {
             try {
                 const response = await authAxios.get(`/userByUuid/${encodeURIComponent(creatorUUID)}`);
                 const creator = response.data;
-                console.log(creator);
 
                 if (!isCancelled) {
                     setCreatorProfile(creator);
-                    setCreatorUserDisplayName(creator?.user_display_name ?? undefined);
                     setSelectedBookingServiceId(
                         creator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
                     );
@@ -226,307 +232,310 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     return (<>
             <h1> profile content</h1>
             <h1> isOwnProfile: {isOwnProfile ? 'true' : 'false'}</h1>
-        </>
-        /*
-        <div className="profile-view">
-            <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                <div className="profile-user-photo-shell">
-                    <div className="profile-user-photo">
-                        <img alt="profile photo" />
-                    </div>
-                </div>
-                <div className="profile-header-user-details-container">
-                    <div className="profile-header-user-details">
-                        <div className="profile-header-user-headline"><h1>{creatorUserDisplayName}</h1></div>
-                        <div className="profile-header-user-headline-supporting">
-                            <span>{creatorProfile?.userName}</span>
-                            <span>online</span>
+            <div className="profile-view">
+                <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <div className="profile-user-photo-shell">
+                        <div className="profile-user-photo">
+                            <img alt="profile photo" />
                         </div>
                     </div>
-                    <div className="profile-header-footer">
-                        <div className="profile-header-user-metrics-and-tags">
-                            <div className="profile-header-user-metrics">
-                                <span>4.9 (128 reviews)</span>
-                                <span>1.2k followers</span>
-                            </div>
-                            <div className="profile-header-user-tags">
-                                <span className="profile-header-user-tag-fps-games">FPS Games</span>
-                                <span className="profile-header-user-tag-variety-streamer">Variety Streamer</span>
-                                <span className="profile-header-user-tag-chill-vibes">Chill Vibes</span>
+                    <div className="profile-header-user-details-container">
+                        <div className="profile-header-user-details">
+                            <div className="profile-header-user-headline"><h1>{creatorProfile?.user_display_name}</h1></div>
+                            <div className="profile-header-user-headline-supporting">
+                                <span>@{creatorProfile?.user_name}</span>
+                                <span>online</span>
                             </div>
                         </div>
-                        <div className="profile-header-cta">
-                            <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setBookingStep(1); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
-                            <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
+                        <div className="profile-header-footer">
+                            <div className="profile-header-user-metrics-and-tags">
+                                <div className="profile-header-user-metrics">
+                                    <span>4.9 (128 reviews)</span>
+                                    <span>1.2k followers</span>
+                                </div>
+                                <div className="profile-header-user-tags">
+                                    <span className="profile-header-user-tag-fps-games">FPS Games</span>
+                                    <span className="profile-header-user-tag-variety-streamer">Variety Streamer</span>
+                                    <span className="profile-header-user-tag-chill-vibes">Chill Vibes</span>
+                                </div>
+                            </div>
+                            <div className="profile-header-cta">
+                                <button className="profile-header-cta-book" onClick={() => { setCheckoutError(null); setBookingStep(1); setIsBookingModalOpen(true); }}><h3>Book a Session</h3></button>
+                                <button className="profile-header-cta-follow" onClick={() => alert('Message feature coming soon!')}><h3>Message</h3></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {isBookingModalOpen && (
-                <div
-                    className="booking-modal-backdrop"
-                    onClick={() => setIsBookingModalOpen(false)}
-                    role="presentation"
-                >
+                {/*
+                {isBookingModalOpen && (
                     <div
-                        className="booking-modal"
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="booking-modal-title"
-                        onClick={(event) => event.stopPropagation()}
+                        className="booking-modal-backdrop"
+                        onClick={() => setIsBookingModalOpen(false)}
+                        role="presentation"
                     >
-                        <button
-                            type="button"
-                            className="booking-modal-close"
-                            aria-label="Close booking popup"
-                            onClick={() => setIsBookingModalOpen(false)}
+                        <div
+                            className="booking-modal"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-labelledby="booking-modal-title"
+                            onClick={(event) => event.stopPropagation()}
                         >
-                            ×
-                        </button>
-                        <h2 id="booking-modal-title">Book a Session</h2>
-                        <div className="booking-progress" aria-label="Booking progress">
-                            <div className={`booking-progress-step${bookingStep === 1 ? ' active' : ''}`}><span>1</span><strong>Service</strong></div>
-                            <i aria-hidden="true" />
-                            <div className={`booking-progress-step${bookingStep === 2 ? ' active' : ''}`}><span>2</span><strong>Date &amp; Time</strong></div>
-                        </div>
-                        {bookingStep === 1 && <>
-                            <div className="booking-modal-heading">
-                                <h3>Select a Service</h3>
-                                <p>Choose how you’d like to spend time with {creatorUserDisplayName}.</p>
-                            </div>
-                            {bookableServices.length ? (
-                            <div className="booking-service-options" role="radiogroup" aria-label="Available sessions">
-                                {bookableServices.map((service: any) => {
-                                    const isSelected = selectedBookingServiceId === service.id;
-                                    return (
-                                        <button
-                                            key={service.id}
-                                            type="button"
-                                            className={`booking-service-option${isSelected ? ' selected' : ''}`}
-                                            role="radio"
-                                            aria-checked={isSelected}
-                                            onClick={() => { setSelectedBookingServiceId(service.id); setSelectedBookingQuantity(1); }}
-                                            disabled={isStartingCheckout}
-                                        >
-                                            <span className="booking-service-icon"><ServiceIcon service={service} /></span>
-                                            <span className="booking-service-copy">
-                                                <strong>{service.name}</strong>
-                                                <small>{service.description || 'A personalized session with your creator.'}</small>
-                                            </span>
-                                            <span className="booking-service-price">
-                                                <strong>${Number(service.price).toFixed(2)}</strong>
-                                                {service.durationMin && <small> / {service.durationMin} min</small>}
-                                            </span>
-                                            <span className="booking-service-radio" aria-hidden="true">{isSelected && <CheckCircle />}</span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <p className="booking-modal-error">No sessions are currently available.</p>
-                        )}
-                        </>}
-                        {bookingStep === 2 && <>
-                            <div className="booking-modal-heading">
-                                <h3>Choose a date and time</h3>
-                                <p>Select a time that works for you. All times are shown in {creatorProfile?.availability_time_zone || 'the creator’s local time'}.</p>
-                            </div>
-                            <div className="booking-date-options" role="radiogroup" aria-label="Available dates">
-                                {bookingDateOptions.map((date) => (
-                                    <button
-                                        key={date.value}
-                                        type="button"
-                                        role="radio"
-                                        aria-checked={selectedBookingDate === date.value}
-                                        className={`booking-date-option${selectedBookingDate === date.value ? ' selected' : ''}`}
-                                        onClick={() => setSelectedBookingDate(date.value)}
-                                    >
-                                        <span>{date.weekday}</span><strong>{date.day}</strong>
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="booking-time-options" role="radiogroup" aria-label="Available times">
-                                {bookingTimes.map((time) => (
-                                    <button
-                                        key={time}
-                                        type="button"
-                                        role="radio"
-                                        aria-checked={selectedBookingTime === time}
-                                        className={`booking-time-option${selectedBookingTime === time ? ' selected' : ''}`}
-                                        onClick={() => setSelectedBookingTime(time)}
-                                    >
-                                        {time}
-                                    </button>
-                                ))}
-                            </div>
-                        </>}
-                        {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
-                        {selectedBookingService && (
-                            <>
-                                <div className="booking-quantity-picker">
-                                    <span>Number of sessions</span>
-                                    <div>
-                                        <button type="button" aria-label="Remove one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.max(1, quantity - 1))} disabled={selectedBookingQuantity === 1}>−</button>
-                                        <strong>{selectedBookingQuantity}</strong>
-                                        <button type="button" aria-label="Add one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.min(8, quantity + 1))}>+</button>
-                                    </div>
-                                </div>
-                                <div className="booking-selected-summary">
-                                    <span>Booking request</span>
-                                    <strong>{selectedBookingService.name} · {selectedBookingQuantity} {selectedBookingQuantity === 1 ? 'session' : 'sessions'} · {selectedBookingDuration} min · ${selectedBookingTotal.toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate}, ${selectedBookingTime}–${selectedBookingEndTime}` : ''}</strong>
-                                </div>
-                            </>
-                        )}
-                        <div className="booking-modal-actions">
-                            <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
-                                Cancel
+                            <button
+                                type="button"
+                                className="booking-modal-close"
+                                aria-label="Close booking popup"
+                                onClick={() => setIsBookingModalOpen(false)}
+                            >
+                                ×
                             </button>
-                            {bookingStep === 2 && <button type="button" className="booking-modal-cancel" onClick={() => { setCheckoutError(null); setBookingStep(1); }}>
-                                Back
-                            </button>}
-                            {bookingStep === 1 ? <button
-                                type="button"
-                                className="booking-modal-confirm"
-                                onClick={() => setBookingStep(2)}
-                                disabled={!selectedBookingServiceId}
-                            >
-                                Choose date &amp; time <ArrowForward fontSize="small" />
-                            </button> : <button
-                                type="button"
-                                className="booking-modal-confirm"
-                                onClick={startCheckout}
-                                disabled={!selectedBookingServiceId || !selectedBookingTime || isStartingCheckout}
-                            >
-                                {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Send request &amp; pay <ArrowForward fontSize="small" /></>}
-                            </button>}
-                        </div>
-                        <p className="booking-payment-policy">
-                            By proceeding, you agree to Konevo&apos;s <a href="/terms" target="_blank" rel="noreferrer">Terms of Service and Payment Policy</a>. Your booking is not confirmed until the creator accepts your request. If your request is declined, your payment will be refunded to your original payment method.
-                        </p>
-                        <p className="booking-security-note"><LockOutlined fontSize="small" /> Payments are securely processed by Stripe.</p>
-                    </div>
-                </div>
-            )}
-            <div className="profile-main-tabs">
-                {profileTabs.map((tab) => (
-                    <button key={tab} type="button" className={`${profileTab === tab ? 'active' : ''}`} onClick={() => setProfileTab(tab)}>
-                        {tab}
-                    </button>
-                ))}
-            </div>
-            <div className="profile-main">
-                {profileTab === "overview" && <>
-                    <div className="profile-overview-grid">
-                        <div className="profile-services-offered profile-panel">
-                            <div className="profile-panel-heading">
-                                <SportsEsportsOutlined fontSize="large" htmlColor="#9557ED" />
-                                <div>
-                                    <h3>Services</h3>
-                                </div>
+                            <h2 id="booking-modal-title">Book a Session</h2>
+                            <div className="booking-progress" aria-label="Booking progress">
+                                <div className={`booking-progress-step${bookingStep === 1 ? ' active' : ''}`}><span>1</span><strong>Service</strong></div>
+                                <i aria-hidden="true" />
+                                <div className={`booking-progress-step${bookingStep === 2 ? ' active' : ''}`}><span>2</span><strong>Date &amp; Time</strong></div>
                             </div>
-                            <p>Pick a format that matches the energy you want from the session.</p>
-                            {creatorProfile?.services?.map((service: any) => (
-                                <div className="profile-service-card" key={`bar${Math.random()}`}>
-                                    <div className="profile-service-card-icon">
-                                        <Business fontSize="medium" htmlColor="#9557ED" />
-                                    </div>
-                                    <div className="profile-service-card-detail">
-                                        <h3>{service.name}</h3>
-                                        <p>{service.description}</p>
-                                    </div>
-                                    <div className="profile-service-card-price">
-                                        <h3>{service.price}</h3>
-                                        <p>unit here</p>
-                                    </div>
+                            {bookingStep === 1 && <>
+                                <div className="booking-modal-heading">
+                                    <h3>Select a Service</h3>
+                                    <p>Choose how you’d like to spend time with {creatorProfile?.user_display_name}.</p>
                                 </div>
-                            ))}
-                            <button type="button"><h3>View All Services</h3></button>
-                        </div>
-                        <div className="profile-user-bio-and-recent-posts">
-                            <div className="profile-user-bio profile-panel">
-                                <div className="profile-user-bio-header">
-                                    <div>
-                                        <h3>Bio</h3>
-                                    </div>
-                                    <button type="button" className="profile-icon-button" onClick={startEditBio}>
-                                        <Edit />
-                                    </button>
-                                </div>
-                                <div className="profile-user-bio-content">
-                                    {!isEditingBio && <div className="profile-user-bio-display">
-                                        <div>{userBio}</div>
-                                    </div>}
-                                    {isEditingBio && <div className="profile-user-bio-edit">
-                                        <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
-                                        <div className="profile-user-bio-edit-cta">
-                                            <button type="button" onClick={saveBio}>Save</button>
-                                            <button type="button" className="secondary" onClick={cancelEditBio}>Cancel</button>
-                                        </div>
-                                    </div>}
-                                </div>
-                                <div className="profile-user-bio-footer">
-                                    {creatorProfile?.quickFacts?.map((fact: { label: string; value: string; icon: string }, index: number) => {
-                                        const IconComponent = quickFactIconMap[fact.icon];
+                                {bookableServices.length ? (
+                                <div className="booking-service-options" role="radiogroup" aria-label="Available sessions">
+                                    {bookableServices.map((service: any) => {
+                                        const isSelected = selectedBookingServiceId === service.id;
                                         return (
-                                        <div className="profile-user-bio-footer-item" key={index}>
-                                            {IconComponent && <IconComponent fontSize="large" htmlColor="#9557ED" />}
-                                            <div>
-                                                <p>{fact.label}</p>
-                                                <h3>{fact.value}</h3>
-                                            </div>
-                                        </div>
+                                            <button
+                                                key={service.id}
+                                                type="button"
+                                                className={`booking-service-option${isSelected ? ' selected' : ''}`}
+                                                role="radio"
+                                                aria-checked={isSelected}
+                                                onClick={() => { setSelectedBookingServiceId(service.id); setSelectedBookingQuantity(1); }}
+                                                disabled={isStartingCheckout}
+                                            >
+                                                <span className="booking-service-icon"><ServiceIcon service={service} /></span>
+                                                <span className="booking-service-copy">
+                                                    <strong>{service.name}</strong>
+                                                    <small>{service.description || 'A personalized session with your creator.'}</small>
+                                                </span>
+                                                <span className="booking-service-price">
+                                                    <strong>${Number(service.price).toFixed(2)}</strong>
+                                                    {service.durationMin && <small> / {service.durationMin} min</small>}
+                                                </span>
+                                                <span className="booking-service-radio" aria-hidden="true">{isSelected && <CheckCircle />}</span>
+                                            </button>
                                         );
                                     })}
                                 </div>
-                            </div>
-                            <div className="profile-user-recent-posts profile-panel">
-                                <div className="profile-panel-heading">
-                                    <div>
-                                        <h3>Recent posts</h3>
-                                        <button type="button" onClick={() => setProfileTab("posts")}><h3>View All</h3></button>
-                                    </div>
+                            ) : (
+                                <p className="booking-modal-error">No sessions are currently available.</p>
+                            )}
+                            </>}
+                            {bookingStep === 2 && <>
+                                <div className="booking-modal-heading">
+                                    <h3>Choose a date and time</h3>
+                                    <p>Select a time that works for you. All times are shown in {creatorProfile?.availability_time_zone || 'the creator’s local time'}.</p>
                                 </div>
-                                <div className="profile-user-recent-posts-list">
-                                    {creatorProfile?.recentPosts?.map((post : any) => (
-                                        <UserPost key={post.id} post={post} userName={creatorProfile?.userName ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />
+                                <div className="booking-date-options" role="radiogroup" aria-label="Available dates">
+                                    {bookingDateOptions.map((date) => (
+                                        <button
+                                            key={date.value}
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={selectedBookingDate === date.value}
+                                            className={`booking-date-option${selectedBookingDate === date.value ? ' selected' : ''}`}
+                                            onClick={() => setSelectedBookingDate(date.value)}
+                                        >
+                                            <span>{date.weekday}</span><strong>{date.day}</strong>
+                                        </button>
                                     ))}
                                 </div>
-                            </div>
-                        </div>
-                        <div className="profile-gifts-donation profile-panel">
-                            <div className="profile-panel-heading">
-                                <div>
-                                    <h3 className="profile-gifts-donation-header">Send a Gift</h3>
+                                <div className="booking-time-options" role="radiogroup" aria-label="Available times">
+                                    {bookingTimes.map((time) => (
+                                        <button
+                                            key={time}
+                                            type="button"
+                                            role="radio"
+                                            aria-checked={selectedBookingTime === time}
+                                            className={`booking-time-option${selectedBookingTime === time ? ' selected' : ''}`}
+                                            onClick={() => setSelectedBookingTime(time)}
+                                        >
+                                            {time}
+                                        </button>
+                                    ))}
                                 </div>
+                            </>}
+                            {checkoutError && <p className="booking-modal-error" role="alert">{checkoutError}</p>}
+                            {selectedBookingService && (
+                                <>
+                                    <div className="booking-quantity-picker">
+                                        <span>Number of sessions</span>
+                                        <div>
+                                            <button type="button" aria-label="Remove one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.max(1, quantity - 1))} disabled={selectedBookingQuantity === 1}>−</button>
+                                            <strong>{selectedBookingQuantity}</strong>
+                                            <button type="button" aria-label="Add one session" onClick={() => setSelectedBookingQuantity((quantity) => Math.min(8, quantity + 1))}>+</button>
+                                        </div>
+                                    </div>
+                                    <div className="booking-selected-summary">
+                                        <span>Booking request</span>
+                                        <strong>{selectedBookingService.name} · {selectedBookingQuantity} {selectedBookingQuantity === 1 ? 'session' : 'sessions'} · {selectedBookingDuration} min · ${selectedBookingTotal.toFixed(2)}{bookingStep === 2 && selectedBookingTime ? ` · ${selectedBookingDate}, ${selectedBookingTime}–${selectedBookingEndTime}` : ''}</strong>
+                                    </div>
+                                </>
+                            )}
+                            <div className="booking-modal-actions">
+                                <button type="button" className="booking-modal-cancel" onClick={() => setIsBookingModalOpen(false)}>
+                                    Cancel
+                                </button>
+                                {bookingStep === 2 && <button type="button" className="booking-modal-cancel" onClick={() => { setCheckoutError(null); setBookingStep(1); }}>
+                                    Back
+                                </button>}
+                                {bookingStep === 1 ? <button
+                                    type="button"
+                                    className="booking-modal-confirm"
+                                    onClick={() => setBookingStep(2)}
+                                    disabled={!selectedBookingServiceId}
+                                >
+                                    Choose date &amp; time <ArrowForward fontSize="small" />
+                                </button> : <button
+                                    type="button"
+                                    className="booking-modal-confirm"
+                                    onClick={startCheckout}
+                                    disabled={!selectedBookingServiceId || !selectedBookingTime || isStartingCheckout}
+                                >
+                                    {isStartingCheckout ? 'Opening Stripe…' : <><LockOutlined fontSize="small" /> Send request &amp; pay <ArrowForward fontSize="small" /></>}
+                                </button>}
                             </div>
-                            <p>Back the creator with something playful and premium.</p>
-                            <div className="profile-gifts-donation-items">
-                                {giftItems.map((gift) => (
-                                    <button
-                                        key={gift.id}
-                                        type="button"
-                                        className={`profile-gifts-donation-item ${selectedGift === gift.id ? 'selected' : ''}`}
-                                        onClick={() => setSelectedGift(gift.id)}
-                                    >
-                                        <img src={gift.image} alt={gift.alt} />
-                                        <span>{gift.name}</span>
-                                        <p>{gift.price}</p>
-                                    </button>
-                                ))}
-                            </div>
-                            <button type="button" className="profile-gifts-donation-send-button"><h3>Send Selected Gift</h3></button>
+                            <p className="booking-payment-policy">
+                                By proceeding, you agree to Konevo&apos;s <a href="/terms" target="_blank" rel="noreferrer">Terms of Service and Payment Policy</a>. Your booking is not confirmed until the creator accepts your request. If your request is declined, your payment will be refunded to your original payment method.
+                            </p>
+                            <p className="booking-security-note"><LockOutlined fontSize="small" /> Payments are securely processed by Stripe.</p>
                         </div>
                     </div>
-                    </>
-                }
-                {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.userName ?? ''} displayName={creatorUserDisplayName ?? ''} />}
-                {profileTab === "games" && <h1>games</h1>}
-                {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID} />}
-                {profileTab === "media" && <h1>media</h1>}
-                {profileTab === "reviews" && <h1>reviews</h1>}
-                {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID} />}
+                )}
+                */}
+                <div className="profile-main-tabs">
+                    {profileTabs.map((tab) => (
+                        <button key={tab} type="button" className={`${profileTab === tab ? 'active' : ''}`} onClick={() => setProfileTab(tab)}>
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+                {/*
+                <div className="profile-main">
+                    {profileTab === "overview" && <>
+                        <div className="profile-overview-grid">
+                            <div className="profile-services-offered profile-panel">
+                                <div className="profile-panel-heading">
+                                    <SportsEsportsOutlined fontSize="large" htmlColor="#9557ED" />
+                                    <div>
+                                        <h3>Services</h3>
+                                    </div>
+                                </div>
+                                <p>Pick a format that matches the energy you want from the session.</p>
+                                {creatorProfile?.services?.map((service: any) => (
+                                    <div className="profile-service-card" key={`bar${Math.random()}`}>
+                                        <div className="profile-service-card-icon">
+                                            <Business fontSize="medium" htmlColor="#9557ED" />
+                                        </div>
+                                        <div className="profile-service-card-detail">
+                                            <h3>{service.name}</h3>
+                                            <p>{service.description}</p>
+                                        </div>
+                                        <div className="profile-service-card-price">
+                                            <h3>{service.price}</h3>
+                                            <p>unit here</p>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button type="button"><h3>View All Services</h3></button>
+                            </div>
+                            <div className="profile-user-bio-and-recent-posts">
+                                <div className="profile-user-bio profile-panel">
+                                    <div className="profile-user-bio-header">
+                                        <div>
+                                            <h3>Bio</h3>
+                                        </div>
+                                        <button type="button" className="profile-icon-button" onClick={startEditBio}>
+                                            <Edit />
+                                        </button>
+                                    </div>
+                                    <div className="profile-user-bio-content">
+                                        {!isEditingBio && <div className="profile-user-bio-display">
+                                            <div>{userBio}</div>
+                                        </div>}
+                                        {isEditingBio && <div className="profile-user-bio-edit">
+                                            <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
+                                            <div className="profile-user-bio-edit-cta">
+                                                <button type="button" onClick={saveBio}>Save</button>
+                                                <button type="button" className="secondary" onClick={cancelEditBio}>Cancel</button>
+                                            </div>
+                                        </div>}
+                                    </div>
+                                    <div className="profile-user-bio-footer">
+                                        {creatorProfile?.quickFacts?.map((fact: { label: string; value: string; icon: string }, index: number) => {
+                                            const IconComponent = quickFactIconMap[fact.icon];
+                                            return (
+                                            <div className="profile-user-bio-footer-item" key={index}>
+                                                {IconComponent && <IconComponent fontSize="large" htmlColor="#9557ED" />}
+                                                <div>
+                                                    <p>{fact.label}</p>
+                                                    <h3>{fact.value}</h3>
+                                                </div>
+                                            </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                                <div className="profile-user-recent-posts profile-panel">
+                                    <div className="profile-panel-heading">
+                                        <div>
+                                            <h3>Recent posts</h3>
+                                            <button type="button" onClick={() => setProfileTab("posts")}><h3>View All</h3></button>
+                                        </div>
+                                    </div>
+                                    <div className="profile-user-recent-posts-list">
+                                        {creatorProfile?.recentPosts?.map((post : any) => (
+                                            <UserPost key={post.id} post={post} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="profile-gifts-donation profile-panel">
+                                <div className="profile-panel-heading">
+                                    <div>
+                                        <h3 className="profile-gifts-donation-header">Send a Gift</h3>
+                                    </div>
+                                </div>
+                                <p>Back the creator with something playful and premium.</p>
+                                <div className="profile-gifts-donation-items">
+                                    {giftItems.map((gift) => (
+                                        <button
+                                            key={gift.id}
+                                            type="button"
+                                            className={`profile-gifts-donation-item ${selectedGift === gift.id ? 'selected' : ''}`}
+                                            onClick={() => setSelectedGift(gift.id)}
+                                        >
+                                            <img src={gift.image} alt={gift.alt} />
+                                            <span>{gift.name}</span>
+                                            <p>{gift.price}</p>
+                                        </button>
+                                    ))}
+                                </div>
+                                <button type="button" className="profile-gifts-donation-send-button"><h3>Send Selected Gift</h3></button>
+                            </div>
+                        </div>
+                        </>
+                    }
+                    {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} />}
+                    {profileTab === "games" && <h1>games</h1>}
+                    {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID} />}
+                    {profileTab === "media" && <h1>media</h1>}
+                    {profileTab === "reviews" && <h1>reviews</h1>}
+                    {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID} />}
+                </div>
+            </div> */}
             </div>
-        </div> */
+        </>
     );
 
 }

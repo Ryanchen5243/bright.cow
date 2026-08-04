@@ -11,6 +11,7 @@ export default defineConfig({
       '/api': 'http://localhost:5000',
       '/userByUuid': 'http://localhost:5000',
       '/user': 'http://localhost:5000',
+      '/update_display_name': 'http://localhost:5000',
     },
   },
   test: {

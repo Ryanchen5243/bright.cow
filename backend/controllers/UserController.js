@@ -11,7 +11,7 @@ const UserController = {
   },
   getMe: async (req, res) => {
     try {
-      const user = await User.findByFirebaseUid(req.firebaseUid);
+      const user = await User.findByUUID(req.userId);
       if (!user) return res.status(404).json({ error: 'User not found' });
       res.json(user);
     } catch (err) {
@@ -27,6 +27,16 @@ const UserController = {
       res.status(500).json({ error: err.message });
     }
   },
-
+  updateDisplayName: async (req, res) => {
+    try {
+      const { userDisplayName } = req.body;
+      if (!userDisplayName) return res.status(400).json({ error: 'userDisplayName is required' });
+      const user = await User.updateDisplayName(req.userId, userDisplayName);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 };
 export default UserController; 

@@ -54,6 +54,14 @@ const User = {
       throw err;
     }
   },
+
+  async updateDisplayName(id, newDisplayName) {
+    const { rows } = await query(
+      'UPDATE users SET user_display_name = $1 WHERE id = $2 RETURNING *',
+      [newDisplayName, id]
+    );
+    return rows[0] ?? null;
+  },
 };
 
 export default User;
