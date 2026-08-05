@@ -1,10 +1,24 @@
 import {Add, Edit, Language, PermIdentity, Save} from '@mui/icons-material';
 import { useState } from 'react';
+import { Button } from "@/components/ui/button"
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox"
 
 export default function ProfileInformation(){
     const [isDisabled, setIsDisabled] = useState(true);
     function addLanguage(){
         //add logic here to pop out a combo box and add a language
+        return(
+            <div>
+                hi
+            </div>
+        )
     }
 
     function allowEdits(){
@@ -20,10 +34,12 @@ export default function ProfileInformation(){
     const displayName = "temp Display Name";
     const username = "temp username";
     const bio = "some bio";
-    const location = "some location";
+    const defaultLocation = "some location";
     const birthday = "some birthday";
     const gender = "a gender";
     const joinDate = "7/6/67";
+    const locationOptions = ["San Francisco", "New York", "London", "Barcelona", "Remote"];
+    const [selectedLocation, setSelectedLocation] = useState(defaultLocation);
 
     return(
         <div className="settings-profile-container">
@@ -49,7 +65,7 @@ export default function ProfileInformation(){
                         </button>
                     </div>
                 </div>
-
+                
                 {/* User fields */}
                 <div className="settings-detail-container">
                     <div className="settings-profile-picture">
@@ -74,7 +90,34 @@ export default function ProfileInformation(){
                         <span className="settings-container">
                             <div className="settings-input-group">
                                 <label htmlFor="location" className="settings-input-label">Location</label>
-                                <input className="settings-detail-two-box-left" type="text" id="location" name="location" disabled={isDisabled} defaultValue={location}/>
+                                <Combobox
+                                    items={locationOptions}
+                                    value={selectedLocation}
+                                    onValueChange={setSelectedLocation}
+                                    disabled={isDisabled}
+                                >
+                                    <ComboboxInput
+                                        id="location"
+                                        name="location"
+                                        className="w-full settings-detail-two-box-left"
+                                        placeholder="Select a location"
+                                        disabled={isDisabled}
+                                    />
+                                <ComboboxContent
+                                    className="settings-detail-two-box-left-content"
+                                    style={{ width: "var(--anchor-width, 100%)", minWidth: "var(--anchor-width, 100%)" }}
+                                >
+                                        <ComboboxEmpty>No items found.</ComboboxEmpty>
+
+                                        <ComboboxList>
+                                            {(item) => (
+                                                <ComboboxItem key={item} value={item}>
+                                                    {item}
+                                                </ComboboxItem>
+                                            )}
+                                        </ComboboxList>
+                                    </ComboboxContent>
+                                </Combobox>
                             </div>
                             <div className="settings-input-group">
                                 <label htmlFor="gender" className="settings-input-label-right">Gender</label>
@@ -104,8 +147,21 @@ export default function ProfileInformation(){
                                 {/* Maybe add an actual lucide icon here instead of this small + */}
                                 <button className="settings-add-language" onClick={addLanguage}><Add/></button>
                             </div>
+                            <Button variant= 'secondary' className='dark'>asd</Button>
                         </div>
-
+                            <Combobox items={locationOptions}>
+                                <ComboboxInput placeholder="Select a framework" />
+                                <ComboboxContent>
+                                    <ComboboxEmpty>No items found.</ComboboxEmpty>
+                                    <ComboboxList>
+                                    {(item) => (
+                                        <ComboboxItem key={item} value={item}>
+                                        {item}
+                                        </ComboboxItem>
+                                    )}
+                                    </ComboboxList>
+                                </ComboboxContent>
+                            </Combobox>
                     </div>
                 </div>
             </div>

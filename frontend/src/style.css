@@ -1,6 +1,11 @@
 @layer theme, base, components, utilities;
+
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 /* Design System */
 :root {
   /* colors */
@@ -18,11 +23,39 @@
   --nav-icon-size: 32px;
 
   /* spacing */
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 }
 
 html {
@@ -775,7 +808,6 @@ border-color: rgba(255,255,255,0.08);;
 .lv-stat-box p {
   color: #b5b5bd;
 }
-
 
 /* end app body styles */
 
@@ -3389,7 +3421,6 @@ border-color: rgba(255,255,255,0.08);;
   }
 }
 
-
 /* FullCalendar base reset */
 .calendar-wrapper {
   background: transparent;
@@ -3447,6 +3478,11 @@ border-color: rgba(255,255,255,0.08);;
 .settings-container {
   display: flex;
   flex-direction: row;
+  gap: 24px;
+}
+.settings-container .settings-input-group {
+  flex: 1;
+  min-width: 0;
 }
 .settings-aside {
   flex: 0 0 240px;
@@ -3499,6 +3535,79 @@ border-color: rgba(255,255,255,0.08);;
 .settings-detail-two-box-left{
   margin-left: 48px;
   color: white;
+}
+.settings-detail-two-box-left[data-slot="combobox-anchor"] {
+  position: relative;
+  box-sizing: border-box;
+  width: auto;
+  max-width: 100%;
+  min-height: 64px;
+  height: 40px;
+  border: 1px solid rgba(124, 93, 191, 0.18);
+  background: rgba(124, 93, 191, 0.08);
+  border-radius: 12px;
+  padding: 0 12px;
+  cursor: text;
+  pointer-events: auto;
+}
+.settings-detail-two-box-left[data-slot="combobox-anchor"][data-disabled="true"],
+.settings-detail-two-box-left[data-slot="combobox-anchor"][data-disabled="true"] > [data-slot="input-group"],
+.settings-detail-two-box-left[data-slot="combobox-anchor"][data-disabled="true"] [data-slot="input-group-control"],
+.settings-detail-two-box-left[data-slot="combobox-anchor"][data-disabled="true"] input {
+  cursor: not-allowed !important;
+}
+.settings-detail-two-box-left[data-slot="combobox-anchor"] > [data-slot="input-group"] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100% !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  pointer-events: auto;
+}
+.settings-detail-two-box-left[data-slot="combobox-anchor"] [data-slot="input-group-control"],
+.settings-detail-two-box-left[data-slot="combobox-anchor"] input {
+  width: 100%;
+  min-height: 40px;
+  height: 100%;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: inherit;
+  pointer-events: auto;
+}
+.settings-detail-two-box-left[data-slot="combobox-anchor"] [data-slot="input-group-control"] {
+  display: flex;
+  align-items: center;
+}
+.settings-detail-two-box-left-content {
+  background: rgba(124, 93, 191, 0.90) !important;
+  border: 1px solid rgba(124, 93, 191, 0.18) !important;
+  color: white !important;
+  border-radius: 12px;
+  width: 100% px !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  right: auto !important;
+  box-sizing: border-box;
+}
+.settings-detail-two-box-left-content[data-slot="combobox-content"] {
+  padding: 0 !important;
+}
+.settings-detail-two-box-left-content [data-slot="combobox-list"] {
+  padding: 0 !important;
+}
+.settings-detail-two-box-left-content [data-slot="combobox-item"] {
+  padding: 10px 12px !important;
+  color: white !important;
+}
+.settings-detail-two-box-left-content [data-slot="combobox-item"][data-highlighted] {
+  background: rgba(124, 93, 191, 0.16) !important;
 }
 .settings-input-group input:disabled,.settings-input-group textarea:disabled{
   cursor: not-allowed;
@@ -3613,3 +3722,262 @@ border-color: rgba(255,255,255,0.08);;
   margin-bottom: 24px;
 }
 /* end settings page styles */
+
+
+/* Shadcn css (i hope this doesn't mess anything up lemme know if it does) */
+@theme inline {
+
+  --font-heading: var(--font-sans);
+
+  --font-sans: 'Inter Variable', sans-serif;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-sidebar-border: var(--sidebar-border);
+
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+
+  --color-sidebar-accent: var(--sidebar-accent);
+
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+  --color-sidebar-primary: var(--sidebar-primary);
+
+  --color-sidebar-foreground: var(--sidebar-foreground);
+
+  --color-sidebar: var(--sidebar);
+
+  --color-chart-5: var(--chart-5);
+
+  --color-chart-4: var(--chart-4);
+
+  --color-chart-3: var(--chart-3);
+
+  --color-chart-2: var(--chart-2);
+
+  --color-chart-1: var(--chart-1);
+
+  --color-ring: var(--ring);
+
+  --color-input: var(--input);
+
+  --color-border: var(--border);
+
+  --color-destructive: var(--destructive);
+
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-accent: var(--accent);
+
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-muted: var(--muted);
+
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-secondary: var(--secondary);
+
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-primary: var(--primary);
+
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-popover: var(--popover);
+
+  --color-card-foreground: var(--card-foreground);
+
+  --color-card: var(--card);
+
+  --color-foreground: var(--foreground);
+
+  --color-background: var(--background);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+
+  --radius-md: calc(var(--radius) * 0.8);
+
+  --radius-lg: var(--radius);
+
+  --radius-xl: calc(var(--radius) * 1.4);
+
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  --radius-3xl: calc(var(--radius) * 2.2);
+
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+.dark {
+
+  --background: oklch(0.145 0 0);
+
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.205 0 0);
+
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.205 0 0);
+
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.922 0 0);
+
+  --primary-foreground: oklch(0.205 0 0);
+
+  --secondary: oklch(0.269 0 0);
+
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.269 0 0);
+
+  --muted-foreground: oklch(0.708 0 0);
+
+  --accent: oklch(0.269 0 0);
+
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --border: oklch(1 0 0 / 10%);
+
+  --input: oklch(1 0 0 / 15%);
+
+  --ring: oklch(0.556 0 0);
+
+  --chart-1: oklch(0.87 0 0);
+
+  --chart-2: oklch(0.556 0 0);
+
+  --chart-3: oklch(0.439 0 0);
+
+  --chart-4: oklch(0.371 0 0);
+
+  --chart-5: oklch(0.269 0 0);
+
+  --sidebar: oklch(0.205 0 0);
+
+  --sidebar-foreground: oklch(0.985 0 0);
+
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+
+  --sidebar-accent: oklch(0.269 0 0);
+
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+
+  --sidebar-border: oklch(1 0 0 / 10%);
+
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+
+@layer base {
+  /*
+   * Apply common Preflight-like behavior only to shadcn components
+   * and elements rendered inside them.
+   */
+  :where(
+    [data-slot],
+    [data-slot] *,
+    [data-slot]::before,
+    [data-slot]::after,
+    [data-slot] *::before,
+    [data-slot] *::after
+  ) {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: currentColor;
+  }
+
+  /*
+   * Use the shadcn border and focus-ring theme variables.
+   */
+  :where([data-slot], [data-slot] *) {
+    @apply border-border outline-ring/50;
+  }
+
+  /*
+   * Remove browser margins inside shadcn components.
+   */
+  :where(
+    [data-slot] h1,
+    [data-slot] h2,
+    [data-slot] h3,
+    [data-slot] h4,
+    [data-slot] h5,
+    [data-slot] h6,
+    [data-slot] p,
+    [data-slot] blockquote,
+    [data-slot] figure,
+    [data-slot] dl,
+    [data-slot] dd
+  ) {
+    margin: 0;
+  }
+
+  /*
+   * Normalize controls used by shadcn.
+   */
+  :where(
+    button[data-slot],
+    input[data-slot],
+    select[data-slot],
+    textarea[data-slot],
+    [data-slot] button,
+    [data-slot] input,
+    [data-slot] select,
+    [data-slot] textarea
+  ) {
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+  }
+
+  :where(button[data-slot], [data-slot] button) {
+    background-color: transparent;
+    background-image: none;
+  }
+
+  /*
+   * Normalize lists inside shadcn components.
+   */
+  :where(
+    [data-slot] ul,
+    [data-slot] ol,
+    [data-slot] menu
+  ) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /*
+   * Normalize media inside shadcn components.
+   */
+  :where(
+    [data-slot] img,
+    [data-slot] svg,
+    [data-slot] video,
+    img[data-slot],
+    svg[data-slot],
+    video[data-slot]
+  ) {
+    display: block;
+    vertical-align: middle;
+  }
+
+  :where([data-slot] img, [data-slot] video) {
+    max-width: 100%;
+    height: auto;
+  }
+}

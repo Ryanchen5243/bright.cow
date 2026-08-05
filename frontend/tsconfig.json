@@ -24,7 +24,12 @@
     "strictNullChecks": true,
 
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+
+    /* Shadcn Components */
+    "paths": {
+      "@/*" : ["./src/*"]
+    }
   },
   "include": ["src"]
 }
