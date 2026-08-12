@@ -3697,10 +3697,20 @@ border-color: rgba(255,255,255,0.08);;
   border-radius: 6px;
   color: #6f4ed8;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+  user-select: none;
+  transform: none;
+  height: 36px;
 }
 .settings-add-language:hover{
   border-color: #9557ED;
   color:#9557ED;
+}
+.settings-add-language:active{
+  transform: none;
 }
 #language-panel{
   margin-top: 12px;
@@ -3720,6 +3730,8 @@ border-color: rgba(255,255,255,0.08);;
 }
 .settings-language-alignment{
   margin-bottom: 24px;
+}
+.settings-language-combobox {
 }
 /* end settings page styles */
 

@@ -12,13 +12,12 @@ import {
 
 export default function ProfileInformation(){
     const [isDisabled, setIsDisabled] = useState(true);
+    const [languageOpen, setLanguageOpen] = useState(false);
+    const [selectedLocation, setSelectedLocation] = useState("");
+
     function addLanguage(){
         //add logic here to pop out a combo box and add a language
-        return(
-            <div>
-                hi
-            </div>
-        )
+        setLanguageOpen((prev) => !prev);
     }
 
     function allowEdits(){
@@ -31,6 +30,11 @@ export default function ProfileInformation(){
         }
     }
 
+    function addingLanguage(location: string){
+        setSelectedLocation(location);
+        setLanguageOpen((prev) => !prev);
+    }
+
     const displayName = "temp Display Name";
     const username = "temp username";
     const bio = "some bio";
@@ -39,7 +43,6 @@ export default function ProfileInformation(){
     const gender = "a gender";
     const joinDate = "7/6/67";
     const locationOptions = ["San Francisco", "New York", "London", "Barcelona", "Remote"];
-    const [selectedLocation, setSelectedLocation] = useState(defaultLocation);
 
     return(
         <div className="settings-profile-container">
@@ -145,23 +148,42 @@ export default function ProfileInformation(){
 
                             <div className="settings-language-badges">
                                 {/* Maybe add an actual lucide icon here instead of this small + */}
-                                <button className="settings-add-language" onClick={addLanguage}><Add/></button>
+                                
+                                {languageOpen ? (
+                                    <div className='settings-language-combobox'>
+                                        <Combobox
+                                            items={locationOptions}
+                                            value={selectedLocation}
+                                            onValueChange={addingLanguage}
+                                        >
+                                            {/* TODO: CHANGE THIS COLOR LATER */}
+                                            <ComboboxInput
+                                                id="location"
+                                                name="location"
+                                                className="w-2xs rounded-lg bg-(--vibrant-purple)" 
+                                                placeholder="Select a location"
+                                            />
+                                        {/* TODO: CHANGE THIS COLOR LATER */}
+                                        <ComboboxContent
+                                            className="bg-purple-600 cursor-pointer"
+                                            style={{ width: "var(--anchor-width, 100%)", minWidth: "var(--anchor-width, 100%)" }}
+                                        >
+                                                <ComboboxEmpty>No items found.</ComboboxEmpty>
+
+                                                <ComboboxList>
+                                                    {(item) => (
+                                                        <ComboboxItem key={item} value={item}>
+                                                            {item}
+                                                        </ComboboxItem>
+                                                    )}
+                                                </ComboboxList>
+                                            </ComboboxContent>
+                                        </Combobox>
+                                    </div>
+                                ):
+                                <button className="settings-add-language" onClick={addLanguage}><Add/></button>}
                             </div>
-                            <Button variant= 'secondary' className='dark'>asd</Button>
                         </div>
-                            <Combobox items={locationOptions}>
-                                <ComboboxInput placeholder="Select a framework" />
-                                <ComboboxContent>
-                                    <ComboboxEmpty>No items found.</ComboboxEmpty>
-                                    <ComboboxList>
-                                    {(item) => (
-                                        <ComboboxItem key={item} value={item}>
-                                        {item}
-                                        </ComboboxItem>
-                                    )}
-                                    </ComboboxList>
-                                </ComboboxContent>
-                            </Combobox>
                     </div>
                 </div>
             </div>
