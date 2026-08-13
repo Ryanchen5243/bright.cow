@@ -104,3 +104,15 @@ CREATE TABLE availability_exceptions (
 
     CHECK (start_time < end_time)
 );
+
+-- Idempotency store: caches POST responses to safely replay duplicate requests
+CREATE TABLE idempotency_keys (
+    idempotency_key TEXT PRIMARY KEY,
+    request_hash    TEXT NOT NULL,
+    status          TEXT NOT NULL DEFAULT 'processing' CHECK (status IN ('processing', 'completed')),
+    response_status INT,
+    response_body   JSONB,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX ON idempotency_keys (created_at);

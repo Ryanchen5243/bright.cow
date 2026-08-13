@@ -24,7 +24,7 @@ export async function idempotency(req, res, next) {
             return res.status(422).json({ error: 'Idempotency-Key reused with a different request body' });
         }
         if (status === 'completed') {
-            console.log(`Duplicate request detected for Idempotency-Key: ${key}`);
+            res.set('X-Idempotent-Replayed', 'true');
             return res.status(response_status).json(response_body);
         }
         // atomic conditional reset: only succeeds if the row is still stale (> 30s old)

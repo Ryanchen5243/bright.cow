@@ -10,6 +10,19 @@ import { idempotency } from "./middleware/idempotency.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+  if (req.method === "POST") {
+    const key = req.headers["idempotency-key"];
+    console.log(`[idempotency] --> ${req.path} key=${key ?? "none"}`);
+    const originalJson = res.json.bind(res);
+    res.json = (body) => {
+      const replayed = res.getHeader('X-Idempotent-Replayed') === 'true';
+      console.log(`[idempotency] <-- ${req.path} key=${key ?? "none"} status=${res.statusCode} ${replayed ? "[CACHED]" : "[FRESH]"}`);
+      return originalJson(body);
+    };
+  }
+  next();
+});
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
