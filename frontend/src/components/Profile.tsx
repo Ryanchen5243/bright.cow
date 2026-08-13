@@ -1,6 +1,6 @@
 import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import authAxios from '../axios/authAxios';
@@ -58,7 +58,7 @@ const getSessionEndTime = (startTime: string, durationMinutes: number) => {
     return `${displayHour}:${String(endMinutes % 60).padStart(2, '0')} ${displayPeriod}`;
 };
 
-export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
+export default function Profile({ creatorUUID }: { creatorUUID?: string | null}) {
     const { currentUser } = useAuth();
     const [myDbId, setMyDbId] = useState<string | null>(null);
 
@@ -80,6 +80,9 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     const [userBio, setUserBio] = useState("");
     const [isEditingBio, setIsEditingBio] = useState(false);
     const [draftBio, setDraftBio] = useState(userBio);
+    const [isSavingBio, setIsSavingBio] = useState(false);
+    const [bioSaveError, setBioSaveError] = useState<string | null>(null);
+    const [bioSaveSuccess, setBioSaveSuccess] = useState(false);
     const [selectedGift, setSelectedGift] = useState(giftItems[0].id);
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
     const [selectedBookingServiceId, setSelectedBookingServiceId] = useState<string | null>(null);
@@ -90,14 +93,15 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
-    const updateDisplayNameKey = useRef(uuidv4());
+    // const updateDisplayNameKey = useRef(uuidv4());
 
-    useEffect(() => {
-        const update = async () => {
-            await authAxios.post("/update_display_name", { userDisplayName: "New Display Name" }, { headers: { 'Idempotency-Key': updateDisplayNameKey.current } });
-        };
-        update();
-    }, []);
+    // useEffect(() => {
+    //     const update = async () => {
+    //         await authAxios.post("/update_display_name", { userDisplayName: "New Display Name" }, { headers: { 'Idempotency-Key': updateDisplayNameKey.current } });
+    //     };
+    //     update();
+    // }, []);
+
     useEffect(() => {
         if (!creatorUUID) return;
         let isCancelled = false;
@@ -149,12 +153,26 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
 
     const startEditBio = () => {
         setDraftBio(userBio);
+        setBioSaveError(null);
+        setBioSaveSuccess(false);
         setIsEditingBio(true);
     };
 
-    const saveBio = () => {
-        setUserBio(draftBio);
-        setIsEditingBio(false);
+    const saveBio = async () => {
+        setIsSavingBio(true);
+        setBioSaveError(null);
+        setBioSaveSuccess(false);
+        try {
+            await authAxios.post(`/update_bio`, { userBio: draftBio }, { headers: { 'Idempotency-Key': uuidv4() } });
+            setUserBio(draftBio);
+            setIsEditingBio(false);
+            setBioSaveSuccess(true);
+            setTimeout(() => setBioSaveSuccess(false), 3000);
+        } catch {
+            setBioSaveError('Failed to save bio. Please try again.');
+        } finally {
+            setIsSavingBio(false);
+        }
     };
 
     const cancelEditBio = () => {
@@ -230,8 +248,6 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
     };
 
     return (<>
-            <h1> profile content</h1>
-            <h1> isOwnProfile: {isOwnProfile ? 'true' : 'false'}</h1>
             <div className="profile-view">
                 <div className="profile-header" style={{ background: `linear-gradient(135deg, rgba(10, 14, 24, 0.18), rgba(10, 14, 24, 0.82)), url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className="profile-user-photo-shell">
@@ -420,7 +436,6 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
                         </button>
                     ))}
                 </div>
-                {/*
                 <div className="profile-main">
                     {profileTab === "overview" && <>
                         <div className="profile-overview-grid">
@@ -455,9 +470,12 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
                                         <div>
                                             <h3>Bio</h3>
                                         </div>
-                                        <button type="button" className="profile-icon-button" onClick={startEditBio}>
-                                            <Edit />
-                                        </button>
+                                        <div className="profile-user-bio-header-right">
+                                            {bioSaveSuccess && <span className="profile-user-bio-success">Saved!</span>}
+                                            {isOwnProfile && <button type="button" className="profile-icon-button" onClick={startEditBio}>
+                                                <Edit />
+                                            </button>}
+                                        </div>
                                     </div>
                                     <div className="profile-user-bio-content">
                                         {!isEditingBio && <div className="profile-user-bio-display">
@@ -466,9 +484,10 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
                                         {isEditingBio && <div className="profile-user-bio-edit">
                                             <textarea className="profile-user-bio-textarea" value={draftBio} onChange={(e) => setDraftBio(e.target.value)} />
                                             <div className="profile-user-bio-edit-cta">
-                                                <button type="button" onClick={saveBio}>Save</button>
-                                                <button type="button" className="secondary" onClick={cancelEditBio}>Cancel</button>
+                                                <button type="button" onClick={saveBio} disabled={isSavingBio}>{isSavingBio ? 'Saving...' : 'Save'}</button>
+                                                <button type="button" className="secondary" onClick={cancelEditBio} disabled={isSavingBio}>Cancel</button>
                                             </div>
+                                            {bioSaveError && <div className="profile-user-bio-error">{bioSaveError}</div>}
                                         </div>}
                                     </div>
                                     <div className="profile-user-bio-footer">
@@ -526,15 +545,15 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string }) {
                         </div>
                         </>
                     }
-                    {profileTab === "posts" && <Posts creatorUUID={creatorUUID} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} />}
+                    {profileTab === "posts" && <Posts creatorUUID={creatorUUID ?? null} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} />}
                     {profileTab === "games" && <h1>games</h1>}
-                    {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID} />}
+                    {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID ?? null} />}
                     {profileTab === "media" && <h1>media</h1>}
                     {profileTab === "reviews" && <h1>reviews</h1>}
-                    {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID} />}
+                    {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID ?? null} />}
                 </div>
-            </div> */}
             </div>
+        
         </>
     );
 

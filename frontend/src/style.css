@@ -1797,6 +1797,23 @@ border-color: rgba(255,255,255,0.08);;
   border-color: #9557ed;
 }
 
+.profile-user-bio-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-user-bio-success {
+  font-size: 0.8rem;
+  color: #4caf50;
+}
+
+.profile-user-bio-error {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: #f44336;
+}
+
 .profile-user-bio-footer {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

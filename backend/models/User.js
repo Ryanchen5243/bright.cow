@@ -62,6 +62,13 @@ const User = {
     );
     return rows[0] ?? null;
   },
+  async updateBio(id, newBio) {
+    const { rows } = await query(
+      'UPDATE users SET bio = $1 WHERE id = $2 RETURNING *',
+      [newBio, id]
+    );
+    return rows[0] ?? null;
+  }
 };
 
 export default User;

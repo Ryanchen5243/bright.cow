@@ -12,6 +12,7 @@ export default defineConfig({
       '/userByUuid': 'http://localhost:5000',
       '/user': 'http://localhost:5000',
       '/update_display_name': 'http://localhost:5000',
+      '/update_bio': 'http://localhost:5000',
     },
   },
   test: {

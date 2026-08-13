@@ -137,7 +137,7 @@ app.get("/user/me", verifyFirebaseToken, UserController.getMe);
 app.post("/auth/syncUser", verifyFirebaseToken, AuthController.syncUser);
 app.get("/userByUuid/:uuid", UserController.getUserByUUID);
 app.post("/update_display_name", verifyFirebaseToken, idempotency, UserController.updateDisplayName);
-
+app.post("/update_bio", verifyFirebaseToken, idempotency, UserController.updateBio);
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {

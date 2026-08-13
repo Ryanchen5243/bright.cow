@@ -38,5 +38,16 @@ const UserController = {
       res.status(500).json({ error: err.message });
     }
   },
+  updateBio: async (req, res) => {
+    try {
+      const { userBio } = req.body;
+      if (userBio === undefined || userBio === null) return res.status(400).json({ error: 'userBio is required' });
+      const user = await User.updateBio(req.userId, userBio);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
 };
-export default UserController; 
+export default UserController;
