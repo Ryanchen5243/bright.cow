@@ -1,4 +1,4 @@
-import {Add, Edit, Language, PermIdentity, Save} from '@mui/icons-material';
+import {Add, Close, Edit, Language, PermIdentity, Save} from '@mui/icons-material';
 import { useState } from 'react';
 import {
   Combobox,
@@ -21,6 +21,7 @@ export default function ProfileInformation(){
     const [languageOpen, setLanguageOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedGender, setSelectedGender] = useState("");
+    const [languages, setLanguages] = useState<string[]>([]);
 
     function addLanguage(){
         //add logic here to pop out a combo box and add a language
@@ -37,9 +38,17 @@ export default function ProfileInformation(){
         }
     }
 
-    function addingLanguage(location: string){
-        setSelectedLocation(location);
-        setLanguageOpen((prev) => !prev);
+    function addingLanguage(value: unknown){
+        const language = value as string | null;
+
+        if(language){
+            setLanguages((prev) => prev.includes(language) ? prev : [...prev, language]);
+        }
+        setLanguageOpen(false);
+    }
+
+    function removeLanguage(language: string){
+        setLanguages((prev) => prev.filter((item) => item !== language));
     }
 
     const displayName = "temp Display Name";
@@ -50,6 +59,8 @@ export default function ProfileInformation(){
     const joinDate = "7/6/67";
     const locationOptions = ["San Francisco", "New York", "London", "Barcelona", "Remote"];
     const genderOptions = ["Female", "Male", "Non-binary", "Prefer not to say"];
+    const languageOptions = ["English", "Spanish", "Mandarin", "French", "German", "Japanese", "Korean"];
+    const unusedLanguages = languageOptions.filter((option) => !languages.includes(option));
 
     return(
         <div className="settings-profile-container">
@@ -175,21 +186,34 @@ export default function ProfileInformation(){
                             <p className="settings-profile-subtitle">Add the languages you speak.</p>
 
                             <div className="settings-language-badges">
+                                {languages.map((language) => (
+                                    <span key={language} className="settings-language-badge">
+                                        {language}
+                                        <button
+                                            type="button"
+                                            className="settings-language-badge-remove"
+                                            onClick={() => removeLanguage(language)}
+                                            aria-label={`Remove ${language}`}
+                                        >
+                                            <Close sx={{fontSize: 14}}/>
+                                        </button>
+                                    </span>
+                                ))}
+
                                 {/* Maybe add an actual lucide icon here instead of this small + */}
                                 
                                 {languageOpen ? (
                                     <div className='settings-language-combobox'>
                                         <Combobox
-                                            items={locationOptions}
-                                            value={selectedLocation}
+                                            items={unusedLanguages}
                                             onValueChange={addingLanguage}
                                         >
                                             {/* TODO: CHANGE THIS COLOR LATER */}
                                             <ComboboxInput
-                                                id="location"
-                                                name="location"
+                                                id="language"
+                                                name="language"
                                                 className="w-2xs rounded-lg bg-(--vibrant-purple)" 
-                                                placeholder="Select a location"
+                                                placeholder="Select a language"
                                             />
                                         {/* TODO: CHANGE THIS COLOR LATER */}
                                         <ComboboxContent
