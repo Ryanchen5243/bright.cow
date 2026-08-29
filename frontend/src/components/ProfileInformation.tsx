@@ -8,11 +8,19 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function ProfileInformation(){
     const [isDisabled, setIsDisabled] = useState(true);
     const [languageOpen, setLanguageOpen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState("");
+    const [selectedGender, setSelectedGender] = useState("");
 
     function addLanguage(){
         //add logic here to pop out a combo box and add a language
@@ -39,9 +47,9 @@ export default function ProfileInformation(){
     const bio = "some bio";
     const defaultLocation = "some location";
     const birthday = "some birthday";
-    const gender = "a gender";
     const joinDate = "7/6/67";
     const locationOptions = ["San Francisco", "New York", "London", "Barcelona", "Remote"];
+    const genderOptions = ["Female", "Male", "Non-binary", "Prefer not to say"];
 
     return(
         <div className="settings-profile-container">
@@ -123,7 +131,28 @@ export default function ProfileInformation(){
                             </div>
                             <div className="settings-input-group">
                                 <label htmlFor="gender" className="settings-input-label-right">Gender</label>
-                                <input className="settings-detail-two-box-right" type="text" id="gender" name="gender" placeholder="Pick gender" disabled={isDisabled} defaultValue={gender}/>
+                                <Select
+                                    id="gender"
+                                    name="gender"
+                                    value={selectedGender}
+                                    onValueChange={(value) => setSelectedGender((value as string) ?? "")}
+                                    disabled={isDisabled}
+                                >
+                                    <SelectTrigger className="settings-detail-two-box-right">
+                                        <SelectValue placeholder="Pick gender" />
+                                    </SelectTrigger>
+                                    <SelectContent
+                                        className="settings-detail-two-box-right-content"
+                                        alignItemWithTrigger={false}
+                                        align="start"
+                                    >
+                                        {genderOptions.map((option) => (
+                                            <SelectItem key={option} value={option}>
+                                                {option}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </span>
 

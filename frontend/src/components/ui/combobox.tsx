@@ -76,7 +76,7 @@ const ComboboxTrigger = React.forwardRef<
       ref={ref}
       data-slot="combobox-trigger"
       className={cn(
-        "[&_svg:not([class*='size-'])]:size-4",
+        "appearance-none bg-transparent shadow-none hover:bg-transparent disabled:bg-transparent aria-expanded:bg-transparent [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -147,7 +147,7 @@ function ComboboxInput({
               variant="ghost"
               render={<ComboboxTrigger />}
               data-slot="input-group-button"
-              className="group-has-data-[slot=combobox-clear]/input-group:hidden data-pressed:bg-transparent"
+              className="group-has-data-[slot=combobox-clear]/input-group:hidden appearance-none bg-transparent shadow-none hover:bg-transparent disabled:bg-transparent data-pressed:bg-transparent aria-expanded:bg-transparent"
               disabled={disabled}
             />
           )}
