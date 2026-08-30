@@ -1,5 +1,6 @@
-import {Add, Close, Edit, Language, PermIdentity, Save} from '@mui/icons-material';
-import { useState } from 'react';
+import {Add, Close, Edit, Language, PermIdentity, PhotoCamera, Save} from '@mui/icons-material';
+import { useEffect, useRef, useState } from 'react';
+import defaultProfilePhoto from '../assets/default_profile_photo.jpg';
 import {
   Combobox,
   ComboboxContent,
@@ -22,6 +23,31 @@ export default function ProfileInformation(){
     const [selectedLocation, setSelectedLocation] = useState("");
     const [selectedGender, setSelectedGender] = useState("");
     const [languages, setLanguages] = useState<string[]>([]);
+    const [profilePhoto, setProfilePhoto] = useState(defaultProfilePhoto);
+    const profilePhotoInputRef = useRef<HTMLInputElement>(null);
+
+    // Object URLs stay alive until revoked, so drop the previous one whenever
+    // the photo changes and on unmount.
+    useEffect(() => {
+        if(!profilePhoto.startsWith("blob:")){
+            return;
+        }
+        return () => URL.revokeObjectURL(profilePhoto);
+    }, [profilePhoto]);
+
+    function choosingProfilePhoto(){
+        profilePhotoInputRef.current?.click();
+    }
+
+    function changingProfilePhoto(event: React.ChangeEvent<HTMLInputElement>){
+        const file = event.target.files?.[0];
+
+        if(file){
+            setProfilePhoto(URL.createObjectURL(file));
+        }
+        //reset so picking the same file again still fires a change event
+        event.target.value = "";
+    }
 
     function addLanguage(){
         //add logic here to pop out a combo box and add a language
@@ -90,7 +116,24 @@ export default function ProfileInformation(){
                 {/* User fields */}
                 <div className="settings-detail-container">
                     <div className="settings-profile-picture">
-                        <img src="src/assets/default_profile_photo.jpg" className="settings-profile-photo"/>
+                        <button
+                            type="button"
+                            className="settings-profile-photo-button"
+                            onClick={choosingProfilePhoto}
+                            aria-label="Change profile picture"
+                        >
+                            <img src={profilePhoto} className="settings-profile-photo" alt="Profile"/>
+                            <span className="settings-profile-photo-overlay">
+                                <PhotoCamera sx={{fontSize: 40}}/>
+                            </span>
+                        </button>
+                        <input
+                            ref={profilePhotoInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="settings-profile-photo-input"
+                            onChange={changingProfilePhoto}
+                        />
                     </div>
                     <div className="settings-profile-information">
                         <div className="settings-input-group">
