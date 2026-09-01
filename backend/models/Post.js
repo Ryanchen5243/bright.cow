@@ -15,7 +15,7 @@ const Post = {
              COUNT(DISTINCT pl.user_id)::int AS like_count,
              COUNT(DISTINCT pc.id)::int       AS comment_count,
              COALESCE(
-               json_agg(
+               (SELECT json_agg(
                  json_build_object(
                    'id', pi.id,
                    's3_key', pi.s3_key,
@@ -24,13 +24,12 @@ const Post = {
                    'height', pi.height,
                    'position', pi.position
                  ) ORDER BY pi.position
-               ) FILTER (WHERE pi.id IS NOT NULL),
+               ) FROM post_images pi WHERE pi.post_id = p.id),
                '[]'
              ) AS images
         FROM posts p
         LEFT JOIN post_likes   pl ON pl.post_id = p.id
         LEFT JOIN post_comments pc ON pc.post_id = p.id
-        LEFT JOIN post_images  pi ON pi.post_id  = p.id
        WHERE p.user_id = $1 ${cursor}
        GROUP BY p.id
        ORDER BY p.created_at DESC
@@ -45,7 +44,7 @@ const Post = {
              COUNT(DISTINCT pl.user_id)::int AS like_count,
              COUNT(DISTINCT pc.id)::int       AS comment_count,
              COALESCE(
-               json_agg(
+               (SELECT json_agg(
                  json_build_object(
                    'id', pi.id,
                    's3_key', pi.s3_key,
@@ -54,13 +53,12 @@ const Post = {
                    'height', pi.height,
                    'position', pi.position
                  ) ORDER BY pi.position
-               ) FILTER (WHERE pi.id IS NOT NULL),
+               ) FROM post_images pi WHERE pi.post_id = p.id),
                '[]'
              ) AS images
         FROM posts p
         LEFT JOIN post_likes   pl ON pl.post_id = p.id
         LEFT JOIN post_comments pc ON pc.post_id = p.id
-        LEFT JOIN post_images  pi ON pi.post_id  = p.id
        WHERE p.id = $1
        GROUP BY p.id`;
     const { rows } = await query(sql, [postId]);
