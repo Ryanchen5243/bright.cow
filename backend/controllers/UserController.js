@@ -49,5 +49,12 @@ const UserController = {
       res.status(500).json({ error: err.message });
     }
   },
+  getAllPosts: async (req,res) => {
+    try {
+      
+    } catch (err) {
+      res.status(500).json({error: err.message});
+    }
+  }
 };
 export default UserController;

@@ -2,7 +2,6 @@ import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import authAxios from '../axios/authAxios';
 import { useAuth } from '../contexts/authContext';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,7 +21,7 @@ import UserPost from './UserPost';
 import Posts from './Posts';
 import ScheduleCustomize from './ScheduleCustomize';
 
-const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews', 'ScheduleCustomize'] as const;
+const profileTabs = ['overview', 'posts', 'games', 'schedule', 'media', 'reviews'] as const;
 import { Business } from '@mui/icons-material';
 
 const giftItems = [
@@ -92,15 +91,14 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string | null})
     const [selectedBookingDate, setSelectedBookingDate] = useState(getLocalDateValue);
     const [selectedBookingTime, setSelectedBookingTime] = useState<string | null>(null);
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
+    const [recentPosts, setRecentPosts] = useState<any[]>([]);
 
-    // const updateDisplayNameKey = useRef(uuidv4());
-
-    // useEffect(() => {
-    //     const update = async () => {
-    //         await authAxios.post("/update_display_name", { userDisplayName: "New Display Name" }, { headers: { 'Idempotency-Key': updateDisplayNameKey.current } });
-    //     };
-    //     update();
-    // }, []);
+    useEffect(() => {
+        if (!creatorUUID) return;
+        authAxios.get(`/posts/${creatorUUID}`)
+            .then(({ data }) => setRecentPosts(Array.isArray(data) ? data.slice(0, 3) : []))
+            .catch(() => setRecentPosts([]));
+    }, [creatorUUID]);
 
     useEffect(() => {
         if (!creatorUUID) return;
@@ -513,8 +511,8 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string | null})
                                         </div>
                                     </div>
                                     <div className="profile-user-recent-posts-list">
-                                        {creatorProfile?.recentPosts?.map((post : any) => (
-                                            <UserPost key={post.id} post={post} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.userDisplayName ?? ''} />
+                                        {recentPosts.map((post: any) => (
+                                            <UserPost key={post.id} post={post} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} onInteract={() => setProfileTab('posts')} isOwnPost={isOwnProfile} onDelete={(id) => setRecentPosts((prev) => prev.filter((p) => p.id !== id))} />
                                         ))}
                                     </div>
                                 </div>
@@ -545,12 +543,12 @@ export default function Profile({ creatorUUID }: { creatorUUID?: string | null})
                         </div>
                         </>
                     }
-                    {profileTab === "posts" && <Posts creatorUUID={creatorUUID ?? null} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} />}
+                    {profileTab === "posts" && <Posts creatorUUID={creatorUUID ?? null} userName={creatorProfile?.user_name ?? ''} displayName={creatorProfile?.user_display_name ?? ''} isOwnProfile={isOwnProfile} />}
                     {profileTab === "games" && <h1>games</h1>}
                     {profileTab === "schedule" && <CreatorSchedule creatorUUID={creatorUUID ?? null} />}
                     {profileTab === "media" && <h1>media</h1>}
                     {profileTab === "reviews" && <h1>reviews</h1>}
-                    {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID ?? null} />}
+                    {/* {profileTab === "ScheduleCustomize" && <ScheduleCustomize creatorUUID={creatorUUID ?? null} />} */}
                 </div>
             </div>
         

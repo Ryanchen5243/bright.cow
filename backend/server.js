@@ -2,7 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import UserController from "./controllers/UserController.js"
 import AuthController from "./controllers/AuthController.js"
+import PostController from "./controllers/PostController.js"
 import { verifyFirebaseToken } from "./middleware/verifyFirebaseToken.js"
+import { optionalFirebaseToken } from "./middleware/optionalFirebaseToken.js"
 import Stripe from "stripe";
 import { readFile } from "node:fs/promises";
 import { idempotency } from "./middleware/idempotency.js";
@@ -138,7 +140,19 @@ app.post("/auth/syncUser", verifyFirebaseToken, AuthController.syncUser);
 app.get("/userByUuid/:uuid", UserController.getUserByUUID);
 app.post("/update_display_name", verifyFirebaseToken, idempotency, UserController.updateDisplayName);
 app.post("/update_bio", verifyFirebaseToken, idempotency, UserController.updateBio);
-
+app.get('/posts/single/:postId', PostController.getPost);
+app.post('/posts/:postId/presign-upload', verifyFirebaseToken, PostController.presignUpload);
+app.post('/posts/:postId/images', verifyFirebaseToken, PostController.saveImage);
+app.delete('/posts/:postId/images/:imageId', verifyFirebaseToken, PostController.removeImage);
+app.get('/posts/:postId/comments', PostController.getComments);
+app.post('/posts/:postId/comments', verifyFirebaseToken, idempotency, PostController.addComment);
+app.delete('/posts/:postId/comments/:commentId', verifyFirebaseToken, PostController.deleteComment);
+app.post('/posts/:postId/like', verifyFirebaseToken, PostController.likePost);
+app.delete('/posts/:postId/like', verifyFirebaseToken, PostController.unlikePost);
+app.patch('/posts/:postId', verifyFirebaseToken, PostController.updatePost);
+app.delete('/posts/:postId', verifyFirebaseToken, PostController.deletePost);
+app.post('/posts', verifyFirebaseToken, idempotency, PostController.createPost);
+app.get('/posts/:uuid', optionalFirebaseToken, PostController.getPostsByUser);
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
