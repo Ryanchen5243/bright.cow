@@ -25,6 +25,7 @@ export default function UserPost(props: {post: any, userName: string, displayNam
     const [editUploadError, setEditUploadError] = useState<string | null>(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
     const MAX_FILES = 4;
     const MAX_FILE_BYTES = 10 * 1024 * 1024;
     const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -152,6 +153,17 @@ export default function UserPost(props: {post: any, userName: string, displayNam
     };
 
     useEffect(() => {
+        if (lightboxIndex === null) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight') setLightboxIndex((i) => i !== null ? Math.min(i + 1, postImages.length - 1) : null);
+            if (e.key === 'ArrowLeft') setLightboxIndex((i) => i !== null ? Math.max(i - 1, 0) : null);
+            if (e.key === 'Escape') setLightboxIndex(null);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [lightboxIndex, postImages.length]);
+
+    useEffect(() => {
         if (!showComments || commentsLoaded || !post.id) return;
         authAxios.get(`/posts/${post.id}/comments`)
             .then(({ data }) => { setCommentItems(data); setCommentsLoaded(true); })
@@ -169,6 +181,7 @@ export default function UserPost(props: {post: any, userName: string, displayNam
                         <h3>{props?.displayName}</h3>
                         <p>{props?.userName}</p>
                     </div>
+                    <span className="user-post-timestamp">{timestamp}</span>
                     {props.isOwnPost && (
                         <button
                             ref={menuButtonRef}
@@ -180,16 +193,19 @@ export default function UserPost(props: {post: any, userName: string, displayNam
                             <MoreVert fontSize="small" />
                         </button>
                     )}
-                    <span className="user-post-timestamp">{timestamp}</span>
                 </div>
                 {/* {post.title && <p className="user-post-title">{post.title}</p>} */}
                 {postContent && <p className="user-post-body">{postContent}</p>}
                 {postImages.length > 0 && (
-                    <div className="user-post-media-grid" aria-label="Post media attachments">
+                    <div className="user-post-media-grid" data-count={Math.min(postImages.length, 5)} aria-label="Post media attachments">
                         {postImages.map((item: any, index: number) => {
                             const src = item.url ?? null;
                             if (!src) return null;
-                            return <img key={item.id ?? `${src}-${index}`} src={src} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />;
+                            return (
+                                <div key={item.id ?? `${src}-${index}`} className="user-post-media-item" onClick={(e) => { e.stopPropagation(); setLightboxIndex(index); }}>
+                                    <img src={src} alt={`Post attachment ${index + 1}`} className="user-post-media-image" />
+                                </div>
+                            );
                         })}
                     </div>
                 )}
@@ -238,6 +254,30 @@ export default function UserPost(props: {post: any, userName: string, displayNam
                     </div>
                 )}
             </div>
+
+            {lightboxIndex !== null && (
+                <div className="user-post-lightbox-backdrop" onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }} role="dialog" aria-modal="true">
+                    <button className="user-post-lightbox-close" onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }} aria-label="Close">✕</button>
+                    <div className="user-post-lightbox-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="user-post-lightbox-image-area">
+                            <button className="user-post-lightbox-arrow user-post-lightbox-arrow-left" onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => i !== null ? Math.max(i - 1, 0) : null); }} disabled={lightboxIndex === 0} aria-label="Previous">&#8249;</button>
+                            <img src={postImages[lightboxIndex]?.url} alt={`Image ${lightboxIndex + 1} of ${postImages.length}`} className="user-post-lightbox-image" />
+                            <button className="user-post-lightbox-arrow user-post-lightbox-arrow-right" onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => i !== null ? Math.min(i + 1, postImages.length - 1) : null); }} disabled={lightboxIndex === postImages.length - 1} aria-label="Next">&#8250;</button>
+                        </div>
+                        <div className="user-post-lightbox-sidebar">
+                            <div className="user-post-lightbox-identity">
+                                <strong>{props.displayName}</strong>
+                                <span>{props.userName}</span>
+                                <span className="user-post-lightbox-timestamp">{timestamp}</span>
+                            </div>
+                            {postContent && <p className="user-post-lightbox-body">{postContent}</p>}
+                            {postImages.length > 1 && (
+                                <p className="user-post-lightbox-counter">{lightboxIndex + 1} / {postImages.length}</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={() => setMenuAnchor(null)} onClick={(e) => e.stopPropagation()}>
                 <MenuItem onClick={openEdit}>Edit</MenuItem>
