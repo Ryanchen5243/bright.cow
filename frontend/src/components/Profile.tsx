@@ -2,6 +2,7 @@ import bg from '../assets/default_background_img.png';
 import pfp from '../assets/default_profile_photo.jpg';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import axios from 'axios';
 import { Adjust, Edit, Group, SportsEsportsOutlined, SmartDisplay, Message, StarBorder, Translate, Public, WatchLater, VideocamOutlined, ForumOutlined, CheckCircle, LockOutlined, ArrowForward, type SvgIconComponent } from '@mui/icons-material';
 
 const quickFactIconMap: Record<string, SvgIconComponent> = { Translate, Public, WatchLater };
@@ -54,7 +55,7 @@ const getSessionEndTime = (startTime: string, durationMinutes: number) => {
     return `${displayHour}:${String(endMinutes % 60).padStart(2, '0')} ${displayPeriod}`;
 };
 
-export default function Profile({ creatorUserName }: { creatorUserName?: string }) {
+export default function Profile({ creatorId }: { creatorId?: string }) {
     const [searchParams, setSearchParams] = useSearchParams();
     const rawTab = searchParams.get('tab');
     const profileTab = (profileTabs as readonly string[]).includes(rawTab ?? '') ? rawTab! : 'overview';
@@ -79,27 +80,23 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
     const [selectedBookingQuantity, setSelectedBookingQuantity] = useState(1);
 
     useEffect(() => {
+        if (!creatorId) return;
         let isCancelled = false;
+
         const loadCreatorProfile = async () => {
             try {
-                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
-                if (!response.ok) {
-                    return;
-                }
-
-                const data = await response.json() as any[];
-                const creators = Array.isArray(data) ? data : [];
-                const resolvedCreator = creators.find((creator) => creator.userName === creatorUserName) ?? null;
+                const response = await axios.get(`/api/users/by-id/${encodeURIComponent(creatorId)}`);
+                const creator = response.data;
 
                 if (!isCancelled) {
-                    setCreatorProfile(resolvedCreator);
-                    setCreatorUUID(resolvedCreator?.id ?? null);
-                    setCreatorUserDisplayName(resolvedCreator?.userDisplayName ?? undefined);
+                    setCreatorProfile(creator);
+                    setCreatorUUID(creator?.id ?? null);
+                    setCreatorUserDisplayName(creator?.user_display_name ?? undefined);
                     setSelectedBookingServiceId(
-                        resolvedCreator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
+                        creator?.services?.find((service: any) => service.type === 'session' || service.type === 'minute')?.id ?? null,
                     );
-                    setUserBio(resolvedCreator?.userBio ?? "");
-                    setDraftBio(resolvedCreator?.userBio ?? "");
+                    setUserBio(creator?.bio ?? "");
+                    setDraftBio(creator?.bio ?? "");
                     setIsEditingBio(false);
                 }
             } catch {
@@ -116,7 +113,7 @@ export default function Profile({ creatorUserName }: { creatorUserName?: string 
         return () => {
             isCancelled = true;
         };
-    }, [creatorUserName]);
+    }, [creatorId]);
 
     useEffect(() => {
         if (!isBookingModalOpen) {

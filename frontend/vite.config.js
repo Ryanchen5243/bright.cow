@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      '/allUsers': 'http://localhost:5001',
+      '/myProfile': 'http://localhost:5001',
+      '/syncUser': 'http://localhost:5001',
       '/api': 'http://localhost:5001',
     },
   },

@@ -266,6 +266,12 @@ export default function TermsPage() {
             <li>We may use anonymous data as permitted by law.</li>
         </ul>
 
+        <h2>Changes to This Policy</h2>
+
+    <p>UWUVIBE may update these policies periodically to reflect changes in platform features, legal requirements, 
+        operational needs, or community standards. Updated versions will become effective upon publication unless otherwise stated. 
+        Continued use of UWUVIBE constitutes acceptance of any revised Guidelines.</p>
+
 
 
     </div>
@@ -664,11 +670,62 @@ export default function TermsPage() {
     Additional information regarding our collection, use, disclosure, and retention of personal information can be found throughout this Privacy Policy.
 </p>
 
-    <h2>International Users</h2>
-    <p>
-        Your information may be processed, stored, and transferred in countries where UWUVIBE, Konevo LLC, or our service providers operate.
-        By using the platform, you consent to the transfer, storage, and processing of information in accordance with this Privacy Policy and applicable laws.
-    </p>
+    <h2>International Users and Regional Privacy Rights</h2>
+
+<p>
+    Konevo LLC operates internationally and welcomes users from multiple countries and regions. If you access or use our Platform outside of the United States, your personal information may be collected, processed, stored, and transferred to the United States or other countries where Konevo LLC or our trusted service providers operate.
+</p>
+
+<p>
+    By using our Platform, you acknowledge and consent to the transfer, storage, and processing of your personal information in accordance with this Privacy Policy and applicable laws. Data protection laws in these countries may differ from those in your country of residence.
+</p>
+
+<p>
+    We implement reasonable administrative, technical, and organizational safeguards to protect your personal information during international transfers and while it is stored or processed by us or our trusted service providers.
+</p>
+
+<h3>Your Privacy Rights</h3>
+
+<p>
+    Depending on your country or region of residence, you may have additional privacy rights under applicable laws. Subject to applicable law, you may have the right to:
+</p>
+
+<ul>
+    <li>Request access to the personal information we maintain about you.</li>
+    <li>Request correction of inaccurate or incomplete personal information.</li>
+    <li>Request deletion of your personal information where permitted by law.</li>
+    <li>Request restriction or suspension of certain processing activities.</li>
+    <li>Object to certain uses of your personal information where permitted by law.</li>
+    <li>Withdraw consent where processing is based on your consent.</li>
+    <li>Request a copy of your personal information in a portable format where applicable.</li>
+    <li>Submit a complaint to the appropriate privacy or data protection authority within your jurisdiction.</li>
+</ul>
+
+<p>
+    We may request additional information to verify your identity before processing any privacy-related request.
+</p>
+
+<h3>International Compliance</h3>
+
+<p>
+    Konevo LLC strives to comply with applicable privacy and data protection laws in the jurisdictions where our services are offered. These may include, where applicable:
+</p>
+
+<ul>
+    <li>United States privacy laws</li>
+    <li>European Union General Data Protection Regulation (GDPR)</li>
+    <li>United Kingdom General Data Protection Regulation (UK GDPR)</li>
+    <li>Japan's Act on the Protection of Personal Information (APPI)</li>
+    <li>South Korea's Personal Information Protection Act (PIPA)</li>
+    <li>Canada's Personal Information Protection and Electronic Documents Act (PIPEDA)</li>
+    <li>Australia's Privacy Act 1988</li>
+    <li>Other applicable national or regional privacy laws</li>
+</ul>
+
+<p>
+    Where local laws provide users with additional rights or impose additional obligations, those rights and obligations shall apply only to users located within the applicable jurisdiction.
+</p>
+
 
     <h2>Changes to This Privacy Policy</h2>
     <p>
@@ -1119,19 +1176,75 @@ export default function TermsPage() {
         assist at our discretion.
     </p>
 
-    <h2>13. Limitation of Liability</h2>
+    <h2>13. Creator and User Disputes</h2>
+
+        <p>
+            UWUVIBE is a marketplace platform that connects users with independent creators. Unless expressly stated otherwise, Konevo LLC is not a party to any agreement, booking, communication, transaction, or arrangement entered into between users and creators.
+        </p>
+
+        <p>
+            Creators and users are solely responsible for their communications, bookings, transactions, payments, cancellations, conduct, and the fulfillment of any services provided through the Platform.
+        </p>
+
+        <p>
+            If a dispute arises between a creator and a user, both parties agree to make a good-faith effort to resolve the matter directly before requesting assistance from Konevo LLC.
+        </p>
+
+        <p>
+            Either party may submit a dispute through UWUVIBE's designated support channels. Upon receiving a dispute, Konevo LLC may, at its sole discretion, investigate the matter by reviewing booking records, payment history, messages exchanged through the Platform, uploaded content, and any other relevant information.
+        </p>
+
+        <p>
+            Both creators and users agree to cooperate fully with any investigation conducted by Konevo LLC. Failure to respond to reasonable requests for information or attempts to obstruct an investigation may result in enforcement action against the non-cooperating party.
+        </p>
+
+        <p>
+            During an investigation, Konevo LLC may temporarily place holds on payouts, suspend bookings, restrict account functionality, or take other reasonable measures necessary to protect the integrity of the Platform while the matter is being reviewed.
+        </p>
+
+        <p>
+            After reviewing the available information, Konevo LLC may, at its sole discretion, determine the appropriate resolution. Such actions may include, but are not limited to:
+        </p>
+
+        <ul>
+            <li>Issuing a full or partial refund to the user.</li>
+            <li>Approving, reducing, delaying, or reversing creator payouts.</li>
+            <li>Cancelling or modifying bookings.</li>
+            <li>Removing content that violates Platform policies.</li>
+            <li>Issuing warnings to either party.</li>
+            <li>Temporarily suspending or permanently terminating accounts.</li>
+            <li>Taking any other action reasonably necessary to protect users, creators, or the Platform.</li>
+        </ul>
+
+        <p>
+            Konevo LLC reserves the right to make the final determination regarding disputes involving violations of the Terms of Service, Creator Agreement, User Agreement, Community Guidelines, Privacy Policy, or any other Platform policies. Our decisions regarding Platform enforcement are final unless otherwise required by applicable law.
+        </p>
+
+        <p>
+            Nothing in this Agreement requires Konevo LLC to mediate, arbitrate, or resolve disputes between users and creators. Any assistance provided by Konevo LLC is voluntary and does not create any legal obligation, fiduciary duty, partnership, agency relationship, or liability on the part of Konevo LLC.
+        </p>
+
+        <p>
+            Creators acknowledge that repeated customer complaints, excessive cancellations, fraudulent activity, misleading listings, failure to deliver booked services, poor communication, or other conduct that negatively impacts users or the Platform may result in warnings, reduced visibility, payout holds, suspension, permanent account termination, or other enforcement actions at Konevo LLC's sole discretion.
+        </p>
+
+        <p>
+            Users acknowledge that fraudulent chargebacks, abusive behavior, harassment, false reports, attempts to circumvent the Platform, non-payment, or other violations of Platform policies may result in warnings, account restrictions, suspension, permanent account termination, legal action where appropriate, or other enforcement measures deemed necessary by Konevo LLC.
+        </p>
+
+    <h2>14. Limitation of Liability</h2>
     <p>
         To the maximum extent permitted by law, UWUVIBE is not liable for indirect, 
         incidental, consequential, or punitive damages arising from platform use.
     </p>
 
-    <h2>14. Termination</h2>
+    <h2>15. Termination</h2>
     <p>
         UWUVIBE may suspend or terminate access to the platform at any time for violations of 
         this Agreement, legal requirements, or platform policies.
     </p>
 
-    <h2>15. Changes to This Agreement</h2>
+    <h2>16. Changes to This Agreement</h2>
     <p>
         UWUVIBE may update this Agreement periodically. Updated versions become effective upon 
         publication unless otherwise stated. Continued use of the platform constitutes 
@@ -1145,7 +1258,112 @@ export default function TermsPage() {
                     {termsTab === "complaints" && (
                         <Section title="Complaint Policy">
                             <h2>Complaint Policy</h2>
-                            <p>INSERT COMPLAINT POLICY HERE</p>
+                            <p>
+
+<p>
+    If you have a complaint, concern, or dispute regarding UWUVIBE, Konevo LLC, another user, creator, or any aspect of the Platform, we encourage you to contact our support team first so we can attempt to resolve the issue promptly, fairly, and in good faith.
+</p>
+
+<p>
+    Before initiating arbitration or any legal proceeding, both you and Konevo LLC agree to make a good-faith effort to resolve the dispute informally for at least thirty (30) days after written notice of the dispute has been provided.
+</p>
+
+<p>
+    Written notice may be submitted through our designated customer support channels or by email. We may contact you regarding the dispute using the email address associated with your account.
+</p>
+
+<h2>Arbitration &amp; Dispute Resolution</h2>
+
+<p>
+    If a dispute cannot be resolved through informal negotiations, it shall be resolved exclusively through final and binding arbitration administered by the American Arbitration Association ("AAA") in accordance with its applicable Consumer Arbitration Rules, unless both parties mutually agree otherwise or applicable law requires a different procedure.
+</p>
+
+<p>Arbitration shall:</p>
+
+<ul>
+    <li>Be conducted in New York, New York, United States, unless applicable law requires another location.</li>
+    <li>Be conducted in the English language.</li>
+    <li>Be heard by one (1) neutral arbitrator.</li>
+    <li>Be final and binding upon both parties, subject only to any rights of appeal provided by applicable law.</li>
+</ul>
+
+<p>
+    Each party shall be responsible for its own arbitration costs, filing fees, administrative fees, attorney's fees, and related expenses unless otherwise required by applicable law or awarded by the arbitrator.
+</p>
+
+<p>
+    Additional information regarding the American Arbitration Association may be found at https://adr.org/.
+</p>
+
+<p>
+    BY USING UWUVIBE, YOU UNDERSTAND AND AGREE THAT, TO THE MAXIMUM EXTENT PERMITTED BY LAW, YOU ARE WAIVING YOUR RIGHT TO A TRIAL BY JURY FOR ANY DISPUTE SUBJECT TO ARBITRATION.
+</p>
+
+<h2>Class Action Waiver</h2>
+
+<p>
+    To the fullest extent permitted by applicable law, all claims and disputes must be brought solely in an individual capacity and not as a plaintiff, class member, or representative in any class action, collective action, consolidated action, private attorney general action, or other representative proceeding.
+</p>
+
+<p>
+    The arbitrator shall have no authority to consolidate claims from multiple individuals or to preside over any class, collective, or representative proceeding unless required by applicable law.
+</p>
+
+<h2>Indemnification</h2>
+
+<p>
+    You agree to defend, indemnify, and hold harmless UWUVIBE, Konevo LLC, its parent companies, subsidiaries, affiliates, officers, directors, employees, contractors, agents, licensors, partners, successors, and assigns from and against any claims, demands, actions, lawsuits, liabilities, damages, judgments, settlements, penalties, fines, losses, costs, and expenses, including reasonable attorneys' fees and legal expenses, arising out of or relating to:
+</p>
+
+<ul>
+    <li>Your access to or use of the Platform.</li>
+    <li>Your misuse of the Platform or any services provided through it.</li>
+    <li>Any content, messages, media, or other materials you upload, submit, publish, transmit, or otherwise make available.</li>
+    <li>Your bookings, transactions, agreements, communications, or disputes with other users or creators.</li>
+    <li>Your violation of these Terms of Service, Community Guidelines, Privacy Policy, Creator Agreement, User Agreement, or any other Platform policies.</li>
+    <li>Your violation of any applicable law, regulation, or third-party rights, including intellectual property, privacy, publicity, or contractual rights.</li>
+    <li>Any fraudulent, negligent, unlawful, abusive, misleading, or intentionally harmful conduct committed by you.</li>
+</ul>
+
+<p>
+    Konevo LLC reserves the right, at its own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you. If we do so, you agree to fully cooperate with our defense and settlement of the matter.
+</p>
+
+<h2>International Disputes</h2>
+
+<p>
+    If you access or use the Platform from outside the United States, you acknowledge that these Terms of Service shall remain governed by the laws specified herein to the extent permitted by applicable law. Certain consumer protection laws or mandatory legal rights in your country or region of residence may apply and cannot be waived or limited by these Terms of Service.
+</p>
+
+<h2>Limitation of Liability</h2>
+
+<p>
+    TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, UWUVIBE, KONEVO LLC, ITS AFFILIATES, OFFICERS, DIRECTORS, EMPLOYEES, CONTRACTORS, AGENTS, LICENSORS, AND PARTNERS SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL, EXEMPLARY, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, LOSS OF REVENUE, LOSS OF BUSINESS OPPORTUNITIES, LOSS OF DATA, LOSS OF GOODWILL, LOSS OF ACCESS TO THE PLATFORM, OR OTHER INTANGIBLE LOSSES ARISING OUT OF OR RELATING TO YOUR USE OF, INABILITY TO USE, OR RELIANCE UPON THE PLATFORM OR ANY SERVICES PROVIDED THROUGH IT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+</p>
+
+<p>
+    TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE TOTAL AGGREGATE LIABILITY OF KONEVO LLC AND UWUVIBE FOR ANY CLAIM ARISING OUT OF OR RELATING TO THE PLATFORM, THESE TERMS OF SERVICE, OR ANY SERVICES PROVIDED SHALL NOT EXCEED THE TOTAL AMOUNT YOU PAID TO UWUVIBE DURING THE TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE EVENT GIVING RISE TO THE CLAIM.
+</p>
+
+<p>
+    Some jurisdictions do not allow certain limitations or exclusions of liability. In such jurisdictions, the foregoing limitations shall apply only to the maximum extent permitted by applicable law.
+</p>
+
+<h2>Force Majeure</h2>
+
+<p>
+    Konevo LLC and UWUVIBE shall not be liable for any delay, interruption, failure to perform, or inability to provide the Platform or any services resulting from causes beyond our reasonable control. Such events include, but are not limited to, natural disasters, acts of God, fire, flood, earthquakes, pandemics, epidemics, war, terrorism, civil unrest, labor disputes, government actions, changes in law, internet outages, power outages, cyberattacks, denial-of-service attacks, payment processor failures, telecommunications failures, hosting provider outages, equipment failures, or any other unforeseen event beyond our reasonable control.
+</p>
+
+<p>
+    During any such event, our obligations shall be suspended for the duration of the event, and we will make commercially reasonable efforts to restore services as soon as reasonably practicable.
+</p></p>
+
+<h2>Changes to This Policy</h2>
+
+    <p>UWUVIBE may update these policies periodically to reflect changes in platform features, legal requirements, 
+        operational needs, or community standards. Updated versions will become effective upon publication unless otherwise stated. 
+        Continued use of UWUVIBE constitutes acceptance of any revised Guidelines.</p>
                         </Section>
                     )}
                 </div>

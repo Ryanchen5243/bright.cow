@@ -9,11 +9,9 @@ import { AuthProvider, useAuth } from "./contexts/authContext";
 import TermsPage from "./components/TermsPage";
 
 function ProtectedRoute({ children }: { children: ReactElement }) {
-  const { currentUser, isAuthLoading } = useAuth();
+  const { currentUser, loading } = useAuth();
 
-  if (isAuthLoading) {
-    return <div className="auth-route-loading" role="status">Loading your booking…</div>;
-  }
+  if (loading) return null;
 
   if (!currentUser) {
     return <Navigate to="/" replace />;
@@ -23,7 +21,9 @@ function ProtectedRoute({ children }: { children: ReactElement }) {
 }
 
 function PublicOnlyRoute({ children }: { children: ReactElement }) {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth();
+
+  if (loading) return null;
 
   if (currentUser) {
     return <Navigate to="/app" replace />;
@@ -39,7 +39,7 @@ export default function App() {
           <div className="App">
             <Routes>
               <Route path="/app" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
-              <Route path="/app/profile/:creatorUserName" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
+              <Route path="/app/profile/:creatorId" element={<ProtectedRoute><ApplicationPage /></ProtectedRoute>} />
               <Route path='/booking' element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
               <Route path='/booking/confirmation' element={<ProtectedRoute><PaymentConfirmationPage /></ProtectedRoute>} />
               <Route path='/other' element={<h1>Other Page</h1>} />

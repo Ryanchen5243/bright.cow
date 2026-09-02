@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import UserController from "./controllers/UserController.js"
+import AuthController from "./controllers/AuthController.js"
 import Stripe from "stripe";
 import { readFile } from "node:fs/promises";
 
@@ -112,10 +114,7 @@ app.get("/api/checkout/session/:sessionId", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-app.get("/user", (req, res) => {
-  res.send("User route");
+  res.status(200).send("API is running...");
 });
 
 const PORT = process.env.PORT || 5001;
@@ -123,7 +122,6 @@ const server = app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
 
-server.ref();
 server.on("error", (error) => {
   console.error("Server failed to start", error);
   process.exitCode = 1;

@@ -12,8 +12,7 @@ async function getPool() {
   if (pool) return pool;
 
   const sm = new AWS.SecretsManager();
-  const sec = await sm.getSecretValue({ SecretId: process.env.DB_SECRET_ARN }).promise();
-  const { password } = JSON.parse(sec.SecretString);
+  const password = process.env.DB_PASSWORD;
 
   const poolConfig = {
     host: process.env.DB_HOST,
@@ -27,6 +26,8 @@ async function getPool() {
     },
   };
   pool = new Pool(poolConfig);
+  const client = await pool.connect();
+  client.release();
   console.log("pool connected successfully");
   const connInfo = [
     `host:     ${poolConfig.host}`,
@@ -46,4 +47,8 @@ async function query(text, params) {
   return p.query(text, params);
 }
 
+getPool().catch((err) => {
+  console.error('Error connecting to the database:', err);
+  process.exit(1);
+});
 module.exports = { query, getPool };

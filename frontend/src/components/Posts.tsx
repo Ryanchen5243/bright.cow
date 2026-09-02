@@ -88,15 +88,8 @@ export default function Posts(props: {creatorUUID: string | null, userName: stri
     };
 
     useEffect(() => {
-        // Simulate fetching posts from an API
-        const fetchPosts = async () => {
-            const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
-            const data = await response.json();
-            const creator = Array.isArray(data) ? data.find((creator: { id: string }) => creator.id === props.creatorUUID) : null;
-            const posts = creator?.recentPosts ?? [];
-            setAllPosts(posts);
-        }
-        fetchPosts();
+        // TODO: fetch posts from DB once a posts table exists
+        setAllPosts([]);
     }, []);
 
     return (

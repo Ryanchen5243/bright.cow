@@ -4,7 +4,7 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 
 const AuthContext = createContext<{
     currentUser: User | null;
-    isAuthLoading: boolean;
+    loading: boolean;
 } | undefined>(undefined);
 
 export function useAuth() {
@@ -17,19 +17,19 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [isAuthLoading, setIsAuthLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setCurrentUser(user ?? null);
-            setIsAuthLoading(false);
+            setLoading(false);
         });
         return () => unsubscribe();
     }, []);
 
     const value = {
         currentUser,
-        isAuthLoading,
+        loading,
     };
     return (
         <AuthContext.Provider value={value}>

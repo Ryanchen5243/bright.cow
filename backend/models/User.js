@@ -4,39 +4,25 @@ const { query } = require('../db.cjs');
 
 const User = {
   async findAll() {
-    const { rows } = await query('SELECT * FROM users ORDER BY id ASC');
+    const { rows } = await query('SELECT * FROM "users" limit 100');
     return rows;
   },
-
-  async findById(id) {
-    const { rows } = await query('SELECT * FROM users WHERE id = $1', [id]);
-    return rows[0] || null;
-  },
-
-  async findByEmail(email) {
-    const { rows } = await query('SELECT * FROM users WHERE email = $1', [email]);
-    return rows[0] || null;
-  },
-
-  async create({ name, email, password_hash }) {
-    const { rows } = await query(
-      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *',
-      [name, email, password_hash]
-    );
+  async vincentTestWrite() {
+    const { rows } = await query('INSERT INTO foo(foobar) VALUES (321) RETURNING *');
     return rows[0];
   },
 
-  async update(id, { name, email }) {
+  // Creates a row for first-time Google sign-ins; updates last_login_at on subsequent logins
+  async upsertByFirebaseUid({ firebaseUid, userName, userDisplayName, profilePhotoUrl }) {
     const { rows } = await query(
-      'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-      [name, email, id]
+      `INSERT INTO users (firebase_uid, user_name, user_display_name, profile_photo_url)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (firebase_uid) DO UPDATE
+         SET last_login_at = now()
+       RETURNING *`,
+      [firebaseUid, userName, userDisplayName ?? null, profilePhotoUrl ?? null]
     );
-    return rows[0] || null;
-  },
-
-  async delete(id) {
-    const { rowCount } = await query('DELETE FROM users WHERE id = $1', [id]);
-    return rowCount > 0;
+    return rows[0];
   },
 };
 
