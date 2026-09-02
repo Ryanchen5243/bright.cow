@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import AppMain, { type AppView } from "./AppMain";
 import NavBar from "./NavBar";
 import { useAuth } from "../contexts/authContext";
@@ -24,7 +24,9 @@ export default function ApplicationPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const { currentUser, loading } = useAuth();
+    const { creatorUserName } = useParams();
     const [myDbProfile, setMyDbProfile] = useState<DbProfile | null>(null);
+    const [creatorExists, setCreatorExists] = useState<boolean | null>(null);
 
     useEffect(() => {
         if (loading || !currentUser) {
@@ -45,21 +47,38 @@ export default function ApplicationPage() {
         return () => { isCancelled = true; };
     }, [currentUser, loading]);
 
+    useEffect(() => {
+        if (!creatorUserName) {
+            setCreatorExists(null);
+            return;
+        }
+
+        let isCancelled = false;
+        fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href)
+            .then((response) => response.ok ? response.json() : Promise.reject())
+            .then((profiles: Array<{ userName: string }>) => {
+                if (!isCancelled) setCreatorExists(profiles.some((profile) => profile.userName === creatorUserName));
+            })
+            .catch(() => { if (!isCancelled) setCreatorExists(false); });
+
+        return () => { isCancelled = true; };
+    }, [creatorUserName]);
+
     const params = new URLSearchParams(location.search);
-    const appView: AppView = params.get("view") === "settings" ? "settings" : "home";
     const viewParam = params.get("view");
     const checkoutStatus = params.get("checkout");
-    // const appView: AppView = creatorUserName
-    //     ? creatorExists === null
-    //         ? "creator-loading"
-    //         : creatorExists
-    //             ? "profile"
-    //             : "creator-not-found"
-    //     : viewParam === "settings"
-    //         ? "settings"
-    //         : "home";
+    const appView: AppView = creatorUserName
+        ? creatorExists === null
+            ? "creator-loading"
+            : creatorExists
+                ? "profile"
+                : "creator-not-found"
+        : viewParam === "settings"
+            ? "settings"
+            : "home";
 
     const handleSetAppView = (nextView: AppView) => {
+        if (nextView === "profile") { navigate('/app/profile/@luna_gamer'); return; }
         if (nextView === "settings") { navigate(`/app?view=settings`); return; }
         navigate("/app");
     };
@@ -77,7 +96,7 @@ export default function ApplicationPage() {
                 </div>
             )}
             <div className="app-body">
-                <AppMain appView={appView} myDbProfile={myDbProfile} />
+                <AppMain appView={appView} myDbProfile={myDbProfile} creatorUserName={creatorUserName} />
             </div>
         </>
     );

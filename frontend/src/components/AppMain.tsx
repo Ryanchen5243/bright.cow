@@ -1,11 +1,11 @@
 import Footer from "./Footer";
 import Settings from "./Settings";
+import Profile from "./Profile";
 import type { DbProfile } from "./ApplicationPage";
-import { useState } from "react";
 
-export type AppView = "home" | "settings";
+export type AppView = "home" | "profile" | "settings" | "creator-loading" | "creator-not-found";
 
-export default function AppMain({ appView, myDbProfile }: { appView: AppView; myDbProfile: DbProfile | null }) {
+export default function AppMain({ appView, myDbProfile, creatorUserName }: { appView: AppView; myDbProfile: DbProfile | null; creatorUserName?: string }) {
   return (
     <div className="app-main">
       <div className="app-main-shell">
@@ -22,7 +22,10 @@ export default function AppMain({ appView, myDbProfile }: { appView: AppView; my
               <div>Loading profile...</div>
             )
           )}
+          {appView === "profile" && <Profile creatorUserName={creatorUserName} />}
           {appView === "settings" && <Settings />}
+          {appView === "creator-loading" && <div>Loading creator profile...</div>}
+          {appView === "creator-not-found" && <div><h2>Creator Not Found</h2><p>We could not find this creator profile.</p></div>}
         </div>
         <Footer />
       </div>
