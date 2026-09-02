@@ -22,6 +22,7 @@ backend/.env.*
 
 # DB connection info (contains plaintext credentials after secret rotation)
 backend/db-connection-info.txt
+backend/postgresql_user_accounts.txt
 
 # Editor directories and files
 .vscode/*

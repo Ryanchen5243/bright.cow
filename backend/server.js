@@ -2,12 +2,29 @@ import express from "express";
 import dotenv from "dotenv";
 import UserController from "./controllers/UserController.js"
 import AuthController from "./controllers/AuthController.js"
+import PostController from "./controllers/PostController.js"
+import { verifyFirebaseToken } from "./middleware/verifyFirebaseToken.js"
+import { optionalFirebaseToken } from "./middleware/optionalFirebaseToken.js"
 import Stripe from "stripe";
 import { readFile } from "node:fs/promises";
+import { idempotency } from "./middleware/idempotency.js";
 
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+  if (req.method === "POST") {
+    const key = req.headers["idempotency-key"];
+    console.log(`[idempotency] --> ${req.path} key=${key ?? "none"}`);
+    const originalJson = res.json.bind(res);
+    res.json = (body) => {
+      const replayed = res.getHeader('X-Idempotent-Replayed') === 'true';
+      console.log(`[idempotency] <-- ${req.path} key=${key ?? "none"} status=${res.statusCode} ${replayed ? "[CACHED]" : "[FRESH]"}`);
+      return originalJson(body);
+    };
+  }
+  next();
+});
 
 const stripe = process.env.STRIPE_SECRET_KEY
   ? new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -117,15 +134,25 @@ app.get("/", (req, res) => {
   res.status(200).send("API is running...");
 });
 
-
-// tbd add authentication middleware to protect these routes
-// myprofile
-
-
-app.get("/allUsers", UserController.getAllUsers);
-
-// app.post("/updateUserName", UserController.updateUserName);
-app.post("/auth/syncUser", AuthController.syncUser);
+app.get("/allUsers", verifyFirebaseToken, UserController.getAllUsers);
+app.get("/user/me", verifyFirebaseToken, UserController.getMe);
+app.post("/auth/syncUser", verifyFirebaseToken, AuthController.syncUser);
+app.get("/userByUuid/:uuid", UserController.getUserByUUID);
+app.post("/update_display_name", verifyFirebaseToken, idempotency, UserController.updateDisplayName);
+app.post("/update_bio", verifyFirebaseToken, idempotency, UserController.updateBio);
+app.get('/posts/single/:postId', PostController.getPost);
+app.post('/posts/:postId/presign-upload', verifyFirebaseToken, PostController.presignUpload);
+app.post('/posts/:postId/images', verifyFirebaseToken, PostController.saveImage);
+app.delete('/posts/:postId/images/:imageId', verifyFirebaseToken, PostController.removeImage);
+app.get('/posts/:postId/comments', PostController.getComments);
+app.post('/posts/:postId/comments', verifyFirebaseToken, idempotency, PostController.addComment);
+app.delete('/posts/:postId/comments/:commentId', verifyFirebaseToken, PostController.deleteComment);
+app.post('/posts/:postId/like', verifyFirebaseToken, PostController.likePost);
+app.delete('/posts/:postId/like', verifyFirebaseToken, PostController.unlikePost);
+app.patch('/posts/:postId', verifyFirebaseToken, PostController.updatePost);
+app.delete('/posts/:postId', verifyFirebaseToken, PostController.deletePost);
+app.post('/posts', verifyFirebaseToken, idempotency, PostController.createPost);
+app.get('/posts/:uuid', optionalFirebaseToken, PostController.getPostsByUser);
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);

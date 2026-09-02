@@ -9,6 +9,52 @@ const UserController = {
       res.status(500).json({ error: err.message });
     }
   },
-
+  getMe: async (req, res) => {
+    try {
+      const user = await User.findByUUID(req.userId);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  getUserByUUID: async (req, res) => {
+    try {
+      const user = await User.findByUUID(req.params.uuid);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  updateDisplayName: async (req, res) => {
+    try {
+      const { userDisplayName } = req.body;
+      if (!userDisplayName) return res.status(400).json({ error: 'userDisplayName is required' });
+      const user = await User.updateDisplayName(req.userId, userDisplayName);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  updateBio: async (req, res) => {
+    try {
+      const { userBio } = req.body;
+      if (userBio === undefined || userBio === null) return res.status(400).json({ error: 'userBio is required' });
+      const user = await User.updateBio(req.userId, userBio);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  getAllPosts: async (req,res) => {
+    try {
+      
+    } catch (err) {
+      res.status(500).json({error: err.message});
+    }
+  }
 };
-export default UserController; 
+export default UserController;
