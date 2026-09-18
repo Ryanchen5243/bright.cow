@@ -25,8 +25,8 @@ export default function ApplicationPage() {
     const location = useLocation();
     const { currentUser, loading } = useAuth();
     const { creatorUserName } = useParams();
-    const [myDbProfile, setMyDbProfile] = useState<DbProfile | null>(null);
     const [creatorExists, setCreatorExists] = useState<boolean | null>(null);
+    const [profileCreatorIdFromRoute, setProfileCreatorIdFromRoute] = useState<string | undefined>(undefined);
     const [currentUserDbProfile, setCurrentUserDbProfile] = useState<DbProfile | null>(null);
 
     useEffect(() => {
@@ -52,14 +52,19 @@ export default function ApplicationPage() {
     useEffect(() => {
         if (!creatorUserName) {
             setCreatorExists(null);
+            setProfileCreatorIdFromRoute(undefined);
             return;
         }
 
         let isCancelled = false;
-        fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href)
-            .then((response) => response.ok ? response.json() : Promise.reject())
-            .then((profiles: Array<{ userName: string }>) => {
-                if (!isCancelled) setCreatorExists(profiles.some((profile) => profile.userName === creatorUserName));
+        setCreatorExists(null);
+        authAxios.get('/allUsers')
+            .then(({ data }) => {
+                if (isCancelled) return;
+                const users = Array.isArray(data) ? data : [];
+                const match = users.find((user: any) => user.user_name === creatorUserName);
+                setCreatorExists(Boolean(match));
+                setProfileCreatorIdFromRoute(match?.id);
             })
             .catch(() => { if (!isCancelled) setCreatorExists(false); });
 
@@ -69,7 +74,6 @@ export default function ApplicationPage() {
     const params = new URLSearchParams(location.search);
     const viewParam = params.get("view");
     const profileCreatorId = params.get("creator") ?? undefined;
-    const appView: AppView = viewParam === "settings" ? "settings" : viewParam === "profile" ? "profile" : "home";
     const checkoutStatus = params.get("checkout");
     const appView: AppView = creatorUserName
         ? creatorExists === null
@@ -79,6 +83,8 @@ export default function ApplicationPage() {
                 : "creator-not-found"
         : viewParam === "settings"
             ? "settings"
+            : viewParam === "profile"
+                ? "profile"
             : "home";
 
     const handleSetAppView = (nextView: AppView, creatorId?: string) => {
@@ -100,7 +106,7 @@ export default function ApplicationPage() {
                 </div>
             )}
             <div className="app-body">
-                <AppMain appView={appView} myDbProfile={myDbProfile} creatorUserName={creatorUserName} setAppView={handleSetAppView} currentUserDbProfile={currentUserDbProfile} profileCreatorId={profileCreatorId} />
+                <AppMain appView={appView} setAppView={handleSetAppView} currentUserDbProfile={currentUserDbProfile} profileCreatorId={profileCreatorId ?? profileCreatorIdFromRoute} />
             </div>
         </>
     );
