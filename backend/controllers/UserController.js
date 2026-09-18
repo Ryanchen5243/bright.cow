@@ -9,32 +9,52 @@ const UserController = {
       res.status(500).json({ error: err.message });
     }
   },
-
-  getMyProfile: async (req, res) => {
+  getMe: async (req, res) => {
     try {
-      const { firebaseUid } = req.params;
-      const user = await User.findByFirebaseUid(firebaseUid);
-      if (!user) return res.status(404).json({ error: 'Profile not found' });
+      const user = await User.findByUUID(req.userId);
+      if (!user) return res.status(404).json({ error: 'User not found' });
       res.json(user);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   },
-
-  syncUser: async (req, res) => {
+  getUserByUUID: async (req, res) => {
     try {
-      const { firebaseUid, userName, userDisplayName, profilePhotoUrl } = req.body;
-      if (!firebaseUid || !userName) {
-        return res.status(400).json({ error: 'firebaseUid and userName are required' });
-      }
-      await User.upsertByFirebaseUid({ firebaseUid, userName, userDisplayName: userDisplayName ?? null, profilePhotoUrl: profilePhotoUrl ?? null });
-      // Always return the full profile row after sync
-      const user = await User.findByFirebaseUid(firebaseUid);
+      const user = await User.findByUUID(req.params.uuid);
+      if (!user) return res.status(404).json({ error: 'User not found' });
       res.json(user);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
   },
-
+  updateDisplayName: async (req, res) => {
+    try {
+      const { userDisplayName } = req.body;
+      if (!userDisplayName) return res.status(400).json({ error: 'userDisplayName is required' });
+      const user = await User.updateDisplayName(req.userId, userDisplayName);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  updateBio: async (req, res) => {
+    try {
+      const { userBio } = req.body;
+      if (userBio === undefined || userBio === null) return res.status(400).json({ error: 'userBio is required' });
+      const user = await User.updateBio(req.userId, userBio);
+      if (!user) return res.status(404).json({ error: 'User not found' });
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+  getAllPosts: async (req,res) => {
+    try {
+      
+    } catch (err) {
+      res.status(500).json({error: err.message});
+    }
+  }
 };
-export default UserController; 
+export default UserController;

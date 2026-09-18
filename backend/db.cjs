@@ -12,8 +12,7 @@ async function getPool() {
   if (pool) return pool;
 
   const sm = new AWS.SecretsManager();
-  const sec = await sm.getSecretValue({ SecretId: process.env.DB_SECRET_ARN }).promise();
-  const { password } = JSON.parse(sec.SecretString);
+  const password = process.env.DB_PASSWORD;
 
   const poolConfig = {
     host: process.env.DB_HOST,

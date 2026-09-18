@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Calendar } from '@calendarjs/react';
 import '@calendarjs/react/style.css';
 import { useEffect, useState } from 'react';
@@ -80,20 +81,14 @@ export default function CreatorSchedule(props: { creatorUUID: string | null}) {
         let isCancelled = false;
 
         const loadCreator = async () => {
+            if (!creatorUUID) return;
             try {
-                const response = await fetch(new URL('../mocks/seedProfiles.json', import.meta.url).href);
-                if (!response.ok) {
-                    return;
-                }
-
-                const data = await response.json() as any[];
-                const creators = Array.isArray(data) ? data : [];
-                const resolvedCreator = creators.find((creator) => creator.id === creatorUUID) ?? null;
-
+                const response = await axios.get(`/api/users/by-id/${encodeURIComponent(creatorUUID)}`);
+                const user = response.data;
                 if (!isCancelled) {
                     setCreatorDetails({
-                        ...resolvedCreator,
-                        photoUrl: resolvedCreator?.photoUrl,
+                        ...user,
+                        name: user.user_display_name ?? user.user_name,
                     });
                 }
             } catch {

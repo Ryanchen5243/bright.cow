@@ -7,8 +7,13 @@ export default defineConfig({
     proxy: {
       '/allUsers': 'http://localhost:5001',
       '/myProfile': 'http://localhost:5001',
-      '/syncUser': 'http://localhost:5001',
+      '/auth': 'http://localhost:5001',
       '/api': 'http://localhost:5001',
+      '/userByUuid': 'http://localhost:5001',
+      '/user': 'http://localhost:5001',
+      '/update_display_name': 'http://localhost:5001',
+      '/update_bio': 'http://localhost:5001',
+      '/posts': 'http://localhost:5001',
     },
   },
   test: {
