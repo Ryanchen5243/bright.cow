@@ -123,6 +123,7 @@ app.get("/", (req, res) => {
 
 
 app.get("/allUsers", UserController.getAllUsers);
+app.patch("/api/users/me/profile", UserController.updateProfile);
 
 // app.post("/updateUserName", UserController.updateUserName);
 app.post("/auth/syncUser", AuthController.syncUser);

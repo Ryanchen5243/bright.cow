@@ -22,7 +22,7 @@ export default function AppMain({ appView, myDbProfile }: { appView: AppView; my
               <div>Loading profile...</div>
             )
           )}
-          {appView === "settings" && <Settings />}
+          {appView === "settings" && <Settings myDbProfile={myDbProfile} />}
         </div>
         <Footer />
       </div>

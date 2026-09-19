@@ -24,6 +24,21 @@ const User = {
     );
     return rows[0];
   },
+
+  // COALESCE leaves a column untouched when the caller omits that field
+  async updateProfileByFirebaseUid({ firebaseUid, userName, userDisplayName, bio }) {
+    const { rows } = await query(
+      `UPDATE users
+          SET user_name = COALESCE($2, user_name),
+              user_display_name = COALESCE($3, user_display_name),
+              bio = COALESCE($4, bio),
+              updated_at = now()
+        WHERE firebase_uid = $1
+        RETURNING *`,
+      [firebaseUid, userName ?? null, userDisplayName ?? null, bio ?? null]
+    );
+    return rows[0] ?? null;
+  },
 };
 
 export default User; 
