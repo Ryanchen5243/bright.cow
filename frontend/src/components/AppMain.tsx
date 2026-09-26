@@ -17,6 +17,7 @@ export default function AppMain({ appView, myDbProfile }: { appView: AppView; my
                 <p><strong>Bio:</strong> {myDbProfile.bio}</p>
                 <p><strong>Joined:</strong> {new Date(myDbProfile.created_at).toLocaleDateString()}</p>
                 <p><strong>ID:</strong> {myDbProfile.id}</p>
+                <p>test</p>
               </div>
             ) : (
               <div>Loading profile...</div>
