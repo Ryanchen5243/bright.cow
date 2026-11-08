@@ -1,0 +1,78 @@
+html{
+    color: white;
+}
+
+.button{
+    background: transparent;
+    border: 2px solid;
+    color:blueviolet;
+    border-radius: 12px;
+    font-size: 14px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.box{
+    background-color: rgb(25, 30, 52);
+    border-radius: 12px;
+    width: 39vw;
+    height: 20vh;
+    padding: 12px;
+}
+
+.box_header{
+    display: flex;
+    gap: 6px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.big_box{
+    background-color: rgb(25, 30, 52);
+    border-radius: 12px;
+    width: 82vw;
+    height: 20vh;
+   
+}
+
+.devices_box{
+    background-color: rgb(40, 45, 67);
+    border-radius: 12px;
+    width: 70vw;
+    height: 5vh;
+}
+
+.accDel{
+    color: red;
+    border-radius: 4px;
+}
+
+.container{
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+}
+
+.setting_icon svg{
+    color: blueviolet;
+    width: 23px;
+    height: 23px;
+}
+
+.sub_box{
+    background-color: rgb(40, 45, 67);
+    border-radius: 12px;
+    width: 32vw;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.sub_header{
+    font-size: 14px;
+}
