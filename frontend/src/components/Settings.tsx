@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PersonOutlined, HttpsOutlined, NotificationsNoneOutlined, ShieldOutlined, WalletOutlined, LinkOutlined, CalendarMonthOutlined, LocalOfferOutlined, DateRangeOutlined, VideocamOutlined, BoltOutlined, PrivacyTipOutlined, ColorLensOutlined, LanguageOutlined } from "@mui/icons-material"
 import ProfileInformation from "./ProfileInformation";
+import Notifications from "./Notifications";
 import type { DbProfile } from "./ApplicationPage";
 export default function Settings(props: { creatorUserName?: string; myDbProfile: DbProfile | null }) {
     const [settingsView, setSettingsView] = useState<string>("profile-information");
@@ -77,7 +78,7 @@ export default function Settings(props: { creatorUserName?: string; myDbProfile:
                 <h1>Settings</h1>
                 {settingsView === "profile-information" && <ProfileInformation myDbProfile={props.myDbProfile}/>}
                 {settingsView === "account-security" && <div>Account & Security Settings</div>}
-                {settingsView === "notifications" && <div>Notifications Settings</div>}
+                {settingsView === "notifications" && <Notifications />}
                 {settingsView === "privacy" && <div>Privacy Settings</div>}
                 {settingsView === "billing-payouts" && <div>Billing & Payouts Settings</div>}
                 {settingsView === "connected-accounts" && <div>Connected Accounts Settings</div>}

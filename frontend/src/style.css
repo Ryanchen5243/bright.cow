@@ -4048,6 +4048,110 @@ border-color: rgba(255,255,255,0.08);;
   border: none !important;
   box-shadow: none !important;
 }
+.settings-notifications-container{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+.settings-notifications-header h2{
+  margin: 0;
+  color: #f8fafc;
+}
+.settings-notifications-header p{
+  margin: 4px 0 0;
+  font-size: 0.86rem;
+  color: rgba(226, 232, 240, 0.55);
+}
+.settings-notifications-panel{
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(148, 63, 255, 0.16);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+.settings-notifications-panel-header{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 24px;
+}
+.settings-notifications-panel-icon{
+  display: inline-flex;
+  margin-top: 2px;
+  color: #a78bfa;
+}
+.settings-notifications-panel-icon svg{
+  width: 20px;
+  height: 20px;
+}
+.settings-notifications-panel-header h3{
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.settings-notifications-panel-header p{
+  margin: 2px 0 0;
+  font-size: 0.8rem;
+  color: rgba(226, 232, 240, 0.55);
+}
+.settings-notifications-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(148, 63, 255, 0.12);
+}
+.settings-notifications-row-label{
+  cursor: pointer;
+}
+.settings-notifications-row-title{
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.settings-notifications-row-subtitle{
+  display: block;
+  margin-top: 2px;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: rgba(226, 232, 240, 0.55);
+}
+/* Unlayered, so these beat the tailwind utilities baked into the shadcn
+   switch, whose primary/input defaults wash out on the dark panel. */
+.settings-notifications-switch[data-slot="switch"]{
+  box-sizing: border-box;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+  padding: 2px;
+  border-color: transparent;
+  background: rgba(148, 163, 184, 0.28);
+  box-shadow: none;
+  cursor: pointer;
+}
+.settings-notifications-switch[data-slot="switch"][data-checked]{
+  background: linear-gradient(135deg, #9557ed 0%, #6f4ed8 100%);
+}
+.settings-notifications-switch[data-slot="switch"]:focus-visible{
+  outline: 2px solid rgba(149, 87, 237, 0.6);
+  outline-offset: 2px;
+}
+.settings-notifications-switch[data-slot="switch"] [data-slot="switch-thumb"]{
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  translate: 0;
+  transform: none;
+  transition: translate 0.18s ease;
+}
+.settings-notifications-switch[data-slot="switch"] [data-slot="switch-thumb"][data-checked]{
+  translate: 18px;
+}
 /* end settings page styles */
 
 
